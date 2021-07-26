@@ -143,7 +143,7 @@ Route::group(["middleware"=>'auth:sanctum',"prefix"=>"utility"],function(){
 Route::group(["middleware"=>['auth:sanctum','check.subs'],"prefix"=>"utilitypaid"],function(){
     Route::post('/add',[UtilityPaidController::class,'add']);
 });
-Route::group(["middleware"=>['auth:sanctum','check.subs'],"prefix"=>"utilitypaid"],function(){
+Route::group(["middleware"=>'auth:sanctum',"prefix"=>"utilitypaid"],function(){
     Route::post('/select',[UtilityPaidController::class,'select']);
     Route::post('/avg',[UtilityPaidController::class,'utilityAll']);
 });

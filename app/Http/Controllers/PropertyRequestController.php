@@ -21,6 +21,17 @@ class PropertyRequestController extends Controller
                 $upload = $request->all();
                 $upload += ["date"=>date('d-m-Y')];
                 PropertyRequest::create($upload);
+                if(PropertyRequest::create($upload))
+                {
+                    $property = Propety::find($request->property_id);
+                    $input = [
+                        "user_id" => $request->tendent_id,
+                        "property_id" => $request->property_id,
+                        "description" => Auth::user()->name." requested you for property ".$property->property_name,
+                        'stt' => 0
+                    ];
+                    NotificationsController::insert($input);
+                }
                 return response()->json(["data"=>["Property Request"=>"inserted"]]);
             }
             return response()->json(["data"=>["error"=>"can not request for same"]]);
@@ -35,7 +46,7 @@ class PropertyRequestController extends Controller
             if($check)
             {
                 $check2 = Propety::where([['id',$check->property_id],['user_id',Auth::user()->id]])->first();
-                
+
                 if (isset($check2)) {
                     $tendent_on_property = Tendent::where([
                         ['tendent_id',$check->tendent_id],
@@ -67,7 +78,7 @@ class PropertyRequestController extends Controller
                         }
                         return response()->json(["data"=>["Property Request"=>"Approved"]]);
                     }
-                    return response()->json(["data"=>["error"=>"Already in any property"]]);    
+                    return response()->json(["data"=>["error"=>"Already in any property"]]);
                 }
                 return response()->json(["data"=>["error"=>"not belongs to you"]]);
             }
