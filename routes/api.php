@@ -15,6 +15,7 @@ use App\Http\Controllers\PropertyRequestController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\FeaturesToPropertyController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\RentPayController;
 use App\Http\Controllers\UsersubscriptionController;
 use App\Http\Controllers\PaymentMethodsController;
@@ -33,31 +34,33 @@ use App\Http\Controllers\SubscriptionController;
 // user Routes
 Route::group(['middleware'=>['auth:sanctum','check.subs'], 'prefix'=>'user'],function(){
     Route::post('/register',[UserController::class,'register']);
-    Route::get('/select',[UserController::class,'select']);
-    Route::post('/select/one',[UserController::class,'selectspecific']);
     Route::post('/update/',[UserController::class,'update']);
     Route::post('/update/image',[UserController::class,'updateimage']);
     Route::post('/update/password',[UserController::class,'verify']);
 });
 Route::group(['middleware'=>'auth:sanctum', 'prefix'=>'user'],function(){
+    Route::get('/select',[UserController::class,'select']);
+    Route::post('/select/one',[UserController::class,'selectspecific']);
     Route::get('/verifition/code',[UserController::class,'sendVerificationCode']);
     Route::get('/match/{code}',[UserController::class,'matchVerificationCode']);
 });
 
 // user/type Routes
-Route::group(['middleware'=>['auth:sanctum','check.subs'] , 'prefix'=>'user/type'],function(){
+Route::group(['middleware'=>'auth:sanctum' , 'prefix'=>'user/type'],function(){
     Route::get('/list',[UserTypeController::class,'select']);
 });
 
 //property Rourtes
 Route::group(["middleware"=>['auth:sanctum','check.subs'], 'prefix' => 'property'],function(){
     Route::post('/insert',[PropertyController::class,'insert']);
-    Route::post('/select',[PropertyController::class,'select']);
     Route::post('/update',[PropertyController::class,'update']);
     Route::post('/delete',[PropertyController::class,'delete']);
     Route::post('/update/image',[PropertyController::class,'updateimage']);
-    Route::post('/select/image',[PropertyController::class,'selectimage']);
     Route::post('/delete/image',[PropertyController::class,'deleteimage']);
+});
+Route::group(["middleware"=>'auth:sanctum', 'prefix' => 'property'],function(){
+    Route::post('/select',[PropertyController::class,'select']);
+    Route::post('/select/image',[PropertyController::class,'selectimage']);
     Route::post('select/one',[PropertyController::class,'selectspecific']);
 });
 
@@ -65,63 +68,95 @@ Route::group(["middleware"=>['auth:sanctum','check.subs'], 'prefix' => 'property
 Route::group(["middleware"=>['auth:sanctum','check.subs'],"prefix"=>"property/request"],function(){
     Route::post('/add',[PropertyRequestController::class,'add']);
     Route::post('/approve',[PropertyRequestController::class,'approve']);
-    Route::post('/tendent',[PropertyRequestController::class,'select']);
     Route::post('/delete',[PropertyRequestController::class,'delete']);
+});
+Route::group(["middleware"=>'auth:sanctum',"prefix"=>"property/request"],function(){
+    Route::post('/tendent',[PropertyRequestController::class,'select']);
 });
 
 // tendent to property Routes
 Route::group(['middleware'=>['auth:sanctum','check.subs'] , "prefix"=>"property/tendent"],function(){
     Route::post('/approved',[TendentController::class,'tendent_only_approved']);
+    Route::post('/tendentonproperty',[TendentController::class,'tendent_on_property']);
+    Route::post('/delete',[TendentController::class,'delete']);
+});
+Route::group(['middleware'=>'auth:sanctum' , "prefix"=>"property/tendent"],function(){
     Route::post('/select',[TendentController::class,'select']);
     Route::post('/select/one',[TendentController::class,'selectspecific']);
     Route::post('/detail',[TendentController::class,'selectone']);
-    Route::post('/tendentonproperty',[TendentController::class,'tendent_on_property']);
     Route::post('/old',[TendentController::class,'tendent_lived_in_property']);
-    Route::post('/delete',[TendentController::class,'delete']);
 });
+
 // features Routes
 Route::group(["middleware"=>['auth:sanctum','check.subs'],"prefix"=>"features"],function(){
     Route::post('/insert',[FeatureController::class,'insert']);
+});
+Route::group(["middleware"=>'auth:sanctum',"prefix"=>"features"],function(){
     Route::get('/select',[FeatureController::class,'select']);
 });
+
+// notifications Routes
+Route::group(["middleware"=>'auth:sanctum',"prefix"=>"notifications"],function(){
+    Route::post('/update',[NotificationsController::class,'update']);
+    Route::get('/select',[NotificationsController::class,'select']);
+});
+
+// property/features Routes
 Route::group(["middleware"=>['auth:sanctum','check.subs'],"prefix"=>"property/features"],function(){
     Route::post('/insert',[FeaturesToPropertyController::class,'insert']);
-    Route::post('/select',[FeaturesToPropertyController::class,'select']);
     Route::post('/delete',[FeaturesToPropertyController::class,'delete']);
 });
+Route::group(["middleware"=>'auth:sanctum',"prefix"=>"property/features"],function(){
+    Route::post('/select',[FeaturesToPropertyController::class,'select']);
+});
+
 // task Routes
 Route::group(["middleware"=>['auth:sanctum','check.subs'],"prefix"=>"task"],function(){
     Route::post('/add',[TaskController::class,'add']);
-    Route::post('/select',[TaskController::class,'select']);
     Route::post('/update',[TaskController::class,'update']);
     Route::post('/delete',[TaskController::class,'delete']);
 });
+Route::group(["middleware"=>'auth:sanctum',"prefix"=>"task"],function(){
+    Route::post('/select',[TaskController::class,'select']);
+});
+
 // task_assign Routes
 Route::group(["middleware"=>['auth:sanctum','check.subs'],"prefix"=>"task/assign"],function(){
     Route::post('/add',[TaskAssignController::class,'add']);
-    Route::post('/select',[TaskAssignController::class,'select']);
     Route::post('/update',[TaskAssignController::class,'update']);
     Route::post('/delete',[TaskAssignController::class,'delete']);
+});
+Route::group(["middleware"=>'auth:sanctum',"prefix"=>"task/assign"],function(){
+    Route::post('/select',[TaskAssignController::class,'select']);
 });
 // utility Routes
 Route::group(["middleware"=>['auth:sanctum','check.subs'],"prefix"=>"utility"],function(){
     Route::post('/add',[UtilityController::class,'add']);
-    Route::get('/select/{property_id}',[UtilityController::class,'select']);
     Route::post('/update',[UtilityController::class,'update']);
     Route::post('/delete',[UtilityController::class,'delete']);
 });
+Route::group(["middleware"=>'auth:sanctum',"prefix"=>"utility"],function(){
+    Route::get('/select/{property_id}',[UtilityController::class,'select']);
+});
+
 // utility_paid Routes
 Route::group(["middleware"=>['auth:sanctum','check.subs'],"prefix"=>"utilitypaid"],function(){
     Route::post('/add',[UtilityPaidController::class,'add']);
+});
+Route::group(["middleware"=>['auth:sanctum','check.subs'],"prefix"=>"utilitypaid"],function(){
     Route::post('/select',[UtilityPaidController::class,'select']);
     Route::post('/avg',[UtilityPaidController::class,'utilityAll']);
 });
-// utility Routes
-Route::group(["middleware"=>['auth:sanctum','check.subs'],"prefix"=>"rent"],function(){
+
+// rent Routes
+Route::group(["middleware"=>'auth:sanctum',"prefix"=>"rent"],function(){
     Route::post('/select',[RentController::class,'select']);
 });
 Route::group(["middleware"=>['auth:sanctum','check.subs'],"prefix"=>"rent/pay"],function(){
     Route::post('/add',[RentPayController::class,'add']);
+
+});
+Route::group(["middleware"=>'auth:sanctum',"prefix"=>"rent/pay"],function(){
     Route::post('/select',[RentPayController::class,'select']);
     Route::post('/date',[RentPayController::class,'duedate']);
     Route::post('/upcoming',[RentPayController::class,'upcomingrent']);
@@ -129,6 +164,7 @@ Route::group(["middleware"=>['auth:sanctum','check.subs'],"prefix"=>"rent/pay"],
     Route::post('/graph',[RentPayController::class,'YearlyDataMothWise']);
 
 });
+
 Route::group(["middleware"=>'auth:sanctum',"prefix"=>"subscription"],function(){
     Route::get('/select',[SubscriptionController::class ,'select']);
 });
@@ -143,7 +179,9 @@ Route::group(["middleware"=>'auth:sanctum',"prefix"=>"pay/method"],function(){
 Route::group(["middleware"=>'auth:sanctum',"prefix"=>"bank"],function(){
     Route::get('/details',[BankDetailController::class ,'select']);
 });
-Route::group(["middleware"=>['auth:sanctum','check.subs'],"prefix"=>"messages"],function(){
+
+// messages Route
+Route::group(["middleware"=>'auth:sanctum',"prefix"=>"messages"],function(){
     Route::get('/select/{property_id}',[MessageController::class ,'getMessages']);
 });
 // signup Route
