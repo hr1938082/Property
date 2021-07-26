@@ -49,7 +49,7 @@ class NotificationsController extends Controller
             if($check)
             {
                 $select = notifications::select('notifications.id','user_id','notifications.description')
-                ->where('property_id',$check->property_id)
+                ->where([['property_id',$check->property_id],['stt',1]])
                 ->get();
                 $data = [];
                 foreach($select as $value)
