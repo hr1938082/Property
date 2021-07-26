@@ -20,7 +20,7 @@ class TaskController extends Controller
             {
                 $task = $request->all();
                     Task::create($task);
-                    return response()->json(["data"=>[["task"=>"inserted"]]]);     
+                    return response()->json(["data"=>[["task"=>"inserted"]]]);
             }
             return response()->json(["data"=>[["error"=>"not belongs to you"]]]);
         }
@@ -35,9 +35,9 @@ class TaskController extends Controller
             $select = Task::join('properties','task.property_id','=','properties.id')
             ->select('task.id as id','task.property_id','properties.property_name','task.task')
             ->where('properties.user_id',Auth::user()->id);
-            if($request->property_id !="")
+            if($request->id !="")
             {
-                $select=$select->where('task.property_id',$request->property_id);
+                $select=$select->where('task.id',$request->id);
             }
             $select=$select->orderByDesc('task.property_id')
             ->get();
@@ -77,7 +77,7 @@ class TaskController extends Controller
             $check2 = TaskAssign::where('task_id',$check->id)->get();
             if($check2->count() > 0)
             {
-                return response()->json(["data"=>[["task"=>"First remove all task_assign"]]]);    
+                return response()->json(["data"=>[["task"=>"First remove all task_assign"]]]);
             }
             $check->delete();
             return response()->json(["data"=>[["task"=>"deleted"]]]);
