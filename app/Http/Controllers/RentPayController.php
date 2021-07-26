@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Propety;
 use App\Models\Rent;
 use Illuminate\Http\Request;
 use App\Models\RentPay;
@@ -15,7 +16,7 @@ class RentPayController extends Controller
     // RentPay Add method
     public function add(Request $request)
     {
-        $rent = Rent::where('user_id', $request->user_id)->select('id', 'amount')->first();
+        $rent = Rent::where('user_id', $request->user_id)->select('id', 'amount', 'property_id')->first();
         if ($rent != null) {
             $find_last_date = RentPay::where('rent_id', $rent->id)
                 ->orderbyDesc('id')
@@ -32,6 +33,13 @@ class RentPayController extends Controller
                     "late" => 0
                 ];
                 if (RentPay::create($upload)) {
+                    $Propety = Propety::find($rent->property_id);
+                        $input = [
+                            'user_id' => $Propety->user_id,
+                            'property_id' => $Propety->id,
+                            'description' => "Rent paid by user ". Auth::user()->name . " for Property ". $Propety->property_name,
+                        ];
+                        NotificationsController::insert($input);
                     return response()->json(["data" => ["status" => true]]);
                 }
                 return response()->json(["data" => ["status" => false]]);
@@ -46,6 +54,13 @@ class RentPayController extends Controller
                     ];
 
                     if (RentPay::create($upload)) {
+                        $Propety = Propety::find($rent->property_id);
+                        $input = [
+                            'user_id' => $Propety->user_id,
+                            'property_id' => $Propety->id,
+                            'description' => "Rent paid by user ". Auth::user()->name . " for Property ". $Propety->property_name,
+                        ];
+                        NotificationsController::insert($input);
                         return response()->json(["status" => true]);
                     }
                     return response()->json(["status" => false]);
