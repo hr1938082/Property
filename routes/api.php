@@ -19,6 +19,7 @@ use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\RentPayController;
 use App\Http\Controllers\UsersubscriptionController;
 use App\Http\Controllers\PaymentMethodsController;
+use App\Http\Controllers\SocialLinksController;
 use App\Http\Controllers\SubscriptionController;
 
 /*
@@ -87,6 +88,11 @@ Route::group(['middleware'=>'auth:sanctum' , "prefix"=>"property/tendent"],funct
     Route::post('/old',[TendentController::class,'tendent_lived_in_property']);
 });
 
+
+//  socialLinks Routes
+Route::group(['middleware'=>"auth:sanctum", "prefix" => "social"],function(){
+    Route::get('/select',[SocialLinksController::class,'select']);
+});
 // features Routes
 Route::group(["middleware"=>['auth:sanctum','check.subs'],"prefix"=>"features"],function(){
     Route::post('/insert',[FeatureController::class,'insert']);
