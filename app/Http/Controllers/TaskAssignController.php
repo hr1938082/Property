@@ -30,7 +30,16 @@ class TaskAssignController extends Controller
                                 "status" => "pending",
                                 "date" => $request->date,
                             ];
-                            TaskAssign::create($add);
+                            if (TaskAssign::create($add)) {
+                                $input = [
+                                    "user_id" => Auth::user()->id,
+                                    "property_id" => $check->id,
+                                    "description" => "Task '" . $check->task . "' Assigned for property $check->property_name",
+                                    "stt" => 1,
+                                    "stl" => 0
+                                ];
+                                NotificationsController::insert($input);
+                            }
                             return response()->json(["data" => [["task_assign" => "Added"]]]);
                         }
                         return response()->json(["data" => [["error" => "Already Added"]]]);
@@ -110,7 +119,18 @@ class TaskAssignController extends Controller
                 $check_property = Tendent::where([['property_id', $check_tendent->property_id], ['tendent_id', Auth::user()->id], ['is_live', 1]])->first();
                 if ($check_property) {
                     $upload = $request->all();
-                    $check = $check->update($upload);
+                    if($check->update($upload))
+                    {
+                        $property = Propety::find($check_tendent->property_id);
+                        $input = [
+                            "user_id" => $property->user_id,
+                            "property_id" => $property->id,
+                            "description" => "Task '" . $check_tendent->task . "' completed for property $property->property_name",
+                            "stt" => 1,
+                            "stl" => 1
+                        ];
+                        NotificationsController::insert($input);
+                    }
                     return response()->json(["data" => [["task_assign" => "updated"]]]);
                 }
                 return response()->json(["data" => [["task_assign" => "not belongs to you"]]]);
