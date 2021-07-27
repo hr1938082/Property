@@ -77,12 +77,12 @@ Route::group(["middleware"=>'auth:sanctum',"prefix"=>"property/request"],functio
 // tendent to property Routes
 Route::group(['middleware'=>['auth:sanctum','check.subs'] , "prefix"=>"property/tendent"],function(){
     Route::post('/approved',[TendentController::class,'tendent_only_approved']);
-    Route::post('/tendentonproperty',[TendentController::class,'tendent_on_property']);
     Route::post('/delete',[TendentController::class,'delete']);
 });
 Route::group(['middleware'=>'auth:sanctum' , "prefix"=>"property/tendent"],function(){
     Route::post('/select',[TendentController::class,'select']);
     Route::post('/select/one',[TendentController::class,'selectspecific']);
+    Route::post('/tendentonproperty',[TendentController::class,'tendent_on_property']);
     Route::post('/detail',[TendentController::class,'selectone']);
     Route::post('/old',[TendentController::class,'tendent_lived_in_property']);
 });

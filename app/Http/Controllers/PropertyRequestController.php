@@ -7,6 +7,7 @@ use App\Models\PropertyRequest;
 use App\Models\Tendent;
 use App\Models\Rent;
 use App\Models\Propety;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class PropertyRequestController extends Controller
@@ -62,7 +63,7 @@ class PropertyRequestController extends Controller
                         $tendent->save();
                         $find = Tendent::where([['property_id',$check->property_id],['is_live',1]])->get();
                         $tendent_on_property_count= $find->count();
-                        $property_rent = Propety::select('rent')
+                        $property_rent = Propety::select('property_name,rent')
                             ->where('id',$check->property_id)->first();
                         $rent = (int)ceil($property_rent->rent/$tendent_on_property_count);
                         $rent_ins = Rent::create([
@@ -71,6 +72,14 @@ class PropertyRequestController extends Controller
                             "amount" => $rent,
                             "split" => 0
                         ]);
+                        $user = User::select('name')->where('id',$tendent->tendent_id)->first;
+                        $input = [
+                            "user_id" => Auth::user()->id,
+                            "property_id" => $check->property_id,
+                            "description" => Auth::user()->name." approved $user->name request for property ".$property_rent->property_name,
+                            'stt' => 1
+                        ];
+                        NotificationsController::insert($input);
                         $check->delete();
                         if ($tendent_on_property_count>1) {
                             Rent::where('property_id',$check->property_id)
