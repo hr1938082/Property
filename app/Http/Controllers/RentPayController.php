@@ -60,6 +60,8 @@ class RentPayController extends Controller
                             'user_id' => $Propety->user_id,
                             'property_id' => $Propety->id,
                             'description' => "Rent paid by user ". Auth::user()->name . " for Property ". $Propety->property_name,
+                            'stt' => 1,
+                            'stl' => 1
                         ];
                         NotificationsController::insert($input);
                         return response()->json(["status" => true]);

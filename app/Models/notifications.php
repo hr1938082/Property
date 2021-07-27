@@ -15,7 +15,8 @@ class notifications extends Model
         'user_id',
         'property_id',
         'description',
-        'stt'
+        'stt',
+        'stl'
     ];
     public $timestamps = false;
 }

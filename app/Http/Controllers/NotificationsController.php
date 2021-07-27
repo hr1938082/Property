@@ -24,7 +24,7 @@ class NotificationsController extends Controller
             $data = [];
             foreach ($select as $value) {
                 $select_read_unread = NotificationReadUnread::select('user_id')
-                ->where('notification_id',$value->id)->get();
+                ->where([['notification_id',$value->id],['stl',1]])->get();
                 $status = 0;
                 if($select_read_unread)
                 {

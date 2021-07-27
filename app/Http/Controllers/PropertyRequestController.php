@@ -21,7 +21,6 @@ class PropertyRequestController extends Controller
             {
                 $upload = $request->all();
                 $upload += ["date"=>date('d-m-Y')];
-                PropertyRequest::create($upload);
                 if(PropertyRequest::create($upload))
                 {
                     $property = Propety::find($request->property_id);
@@ -29,7 +28,8 @@ class PropertyRequestController extends Controller
                         "user_id" => $request->tendent_id,
                         "property_id" => $request->property_id,
                         "description" => Auth::user()->name." requested you for property ".$property->property_name,
-                        'stt' => 0
+                        'stt' => 0,
+                        'stl' => 1
                     ];
                     NotificationsController::insert($input);
                 }
@@ -77,7 +77,8 @@ class PropertyRequestController extends Controller
                             "user_id" => Auth::user()->id,
                             "property_id" => $check->property_id,
                             "description" => Auth::user()->name." approved $user->name request for property ".$property_rent->property_name,
-                            'stt' => 1
+                            'stt' => 1,
+                            "stl"=> 0
                         ];
                         NotificationsController::insert($input);
                         $check->delete();
