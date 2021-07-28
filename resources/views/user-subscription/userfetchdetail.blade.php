@@ -80,7 +80,7 @@ Subs Detail
             </tbody>
         </table>
         @if ($expiry_diff ?? false)
-            @if ($expiry_diff < 0 || $select_subs[0]->status == 0)
+            @if ($expiry_diff < 0)
                 @if ($select->type_name == "landlord" || $select->type_name == "Landlord")
                     <a href="{{ route('user-subs-add-view',["id"=>$select->id]) }}" class="btn btn-block mb-3 btn-sm btn-primary">
                         New Subscription

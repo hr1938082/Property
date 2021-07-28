@@ -12,6 +12,7 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TendentController;
 use App\Http\Controllers\UsersubscriptionController;
 use App\Models\usersubscription;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,17 +24,17 @@ use App\Models\usersubscription;
 | contains the "web" middleware group. Now create something great!
 |
 */
-// Route::get('/foo', function () {
-// Artisan::call('storage:link');
-// });
+Route::get('/foo', function () {
+Artisan::call('storage:link');
+});
 
 Route::group(["middleware" => "guest"],function(){
     Route::get('/policy', function () {
         return view('privacypolicy');
     })->name('policy');
     Route::get('/admin', function () {
-        return view('auth.login'); 
-    
+        return view('auth.login');
+
     })->name('login_view');
     Route::get('/',function(){
         return view('index');
@@ -49,7 +50,7 @@ Route::group(["middleware" => "auth","prefix" => "user"],function()
 {
         Route::get('profile', function () {
             return view('profile.edit');
-        })->name('editprofile'); 
+        })->name('editprofile');
         Route::view('password/update','profile.password')->name('changepassword');
         Route::get('/add',[AdminController::class,'adduserform'])->name('userform');
         Route::post('/register',[AdminController::class,'register'])->name('useradd');

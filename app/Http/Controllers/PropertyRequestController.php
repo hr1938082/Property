@@ -63,7 +63,7 @@ class PropertyRequestController extends Controller
                         $tendent->save();
                         $find = Tendent::where([['property_id',$check->property_id],['is_live',1]])->get();
                         $tendent_on_property_count= $find->count();
-                        $property_rent = Propety::select('property_name,rent')
+                        $property_rent = Propety::select('property_name','rent')
                             ->where('id',$check->property_id)->first();
                         $rent = (int)ceil($property_rent->rent/$tendent_on_property_count);
                         $rent_ins = Rent::create([
@@ -72,7 +72,7 @@ class PropertyRequestController extends Controller
                             "amount" => $rent,
                             "split" => 0
                         ]);
-                        $user = User::select('name')->where('id',$tendent->tendent_id)->first;
+                        $user = User::select('name')->where('id',$tendent->tendent_id)->first();
                         $input = [
                             "user_id" => Auth::user()->id,
                             "property_id" => $check->property_id,

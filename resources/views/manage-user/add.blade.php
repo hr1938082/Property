@@ -11,7 +11,7 @@
 
 @section('content')
 <div class="wrapper fadeInDown">
-    <div id="formContent" style="margin-top: 100px">
+    <div id="formContent" style="margin: 100px 0">
         <!-- Tabs Titles -->
 
         <!-- Icon -->
@@ -55,7 +55,7 @@
             </div>
 
             <div class="form-group">
-                <input id="password-confirm" type="password" class="fadeIn third" name="password_confirmation" 
+                <input id="password-confirm" type="password" class="fadeIn third" name="password_confirmation"
                     autocomplete="new-password" placeholder="Confirm Password">
             </div>
             <div class="form-group">
@@ -74,11 +74,11 @@
                 @enderror
             </div>
             <div class="form-group">
-                <input id="mobile" type="text" class="fadeIn third" name="mobile" 
+                <input id="mobile" type="text" class="fadeIn third" name="mobile"
                     autocomplete="Mobile" placeholder="Mobile">
             </div>
             <div class="form-group">
-                <input id="address" type="text" class="fadeIn third" name="address" 
+                <input id="address" type="text" class="fadeIn third" name="address"
                     autocomplete="Address" placeholder="Address">
             </div>
             <input type="submit" class="fadeIn fourth" value="{{ __('Register') }}">

@@ -59,6 +59,7 @@ Manage User
                     <th scope="col">Id</th>
                     <th scope="col">Name</th>
                     <th scope="col">Rent</th>
+                    <th scope="col">USD</th>
                     <th scope="col">City</th>
                     <th scope="col">Status</th>
                     <th scope="col">Action</th>
@@ -70,6 +71,18 @@ Manage User
                     <td>{{$item->id}}</td>
                     <td>{{$item->name}}</td>
                     <td>{{$item->rent}}</td>
+                    @php
+                        $currencyVal = "not available";
+                    @endphp
+                    @foreach ($currency as $row)
+                        @if ($row->id == $item->currency_id)
+                            @php
+                                $currencyVal = $row->currency;
+                                break;
+                            @endphp
+                        @endif
+                    @endforeach
+                    <td>{{$currencyVal}}</td>
                     <td>{{$item->city}}</td>
                     <td>
                         @if ($item->status == 1)

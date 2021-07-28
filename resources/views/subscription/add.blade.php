@@ -11,7 +11,7 @@ Add Subscription
 
 @section('content')
 <div class="wrapper fadeInDown">
-    <div id="formContent" class="pt-3 pb-2" style="margin-top: 70px;">
+    <div id="formContent" class="pt-3 pb-2" style="margin: 100px;">
         @if (session('status'))
             <div class="alert alert-danger">
                 <h3 class="text-danger"></h3>

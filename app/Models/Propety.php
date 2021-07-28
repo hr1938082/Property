@@ -21,6 +21,7 @@ class Propety extends Model
         'bed_rooms',
         'bath_rooms',
         'description',
+        "currency",
         'user_id',
         'address_id',
         'rent',

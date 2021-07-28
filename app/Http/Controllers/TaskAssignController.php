@@ -16,7 +16,7 @@ class TaskAssignController extends Controller
     {
         if (Auth::user()->user_type_id == 1) {
             $check = Task::join('properties', 'properties.id', '=', 'task.property_id')
-                ->where('properties.user_id', Auth::user()->id);
+                ->where('properties.user_id', Auth::user()->id)->get();
             if ($check->count() > 0) {
                 $check_tendent = Tendent::where([['tendent_id', $request->user_id], ['is_live', 1]])->get();
                 if ($check_tendent->count() > 0) {
@@ -33,8 +33,8 @@ class TaskAssignController extends Controller
                             if (TaskAssign::create($add)) {
                                 $input = [
                                     "user_id" => Auth::user()->id,
-                                    "property_id" => $check->id,
-                                    "description" => "Task '" . $check->task . "' Assigned for property $check->property_name",
+                                    "property_id" => $check[0]->id,
+                                    "description" => "Task '" . $check[0]->task . "' Assigned for property ".$check[0]->property_name,
                                     "stt" => 1,
                                     "stl" => 0
                                 ];

@@ -64,6 +64,13 @@ Edit Details
                     </td>
                 </tr>
                 <tr class="text-center">
+                    <th class="w-25">Currency</th>
+                    <td>
+                        {{$data[0]["currency"]}}
+                    </td>
+                    </td>
+                </tr>
+                <tr class="text-center">
                     <th class="w-25">Year Build</th>
                     <td>
                         {{$data[0]["year_build"]}}
@@ -136,18 +143,18 @@ Edit Details
       edgeFadeEnabled: false,
       separationMultiplier: .8
     });
-  
+
           $('#prev').bind('click', function () {
             carousel.prev();
             return false
           });
-  
+
           $('#next').bind('click', function () {
             carousel.next();
             return false;
           });
-    
-    
+
+
     });
 </script>
 @endsection

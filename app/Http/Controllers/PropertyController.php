@@ -68,6 +68,7 @@ class PropertyController extends Controller
                 "bed_rooms" => $request->bed_rooms,
                 "bath_rooms" => $request->bath_rooms,
                 "description" => $request->description,
+                "currency" => $request->currency,
                 "rent" => $request->rent,
                 "year_build" => "$request->build_year-$request->build_month-$request->build_date",
                 "city" => $request->city,
@@ -108,6 +109,8 @@ class PropertyController extends Controller
                 "bed_rooms" => $request->input('bed_rooms'),
                 "bath_rooms" => $request->input('bath_rooms'),
                 "description" => $request->input('description'),
+                "currencySymbol" => $request->input('currencySymbol'),
+                "currency" => $request->input('currency'),
                 "user_id" => $request->input('user_id'),
                 "rent" => $request->input('rent'),
                 "year_build" => $request->input('year_build')
@@ -275,6 +278,7 @@ class PropertyController extends Controller
                 'properties.bed_rooms',
                 'properties.bath_rooms',
                 'properties.description',
+                'properties.currency_id',
                 'properties.rent AS rent',
                 'properties.year_build AS yearbuild',
                 'users.name AS username',
@@ -296,6 +300,7 @@ class PropertyController extends Controller
                 ->select('features_to_property.id', 'features_to_property.property_id', 'features.feature')
                 ->join('features', 'features_to_property.features_id', 'features.id')
                 ->get();
+            $currency = DB::table('currency')->get();
             $data = [];
             foreach ($select as $value) {
                 $imgTemp = [];
@@ -310,12 +315,21 @@ class PropertyController extends Controller
                         array_push($featuresTemp, ["id" => $row->id, "feature" => $row->feature]);
                     }
                 }
+                $currencyVal = 0;
+                foreach($currency as $row)
+                {
+                    if($row->id == $value->currency_id)
+                    {
+                        $currencyVal = $row->currency;
+                    }
+                }
                 array_push($data, [
                     "id" => $value->id,
                     "name" => $value->name,
                     "bed_rooms" => $value->bed_rooms,
                     "bath_rooms" => $value->bath_rooms,
                     "description" => $value->description,
+                    "currency" => $currencyVal,
                     "rent" => $value->rent,
                     "year_build" => $value->yearbuild,
                     "user_name" => $value->username,
@@ -356,12 +370,14 @@ class PropertyController extends Controller
             ->select(
                 'properties.id AS id',
                 'properties.property_name AS name',
+                'properties.currency_id',
                 'properties.rent AS rent',
                 'address.city AS city',
                 'address.state AS state',
                 'properties.status as status'
             )
             ->join('address', 'address.id', 'properties.address_id');
+            $currency = DB::table('currency')->get();
         if ($request->expectsJson()) {
             if ($name != "") {
                 $select = $select->where('property_name', 'LIKE', '%' . $name . '%');
@@ -407,10 +423,17 @@ class PropertyController extends Controller
                             $count++;
                         }
                     }
+                    $currencyVal = 0;
+                    foreach ($currency as  $row) {
+                        if($row->id == $value->currency_id)
+                        {
+                            $currencyVal = $row->id;
+                        }
+                    }
                     array_push($data, [
                         "id" => $value->id,
                         "name" => $value->name,
-                        "rent" => $value->rent,
+                        "rent" => "$value->rent $currencyVal",
                         "city" => $value->city,
                         "state" => $value->state,
                         "status" => $value->status,
@@ -438,7 +461,7 @@ class PropertyController extends Controller
                     $select = $select->where('properties.status',$request->status);
                 }
                 $select = $select->orderByDesc('id')->paginate('5');
-                return view('properties.manage', compact('select'));
+                return view('properties.manage', compact('select','currency'));
             }
             $status = "No Data Found";
             return view('properties.manage', compact('status'));
@@ -474,7 +497,7 @@ class PropertyController extends Controller
                         ]);
                     } else {
                         return back()->with('status', "Enabled");
-                    } 
+                    }
                 }
                 else
                 {
@@ -487,7 +510,7 @@ class PropertyController extends Controller
                     } else {
                         return back()->with('status', "Disabled");
                     }
-                }           
+                }
             }
             if ($request->expectsJson()) {
                 return response()->json([
@@ -496,7 +519,7 @@ class PropertyController extends Controller
                 ]);
             } else {
                 return back()->with('status', "Not Found");
-            }  
+            }
         }
         if ($request->expectsJson()) {
             return response()->json([

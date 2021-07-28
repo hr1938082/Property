@@ -42,6 +42,20 @@ Add User
                         <div class="text-danger" id="room-span"></div>
                     </div>
                     <div class="form-group">
+                        <div class="form-inline justify-content-center">
+                            <div style="width: 150px">
+                                <input id="currencySymbol" type="text" class="fadeIn second" placeholder="$" name="currencySymbol"
+                                    autocomplete="off" >
+                                <div class="text-danger" id="currencySymbol-span"></div>
+                            </div>
+                            <div style="width: 150px">
+                                <input id="currency" type="text" class="fadeIn second" placeholder="USD" name="currency"
+                                    autocomplete="off" >
+                                <div class="text-danger" id="currency-span"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <textarea id="description" autocomplete="none" type="text" class="fadeIn third shadow-none"
                             placeholder="Description" name="description"></textarea>
                         <div class="text-danger" id="description-span"></div>
@@ -345,7 +359,7 @@ Add User
                 e.preventDefault();
                 $('#modalPropertySubmit').attr('form','property');
                 $('#verifyEmpty').modal('show')
-                
+
             }
             else
             {
@@ -355,3 +369,4 @@ Add User
     })
 </script>
 @endsection
+

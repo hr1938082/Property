@@ -57,11 +57,11 @@ Manage User
                         if (isset($item->status)) {
                             if($item->status == 1)
                             {
-                                echo "Disable";
+                                echo "Enable";
                             }
                             else
                             {
-                                echo "Enable";
+                                echo "Disable";
                             }
                         }
                         else {

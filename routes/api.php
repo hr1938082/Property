@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BankDetailController;
+use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\PropertyController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -73,6 +74,11 @@ Route::group(["middleware"=>['auth:sanctum','check.subs'],"prefix"=>"property/re
 });
 Route::group(["middleware"=>'auth:sanctum',"prefix"=>"property/request"],function(){
     Route::post('/tendent',[PropertyRequestController::class,'select']);
+});
+
+// currency routes
+Route::group(["middleware"=>'auth:sanctum',"prefix"=>"currency"],function(){
+    Route::get('/select',[CurrencyController::class,'select']);
 });
 
 // tendent to property Routes
