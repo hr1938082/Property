@@ -1,7 +1,7 @@
 @extends('layouts.admin.master')
 
 @section('title')
-Add User
+Add Properties
 @endsection
 
 @section('css')
@@ -42,28 +42,26 @@ Add User
                         <div class="text-danger" id="room-span"></div>
                     </div>
                     <div class="form-group">
-                        <div class="form-inline justify-content-center">
-                            <div style="width: 150px">
-                                <input id="currencySymbol" type="text" class="fadeIn second" placeholder="$" name="currencySymbol"
-                                    autocomplete="off" >
-                                <div class="text-danger" id="currencySymbol-span"></div>
-                            </div>
-                            <div style="width: 150px">
-                                <input id="currency" type="text" class="fadeIn second" placeholder="USD" name="currency"
-                                    autocomplete="off" >
-                                <div class="text-danger" id="currency-span"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <textarea id="description" autocomplete="none" type="text" class="fadeIn third shadow-none"
                             placeholder="Description" name="description"></textarea>
                         <div class="text-danger" id="description-span"></div>
                     </div>
                     <div class="form-group">
-                        <input id="Rent" type="text" class="fadeIn third" name="rent" placeholder="Rent"
-                            autocomplete="none">
-                        <div class="text-danger" id="Rent-span"></div>
+                        <div class="form-inline justify-content-center">
+                            <div style="width: 190px">
+                                <select class="fadeIn" name="currency_id" id="currency_id">
+                                    <option selected disabled>currency</option>
+                                    @foreach ($currency as $curr)
+                                        <option value="{{$curr->id}}">{{$curr->currency}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div style="width: 190px">
+                                <input id="Rent" type="text" class="fadeIn third" name="rent" placeholder="Rent"
+                                    autocomplete="none">
+                            </div>
+                            <div class="text-danger" id="Rent-span"></div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Year Build</label>
@@ -241,6 +239,16 @@ Add User
                 $('#room-span').text("");
                 $('#description').css('border', '1px solid red')
                 $('#description-span').text("Provide Some details!!")
+            }else if ($('#currency_id').val() == null){
+                $('#name-span').text("")
+                $('#name').css('border', 'none');
+                $('#bed_rooms').css('border', 'none');
+                $('#bath_rooms').css('border', 'none');
+                $('#room-span').text("");
+                $('#description').css('border', 'none');
+                $('#description-span').text("");
+                $('#currency_id').css('border', '1px solid red');
+                $('#Rent-span').text("Please select currency of this property!!");
             } else if ($('#Rent').val() == "") {
                 $('#name-span').text("")
                 $('#name').css('border', 'none');
@@ -250,6 +258,7 @@ Add User
                 $('#description').css('border', 'none');
                 $('#description-span').text("");
                 $('#Rent').css('border', '1px solid red');
+                $('#currency_id').css('border', 'none');
                 $('#Rent-span').text("Please Provide Rent of this property!!");
             } else if (isNaN(parseInt($('#Rent').val()))) {
                 $('#name-span').text("")
@@ -259,6 +268,7 @@ Add User
                 $('#room-span').text("");
                 $('#description').css('border', 'none');
                 $('#description-span').text("");
+                $('#currency_id').css('border', 'none');
                 $('#Rent').css('border', '1px solid red');
                 $('#Rent-span').text("Only numbers are allowed!!");
             } else if ($('#build_date').val() == null) {
@@ -271,6 +281,7 @@ Add User
                 $('#room-span').text("");
                 $('#description').css('border', 'none');
                 $('#description-span').text("");
+                $('#currency_id').css('border', 'none');
                 $('#Rent').css('border', 'none');
                 $('#Rent-span').text("");
                 $('#build_date').css('border', '1px solid red');
@@ -284,6 +295,7 @@ Add User
                 $('#room-span').text("");
                 $('#description').css('border', 'none');
                 $('#description-span').text("");
+                $('#currency_id').css('border', 'none');
                 $('#Rent').css('border', 'none');
                 $('#Rent-span').text("");
                 $('#build_date').css('border', 'none');
@@ -297,6 +309,7 @@ Add User
                 $('#room-span').text("");
                 $('#description').css('border', 'none');
                 $('#description-span').text("");
+                $('#currency_id').css('border', 'none');
                 $('#Rent').css('border', 'none');
                 $('#Rent-span').text("");
                 $('#build_date').css('border', 'none');

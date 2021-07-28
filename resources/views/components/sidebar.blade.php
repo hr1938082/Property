@@ -24,7 +24,7 @@
         </ul>
         <li class="title">Subscription</li>
         <li class="dropdown-btn" data-toggle="collapse" data-target="#subs" role="button" aria-expanded="false" aria-controls="properties">
-            <a href="#"><i class="fas fa-archive"></i>Subscription</a>
+            <a href="#"><i class="fas fa-file-contract"></i>Subscription</a>
             <i class="fas fa-chevron-left"></i>
         </li>
         <ul class="dropdown collapse" id="subs">
@@ -32,7 +32,7 @@
             <li><a href="{{ route('subs-select-view') }}"><i class="fas fa-cog"></i>Manage</a></li>
         </ul>
         <li class="dropdown-btn" data-toggle="collapse" data-target="#user-subs" role="button" aria-expanded="false" aria-controls="properties">
-            <a href="#"><i class="fas fa-archive"></i>User</a>
+            <a href="#"><i class="fas fa-archive"></i>User Subscription</a>
             <i class="fas fa-chevron-left"></i>
         </li>
         <ul class="dropdown collapse" id="user-subs">
@@ -46,7 +46,7 @@
             <li><a href="{{ route('pay-met-view') }}"><i class="fas fa-cog"></i>Manage</a></li>
         </ul>
         <li class="dropdown-btn" data-toggle="collapse" data-target="#approval" role="button" aria-expanded="false" aria-controls="properties">
-            <a href="#"><i class="fas fa-money-bill-alt"></i>Approval</a>
+            <a href="#"><i class="fas fa-thumbs-up"></i>Approval</a>
             <i class="fas fa-chevron-left"></i>
         </li>
         <ul class="dropdown collapse" id="approval">
@@ -62,7 +62,7 @@
             <li><a href="{{ route('manage-properties') }}"><i class="fas fa-users-cog"></i>Manage</a></li>
         </ul>
         <li class="dropdown-btn" data-toggle="collapse" data-target="#tendent" role="button" aria-expanded="false" aria-controls="tendent">
-            <a href="{{ route('tenants-view') }}"><i class="fas fa-handshake"></i>Tendent</a>
+            <a href="{{ route('tenants-view') }}"><i class="fas fa-handshake"></i>Tenant</a>
         </li>
     </ul>
 </div>

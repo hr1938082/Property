@@ -1,7 +1,7 @@
 @extends('layouts.admin.master')
 
 @section('title')
-Manage User
+Manage Subscription
 @endsection
 
 @section('css')

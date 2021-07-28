@@ -40,7 +40,7 @@ Payment Methods
             </thead>
             <tbody>
                 @foreach ($select as $item)
-                <tr class="text-center">
+                <tr>
                     <td>{{$item->id}}</td>
                     <td>{{$item->name}}</td>
                     <td>@if ($item->status == 1)
@@ -48,7 +48,7 @@ Payment Methods
                         @else
                         {{"Disable"}}
                     @endif</td>
-                    <td>
+                    <td class="text-center">
                         <form class="d-inline" action="{{ route('pay-met-soft-del') }}" method="post">
                             @csrf
                             <input type="hidden" name="id" value="{{$item->id}}">
@@ -60,7 +60,10 @@ Payment Methods
                                 {{1}}
                             @endif
                             ">
-                            <button type="submit" class="btn btn-sm 
+                            <button type="submit" class="btn btn-sm
+                            @if ($item->name != "Stripe")
+                                btn-block
+                            @endif
                             @if ($item->status == 1)
                                 {{"btn-danger"}}
                             @endif
@@ -76,10 +79,12 @@ Payment Methods
                             @endif
                             </button>
                         </form>
+                        @if ($item->name == "Stripe")
                         <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal"
                             data-target="#exampleModal">
                             <i class="far fa-eye"></i>
                         </button>
+                        @endif
                     </td>
                 </tr>
                 @endforeach

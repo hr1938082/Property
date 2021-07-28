@@ -1,7 +1,7 @@
 @extends('layouts.admin.master')
 
 @section('title')
-Edit Details
+Edit User Details
 @endsection
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/style.css') }}" />

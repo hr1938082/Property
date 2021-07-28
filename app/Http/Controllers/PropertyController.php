@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Propety;
 use App\Models\Image;
 use App\Models\Address;
+use App\Models\currency;
 use App\Models\FeaturesToProperty;
 use App\Models\Message;
 use App\Models\Rent;
@@ -33,7 +34,8 @@ class PropertyController extends Controller
     public function index()
     {
         $date = (int)date('Y');
-        return view('properties.add', compact('date'));
+        $currency = currency::all();
+        return view('properties.add', compact('date','currency'));
     }
     public function insert(Request $request)
     {
@@ -68,13 +70,14 @@ class PropertyController extends Controller
                 "bed_rooms" => $request->bed_rooms,
                 "bath_rooms" => $request->bath_rooms,
                 "description" => $request->description,
-                "currency" => $request->currency,
+                "currency_id" => $request->currency_id,
                 "rent" => $request->rent,
                 "year_build" => "$request->build_year-$request->build_month-$request->build_date",
                 "city" => $request->city,
                 "state" => $request->state,
                 "street" => $request->street,
                 "zip_code" => $request->zip_code,
+                "status" => 1
             ];
             $this->address = $this->address->create($upload);
             $upload += [

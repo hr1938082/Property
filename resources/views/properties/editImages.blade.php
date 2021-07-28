@@ -1,7 +1,7 @@
 @extends('layouts.admin.master')
 
 @section('title')
-Edit Images
+Edit Property Images
 @endsection
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/auth.css') }}" />
