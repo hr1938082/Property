@@ -9,7 +9,7 @@ Edit Property Details
 @endsection
 @section('content')
 <div class="row justify-content-center align-items-center m-0" id="register">
-    <div class="col-md-6 col-10 form active shadow-lg rounded mb-3" style="margin-top: 70px;">
+    <div class="col-md-6 col-10 form active" style="margin-top: 150px;">
         <div class="row mt-3 justify-content-center">
             <div class="col-12 position-relative">
                 <h5 class="text-center">Images</h5>
@@ -33,9 +33,9 @@ Edit Property Details
                 <tr class="text-center">
                     <th colspan="2" class="position-relative">
                         Information
-                        <button class="property_image_edit" type="button"style="transform: translate(-50%,-30%);color:white">
+                        <a href="{{ route('editinfo', ['id'=>$data[0]['id']]) }}" class="property_image_edit" type="button"style="transform: translate(-50%,-30%);color:white">
                             <i class="fas fa-edit"></i>
-                        </button>
+                        </a>
                     </th>
                 </tr>
                 <tr class="text-center">
@@ -89,9 +89,9 @@ Edit Property Details
                 <tr class="text-center">
                     <th colspan="2" class="position-relative">
                         Address
-                        <button class="property_image_edit" type="button"style="transform: translate(-50%,-30%);color:white">
+                        <a href="{{ route('editaddress', ['id'=>$data[0]['id']]) }}" class="property_image_edit" type="button"style="transform: translate(-50%,-30%);color:white">
                             <i class="fas fa-edit"></i>
-                        </button>
+                        </a>
                     </th>
                 </tr>
                 <tr class="text-center">

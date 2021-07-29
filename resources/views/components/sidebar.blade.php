@@ -64,5 +64,22 @@
         <li class="dropdown-btn" data-toggle="collapse" data-target="#tendent" role="button" aria-expanded="false" aria-controls="tendent">
             <a href="{{ route('tenants-view') }}"><i class="fas fa-handshake"></i>Tenant</a>
         </li>
+        <li class="title">Teritories</li>
+        <li class="dropdown-btn" data-toggle="collapse" data-target="#states" role="button" aria-expanded="false" aria-controls="properties">
+            <a href="#"><i class="fas fa-map"></i>States</a>
+            <i class="fas fa-chevron-left"></i>
+        </li>
+        <ul class="dropdown collapse" id="states">
+            <li><a href="{{ route('stateIndex') }}"><i class="fas fa-plus"></i>Add</a></li>
+            <li><a href="{{ route('stateManage') }}"><i class="fas fa-cog"></i>Manage</a></li>
+        </ul>
+        <li class="dropdown-btn" data-toggle="collapse" data-target="#city" role="button" aria-expanded="false" aria-controls="properties">
+            <a href="#"><i class="fas fa-city"></i>City</a>
+            <i class="fas fa-chevron-left"></i>
+        </li>
+        <ul class="dropdown collapse" id="city">
+            <li><a href="{{ route('cityIndex') }}"><i class="fas fa-plus"></i>Add</a></li>
+            <li><a href="{{ route('cityManage') }}"><i class="fas fa-cog"></i>Manage</a></li>
+        </ul>
     </ul>
 </div>

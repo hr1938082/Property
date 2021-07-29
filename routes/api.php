@@ -21,7 +21,9 @@ use App\Http\Controllers\RentPayController;
 use App\Http\Controllers\UsersubscriptionController;
 use App\Http\Controllers\PaymentMethodsController;
 use App\Http\Controllers\SocialLinksController;
+use App\Http\Controllers\StatesController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\CityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -164,6 +166,8 @@ Route::group(["middleware"=>'auth:sanctum',"prefix"=>"utilitypaid"],function(){
 Route::group(["middleware"=>'auth:sanctum',"prefix"=>"rent"],function(){
     Route::post('/select',[RentController::class,'select']);
 });
+
+// rentpay Routes
 Route::group(["middleware"=>['auth:sanctum','check.subs'],"prefix"=>"rent/pay"],function(){
     Route::post('/add',[RentPayController::class,'add']);
 
@@ -175,6 +179,16 @@ Route::group(["middleware"=>'auth:sanctum',"prefix"=>"rent/pay"],function(){
     Route::post('/sum',[RentPayController::class,'rentAll']);
     Route::post('/graph',[RentPayController::class,'YearlyDataMothWise']);
 
+});
+
+// state Routes
+Route::group(["middleware" => 'auth:sanctum',"prefix"=>"states"],function(){
+    Route::get('/select',[StatesController::class,'select']);
+});
+
+// city Routes
+Route::group(["middleware" => 'auth:sanctum',"prefix"=>"cities"],function(){
+    Route::post('/select',[CityController::class,'select']);
 });
 
 Route::group(["middleware"=>'auth:sanctum',"prefix"=>"subscription"],function(){

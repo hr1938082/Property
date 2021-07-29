@@ -2,12 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CityController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\PaymentMethodsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserTypeController;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\StatesController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TendentController;
 use App\Http\Controllers\UsersubscriptionController;
@@ -82,6 +84,16 @@ Route::group(["middleware"=>"auth", "prefix" => "properties"],function()
     Route::get('/edit/images/{id}',[PropertyController::class,'editImages'])->name('editImages');
     Route::post('/delete/image',[PropertyController::class,'deleteimage'])->name('deleteImage');
     Route::post('update/images',[PropertyController::class,'updateimage'])->name('updateimage');
+    Route::get('edit/info/{id}',[PropertyController::class,'editinfo'])->name('editinfo');
+    Route::get('edit/address/{id}',[PropertyController::class,'editaddress'])->name('editaddress');
+});
+Route::group(["middelware"=>"auth","prefix"=>"territory"],function(){
+    Route::get('/state/add',[StatesController::class, 'index'])->name('stateIndex');
+    Route::post('/state/add',[StatesController::class, 'insert'])->name('stateInsert');
+    Route::get('state/manage',[StatesController::class,'select'])->name('stateManage');
+    Route::get('city/add',[CityController::class,'Index'])->name('cityIndex');
+    Route::post('city/add',[CityController::class,'insert'])->name('cityInsert');
+    Route::get('city/manage',[CityController::class,'select'])->name('cityManage');
 });
 Route::group(["middleware"=>"auth", "prefix" => "subscription"],function()
 {
@@ -109,7 +121,6 @@ Route::group(["middleware"=>"auth", "prefix" => "payment/methods"], function()
     Route::post('/detail', [PaymentMethodsController::class, 'authCheck'])->name('pay-met-auth');
     Route::post('/update', [PaymentMethodsController::class, 'update'])->name('pay-met-update');
     Route::post('/soft/del', [PaymentMethodsController::class, 'softdel'])->name('pay-met-soft-del');
-
 });
 Route::get('/tenants',[TendentController::class,'ten_to_pro'])
 ->middleware('auth')

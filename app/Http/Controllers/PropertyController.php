@@ -139,6 +139,15 @@ class PropertyController extends Controller
         $select = Image::select('id', 'name_dir')->where('property_id', $id)->get();
         return view('properties.editImages', compact('select', 'id'));
     }
+    public function editinfo(Request $request)
+    {
+        return view('properties.editinfo');
+    }
+
+    public function editaddress(Request $request)
+    {
+        return view('properties.editaddress');
+    }
     // update property image
     public function updateimage(Request $request)
     {

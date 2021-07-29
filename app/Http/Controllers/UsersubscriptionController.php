@@ -26,7 +26,7 @@ class UsersubscriptionController extends Controller
             ->where('status', 1)
             ->get();
         $current_year = (int)date('Y');
-        return view('user-subscription.add', compact('id', 'select', 'select_pay', 'current_year'));
+        return view('user-subscriptions.add', compact('id', 'select', 'select_pay', 'current_year'));
     }
     public function fetchdetail(Request $request)
     {
@@ -68,7 +68,7 @@ class UsersubscriptionController extends Controller
             if (Auth::user()->user_type_id == 1) {
                 if (Auth::user()->verified == 1) {
                     $check_enable = subscription::find($request->subs_id)->where('status', 1)->first();
-                    
+
                     if ($check_enable) {
                         $check = usersubscription::where(
                             [
@@ -462,10 +462,10 @@ class UsersubscriptionController extends Controller
     public function select(Request $request)
     {
         if ($request->expectsJson() && Auth::user()->user_type_id == 1) {
-            $select = usersubscription::join('subscription', 'subscription.id', 'user_subscription.subscription_id')
+            $select = usersubscription::join('subscriptions', 'subscriptions.id', 'user_subscriptions.subscription_id')
                 ->where([
                     ['user_id', Auth::user()->id],
-                    ['user_subscription.status', 1]
+                    ['user_subscriptions.status', 1]
                 ])
                 ->first();
             if ($select) {
