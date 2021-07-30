@@ -13,12 +13,23 @@ Manage States
     <div class="col-md-8 form px-5 pt-3 active shadow-lg">
         <div class="col-12 d-flex justify-content-between">
             <h3 class="text-primary d-none d-lg-block" style="color: ">States</h3>
+            @if (session('status') == "Not Found")
+            <h5 class="alert alert-danger">{{session('status')}}</h5>
+            @endif
+            @if (session('status') == "Disabled")
+
+            @endif
+            @if (session('status') == "Enabled")
+                <h5 class="alert alert-success">{{session('status')}}</h5>
+            @endif
         </div>
         <table class="table table-bordered ">
             <thead>
                 <tr class="text-center">
                     <th scope="col">Id</th>
                     <th scope="col">States</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,11 +37,40 @@ Manage States
                     <tr class="text-center">
                         <td>{{$item->id}}</td>
                         <td>{{$item->state}}</td>
+                        <td>
+                            @if ($item->status == 1)
+                                {{"Enable"}}
+                            @else
+                                {{"Disable"}}
+                            @endif
+                        </td>
+                        <td>
+                            <a href="update/{{$item->id}}" class="btn btn-sm btn-block
+                                @if ($item->status == 1)
+                                    {{"btn-danger"}}
+                                @else
+                                    {{"btn-success"}}
+                                @endif
+                            ">
+                            @if ($item->status == 1)
+                                {{"Disable"}}
+                            @else
+                                {{"Enable"}}
+                            @endif
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
-
         </table>
+
+        <div class="clearfix">
+            <div class="float-right">
+                @if ($select instanceof \Illuminate\Pagination\AbstractPaginator)
+                {{$select->links()}}
+                @endif
+            </div>
+        </div>
     </div>
 </div>
 @endsection

@@ -68,7 +68,7 @@ class TendentController extends Controller
             $count = 0;
             foreach ($image as $row) {
                 if ($value->property_id == $row->property_id && $count == 0) {
-                    array_push($temp, ["id" => $row->id, "path" => "public/storage/app/" . $row->name_dir]);
+                    array_push($temp, ["id" => $row->id, "path" => $row->name_dir]);
                     $count++;
                 }
             }
@@ -104,7 +104,7 @@ class TendentController extends Controller
             $count = 0;
             foreach ($image as $row) {
                 if ($value->property_id == $row->property_id && $count == 0) {
-                    array_push($temp, ["id" => $row->id, "path" => "public/storage/app/" . $row->name_dir]);
+                    array_push($temp, ["id" => $row->id, "path" => $row->name_dir]);
                     $count++;
                 }
             }
@@ -185,8 +185,8 @@ class TendentController extends Controller
             }
             else
             {
-                return response()->json(["data" => [["tendent_to_property" => "property not found"]]]);    
-            }   
+                return response()->json(["data" => [["tendent_to_property" => "property not found"]]]);
+            }
             Rent::where('user_id', $check->tendent_id)->delete();
             if ($tendent_on_property_count > 1) {
                 Rent::where('property_id', $check->property_id)

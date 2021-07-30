@@ -91,9 +91,12 @@ Route::group(["middelware"=>"auth","prefix"=>"territory"],function(){
     Route::get('/state/add',[StatesController::class, 'index'])->name('stateIndex');
     Route::post('/state/add',[StatesController::class, 'insert'])->name('stateInsert');
     Route::get('state/manage',[StatesController::class,'select'])->name('stateManage');
+    Route::get('state/update/{id}',[StatesController::class,'statUpdate'])->name('stateUpdate');
     Route::get('city/add',[CityController::class,'Index'])->name('cityIndex');
     Route::post('city/add',[CityController::class,'insert'])->name('cityInsert');
     Route::get('city/manage',[CityController::class,'select'])->name('cityManage');
+    Route::get('city/delete/{id}',[CityController::class,'delete'])->name('cityDelete');
+    Route::get('city/edit/{id}',[CityController::class,'edit'])->name('cityEdit');
 });
 Route::group(["middleware"=>"auth", "prefix" => "subscription"],function()
 {

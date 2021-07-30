@@ -15,20 +15,21 @@ class StatesController extends Controller
     }
     public function select(Request $request)
     {
-        $select = State::all();
         if($request->expectsJson() && Auth::user()->user_type_id == 1)
         {
+            $select = State::all();
             return response()->json(["status"=> true, "data"=>$select]);
         }
         elseif( !$request->expectsJson() && Auth::user()->user_type_id == 7)
         {
+            $select = state::paginate(5);
             return view('State.manageState',compact('select'));
         }
     }
     public function insert(Request $request)
     {
         $request->validate([
-            'state'=>'required|alpha'
+            'state'=>'required'
         ]);
         $data =$request->all();
         if(State::create($data))
@@ -39,5 +40,26 @@ class StatesController extends Controller
         {
             return back()->with('status',"failed to insert");
         }
+    }
+    public function statUpdate(Request $request)
+    {
+        $state = State::find($request->id);
+        if($state)
+        {
+            if($state->status == 1)
+            {
+                $state->status = 0;
+                $state->save();
+
+            return back()->with('status','Disabled');
+            }
+            else
+            {
+                $state->status = 1;
+                $state->save();
+                return back()->with('status','Enabled');
+            }
+        }
+        return back()->with('status','Not Found');
     }
 }

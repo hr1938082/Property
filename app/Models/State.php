@@ -12,7 +12,8 @@ class State extends Model
     protected $primaryKey = "id";
 
     protected  $fillable = [
-        'state'
+        'state',
+        'status',
     ];
 
     public $timestamps = false;

@@ -20,11 +20,11 @@ class NotificationsController extends Controller
         if(Auth::user()->user_type_id == 1)
         {
             $select = notifications::select('notifications.id','user_id','notifications.description')
-            ->where('user_id',Auth::user()->id)->get();
+            ->where([['user_id',Auth::user()->id],['stl',1]])->get();
             $data = [];
             foreach ($select as $value) {
                 $select_read_unread = NotificationReadUnread::select('user_id')
-                ->where([['notification_id',$value->id],['stl',1]])->get();
+                ->where('notification_id',$value->id)->get();
                 $status = 0;
                 if($select_read_unread)
                 {
@@ -35,13 +35,16 @@ class NotificationsController extends Controller
                         }
                     }
                 }
-                array_push($data,[
-                    'id'=>$value->id,
-                    'description'=>$value->description,
-                    'status'=>$status
-                ]);
+                if($status == 0)
+                {
+                    array_push($data,[
+                        'id'=>$value->id,
+                        'description'=>$value->description,
+                        'status'=>$status
+                    ]);
+                }
             }
-            return response()->json(["status" => true, "data"=>[$data]]);
+            return response()->json(["status" => true, "data"=>$data]);
         }
         if(Auth::user()->user_type_id == 2)
         {
@@ -68,11 +71,14 @@ class NotificationsController extends Controller
                             }
                         }
                     }
-                    array_push($data,[
-                        'id'=>$value->id,
-                        'description'=>$value->description,
-                        'status'=>$status
-                    ]);
+                    if($status == 0)
+                    {
+                        array_push($data,[
+                            'id'=>$value->id,
+                            'description'=>$value->description,
+                            'status'=>$status
+                        ]);
+                    }
                 }
                 return response()->json(["status" => true, "data"=>$data]);
             }

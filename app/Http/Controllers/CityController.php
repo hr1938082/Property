@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\city;
+use App\Models\State;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,10 +12,15 @@ class CityController extends Controller
 {
     public function index()
     {
-        return view('city.addcity');
+        $states = State::all();
+        return view('city.addcity',compact('states'));
     }
     public function insert(Request $request)
     {
+        $request->validate([
+            'city' => 'required',
+            'state_id'=> 'required|numeric'
+        ]);
         $data = $request->all();
         if(city::create($data))
         {
@@ -34,8 +40,19 @@ class CityController extends Controller
         }
         elseif($request->expectsJson() && Auth::user()->user_type_id==1)
         {
-            $select = city::select('city')->join('states','states.id','cities.state_id')->where('states.id',$request->state_id)->get();
-            return response()->json(["status" => true, "data" => [$select]]);
+            $select = city::select('city')->join('states','states.id','cities.state_id')
+            ->where([['states.state',$request->state_name],['states.status',1]])->get();
+            return response()->json(["status" => true, "data" => $select]);
         }
+    }
+    public function delete(Request $request)
+    {
+        $city = city::find($request->id);
+        if($city)
+        {
+            $city->delete();
+            return back()->with('status','Deleted');
+        }
+        return back()->with('status','Not Found');
     }
 }
