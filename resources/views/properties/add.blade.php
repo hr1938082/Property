@@ -98,10 +98,15 @@ Add Properties
                     </div>
                     <div class="form-group">
                         <div class="form-inline justify-content-center">
-                            <input type="text" class="fadeIn px-1" placeholder="City" autocomplete="none" name="city"
-                                id="city" style="width: 185px">
-                            <input type="text" class="fadeIn px-1" placeholder="State" autocomplete="none" name="state"
-                                id="state" style="width: 185px">
+                            <select class="fadeIn px-1" name="state" id="state-input" style="width: 185px">
+                                <option selected disabled>State</option>
+                                @foreach ($state as $stateval)
+                                    <option value="{{$stateval->state}}">{{$stateval->state}}</option>
+                                @endforeach
+                            </select>
+                            <select class="fadeIn px-1" name="city" id="city-input" style="width: 185px">
+                                <option selected disabled>City</option>
+                            </select>
                         </div>
                         <div class="text-danger" id="city_sate-span"></div>
                     </div>
@@ -163,6 +168,9 @@ Add Properties
     const image_btn = document.querySelector('#image_btn');
     const cardBody = document.querySelector('.card-body');
     const cardBodyPara = document.querySelector('#cardBodyPara');
+    const host = "http://127.0.0.1:8000"
+    const state = document.querySelector('#state-input');
+    const city = document.querySelector('#city-input');
     let images = [];
     image_btn.addEventListener('click', () => {
         inpImg.click();
@@ -189,7 +197,29 @@ Add Properties
             }
         }
     });
+    state.addEventListener('change',()=>{
+        $.ajax({
+            type:"GET",
+            headers:{
+                "Accept":"application/json"
+            },
+            url:`${host}/territory/city/select/${state.value}`,
+            success:(res)=>{
+                city.innerHTML = "";
+                const data= res.data;
+                data.map((value)=>{
+
+                    const option = document.createElement("option");
+                    option.text = value.city;
+                    option.value = value.city;
+                    city.appendChild(option);
+                });
+            }
+        })
+
+    });
     $(document).ready(() => {
+        // validation start
         $('#first').click(() => {
             if ($('#name').val() == "") {
                 $('#description').css('border', 'none')
@@ -322,42 +352,42 @@ Add Properties
 
         });
         $('#second').click(() => {
-            if ($('#city').val() == "") {
+            if ($('#city-input').val() == "") {
                 $('#city_sate-span').text("")
                 $('#street').css('border', 'none');
                 $('#street-span').text("")
                 $('#zipcode').css('border', 'none');
                 $('#zipcode-span').text("")
-                $('#city').css('border', '1px solid red');
+                $('#city-input').css('border', '1px solid red');
                 $('#city_sate-span').text("City is Required!!")
-            } else if ($('#state').val() == "") {
+            } else if ($('#state-input').val() == "") {
                 $('#city_sate-span').text("")
                 $('#street').css('border', 'none');
                 $('#street-span').text("")
                 $('#zipcode').css('border', 'none');
                 $('#zipcode-span').text("")
-                $('#city').css('border', 'none');
-                $('#state').css('border', '1px solid red');
+                $('#city-input').css('border', 'none');
+                $('#state-input').css('border', '1px solid red');
                 $('#city_sate-span').text("State is Required!!")
             } else if ($('#street').val() == "") {
                 $('#zipcode').css('border', 'none');
                 $('#zipcode-span').text("")
-                $('#city').css('border', 'none');
-                $('#state').css('border', 'none');
+                $('#city-input').css('border', 'none');
+                $('#state-input').css('border', 'none');
                 $('#city_sate-span').text("")
                 $('#street').css('border', '1px solid red');
                 $('#street-span').text("Street is Required!!")
             } else if ($('#zipcode').val() == "") {
-                $('#city').css('border', 'none');
-                $('#state').css('border', 'none');
+                $('#city-input').css('border', 'none');
+                $('#state-input').css('border', 'none');
                 $('#city_sate-span').text("")
                 $('#street').css('border', 'none');
                 $('#street-span').text("")
                 $('#zipcode').css('border', '1px solid red');
                 $('#zipcode-span').text("Zipcode is Required!!")
             } else if (isNaN(parseInt($('#zipcode').val()))) {
-                $('#city').css('border', 'none');
-                $('#state').css('border', 'none');
+                $('#city-input').css('border', 'none');
+                $('#state-input').css('border', 'none');
                 $('#city_sate-span').text("")
                 $('#street').css('border', 'none');
                 $('#street-span').text("")
@@ -379,6 +409,7 @@ Add Properties
                 $(this).attr('form','property');
             }
         });
+        // validation end
     })
 </script>
 @endsection

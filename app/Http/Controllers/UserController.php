@@ -426,7 +426,7 @@ class UserController extends Controller
             ->join('user_type', 'users.user_type_id', "=", 'user_type.id')
             ->select('users.id', 'users.name', 'user_type.name as user_type_name', 'users.email');
         if ($req->input('search') != "") {
-            $select = $select->where('users.' . $req->input('column'), '=', $req->input('search'))
+            $select = $select->where('users.' . $req->input('column'), 'LIKE', '%'.$req->input('search').'%')
                 ->orderByDesc('users.id')
                 ->get();
         } else {

@@ -6,10 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Propety;
 use App\Models\Image;
 use App\Models\Address;
+use App\Models\city;
 use App\Models\currency;
 use App\Models\FeaturesToProperty;
 use App\Models\Message;
 use App\Models\Rent;
+use App\Models\State;
 use App\Models\Task;
 use App\Models\TaskAssign;
 use App\Models\Tendent;
@@ -30,13 +32,15 @@ class PropertyController extends Controller
         $this->address = new Address();
         $this->image = new Image();
     }
-    // insert property
+    // view property
     public function index()
     {
         $date = (int)date('Y');
         $currency = currency::all();
-        return view('properties.add', compact('date','currency'));
+        $state = State::select('state')->where('status', 1)->get();
+        return view('properties.add', compact('date', 'currency', 'state'));
     }
+    // insert property
     public function insert(Request $request)
     {
         if ($request->expectsJson()) {
@@ -113,7 +117,7 @@ class PropertyController extends Controller
                 "bath_rooms" => $request->input('bath_rooms'),
                 "description" => $request->input('description'),
                 "currencySymbol" => $request->input('currencySymbol'),
-                "currency" => $request->input('currency'),
+                "currency_id" => $request->input('currency_id'),
                 "user_id" => $request->input('user_id'),
                 "rent" => $request->input('rent'),
                 "year_build" => $request->input('year_build')
@@ -132,21 +136,33 @@ class PropertyController extends Controller
         }
         return response()->json(["data" => [["property" => "not found"]]]);
     }
-
+    // edit property images
     public function editImages(Request $request)
     {
         $id = $request->id;
         $select = Image::select('id', 'name_dir')->where('property_id', $id)->get();
         return view('properties.editImages', compact('select', 'id'));
     }
+    // edit property info
     public function editinfo(Request $request)
     {
-        return view('properties.editinfo');
+        $id =$request->id;
+        $property = Propety::find($id);
+        $currency = currency::all();
+        return view('properties.editinfo', compact('id','property', 'currency'));
     }
-
+    // edit property address
     public function editaddress(Request $request)
     {
-        return view('properties.editaddress');
+        $id = $request->id;
+        $property_address = Propety::select('address.id as id', 'address.city as city', 'address.state as state', 'address.street as street', 'address.zip_code as zip_code')
+            ->join('address', 'properties.address_id', 'address.id')
+            ->where('properties.id', $id)
+            ->first();
+        $state = State::select('id','state')->where('status',1)->get();
+        $city = city::select('city as city')->join('states','cities.state_id','states.id')->where('states.state',$property_address->state)->get();
+        // dd($city);
+        return view('properties.editaddress', compact('id','property_address', 'city', 'state'));
     }
     // update property image
     public function updateimage(Request $request)
@@ -250,14 +266,63 @@ class PropertyController extends Controller
             return redirect("properties/edit/images/$request->property_id")->with('status', 'Please pick an image');
         }
     }
-
+    // update property info
+    public function updateinfo(Request $request)
+    {
+        $request->validate([
+            'property_name' => 'required',
+            'bed_rooms' => 'required|numeric',
+            'bath_rooms' => 'required|numeric',
+            'description' => 'required',
+            'currency_id' => 'required|numeric',
+            'rent'=> 'required|numeric',
+            'build_year' => 'required|numeric|min:4',
+            'build_month' => 'required|numeric|min:2',
+            'build_date' => 'required|numeric|min:2',
+        ]);
+        $upload = [
+            "property_name" => $request->property_name,
+            "bed_rooms" => $request->bed_rooms,
+            "bath_rooms" => $request->bath_rooms,
+            "description" => $request->description,
+            "currency_id" => $request->currency_id,
+            "rent" => $request->rent,
+            "year_build" => $request->build_year."-".$request->build_month."-".$request->build_date
+        ];
+        $property = Propety::find($request->id);
+        if($property->update($upload))
+        {
+            return redirect()->route("select-properties",["id"=>$request->id]);
+        }
+    }
+    // update property address
+    public function updateaddress(Request $request)
+    {
+        $request->validate([
+            'state' => 'required',
+            'city' => 'required',
+            'street' => 'required',
+            'zip_code' => 'required'
+        ]);
+        $upload = [
+            "state" => $request->state,
+            "city" => $request->city,
+            "street" =>$request->street,
+            "zip_code" => $request->zip_code,
+        ];
+        $property = Propety::find($request->id);
+        $property_address = Address::find($property->address_id);
+        if($property_address->update($upload))
+        {
+            return redirect()->route("select-properties",["id"=>$request->id]);
+        }
+    }
     // delete property image
     public function selectimage(Request $request)
     {
         $this->image = $this->image::where('property_id', $request->input('property_id'))->get();
         return response()->json(["data" => $this->image]);
     }
-
     // delete property image
     public function deleteimage(Request $request)
     {
@@ -327,21 +392,22 @@ class PropertyController extends Controller
                         array_push($featuresTemp, ["id" => $row->id, "feature" => $row->feature]);
                     }
                 }
-                $currencyVal = 0;
-                foreach($currency as $row)
-                {
-                    if($row->id == $value->currency_id)
-                    {
+                $currencyVal = "";
+                foreach ($currency as $row) {
+                    if ($row->id == $value->currency_id) {
                         $currencyVal = $row->currency;
                     }
                 }
+                $rentval = $currencyVal ? "$value->rent $currencyVal" : $value->rent;
                 array_push($data, [
                     "id" => $value->id,
                     "name" => $value->name,
                     "bed_rooms" => $value->bed_rooms,
                     "bath_rooms" => $value->bath_rooms,
-                    "description" => $value->description ,
-                    "rent" => $value->rent." ".$currencyVal,
+                    "description" => $value->description,
+                    "rent" => $rentval,
+                    "currency" => $currencyVal,
+                    "price" => $value->rent,
                     "year_build" => $value->yearbuild,
                     "user_name" => $value->username,
                     "user_email" => $value->user_email,
@@ -364,7 +430,6 @@ class PropertyController extends Controller
             }
         }
     }
-
     // select property
     public function select(Request $request)
     {
@@ -388,7 +453,7 @@ class PropertyController extends Controller
                 'properties.status as status'
             )
             ->join('address', 'address.id', 'properties.address_id');
-            $currency = DB::table('currency')->get();
+        $currency = DB::table('currency')->get();
         if ($request->expectsJson()) {
             if ($name != "") {
                 $select = $select->where('property_name', 'LIKE', '%' . $name . '%');
@@ -434,17 +499,17 @@ class PropertyController extends Controller
                             $count++;
                         }
                     }
-                    $currencyVal = 0;
+                    $currencyVal = "";
                     foreach ($currency as  $row) {
-                        if($row->id == $value->currency_id)
-                        {
-                            $currencyVal = $row->id;
+                        if ($row->id == $value->currency_id) {
+                            $currencyVal = $row->currency;
                         }
                     }
+                    $rentval = $currencyVal ? "$value->rent $currencyVal" : $value->rent;
                     array_push($data, [
                         "id" => $value->id,
                         "name" => $value->name,
-                        "rent" => "$value->rent $currencyVal",
+                        "rent" => $rentval,
                         "city" => $value->city,
                         "state" => $value->state,
                         "status" => $value->status,
@@ -467,34 +532,29 @@ class PropertyController extends Controller
                         $select = $select->where($column, $search);
                     }
                 }
-                if($request->status != "")
-                {
-                    $select = $select->where('properties.status',$request->status);
+                if ($request->status != "") {
+                    $select = $select->where('properties.status', $request->status);
                 }
                 $select = $select->orderByDesc('id')->paginate('5');
-                return view('properties.manage', compact('select','currency'));
+                return view('properties.manage', compact('select', 'currency'));
             }
             $status = "No Data Found";
             return view('properties.manage', compact('status'));
         }
     }
-
     // delete property
     public  function delete(Request $request)
     {
         $tenant_to_property = Tendent::where([
             ['property_id', $request->id],
-            ['is_live',1]
+            ['is_live', 1]
         ])->get();
         if ($tenant_to_property->count() == 0) {
             $property = Propety::find($request->id);
-            if($property)
-            {
-                if($property->status == 0)
-                {
-                    $rent = Rent::where('property_id',$property->id)->get();
-                    if($rent->count() > 0)
-                    {
+            if ($property) {
+                if ($property->status == 0) {
+                    $rent = Rent::where('property_id', $property->id)->get();
+                    if ($rent->count() > 0) {
                         foreach ($rent as  $value) {
                             $value->delete();
                         }
@@ -509,9 +569,7 @@ class PropertyController extends Controller
                     } else {
                         return back()->with('status', "Enabled");
                     }
-                }
-                else
-                {
+                } else {
                     $property->status = 0;
                     $property->save();
                     if ($request->expectsJson()) {

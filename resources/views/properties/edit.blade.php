@@ -109,13 +109,13 @@ Edit Property Details
                 <tr class="text-center">
                     <th class="w-25">Street</th>
                     <td class="text-capitalize">
-                        {{$data[0]["bath_rooms"]}}
+                        {{$data[0]["street"]}}
                     </td>
                 </tr>
                 <tr class="text-center">
                     <th class="w-25">Zip Code</th>
                     <td>
-                        {{$data[0]["rent"]}}
+                        {{$data[0]["zip_code"]}}
                     </td>
                     </td>
                 </tr>

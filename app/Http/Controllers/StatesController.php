@@ -17,7 +17,7 @@ class StatesController extends Controller
     {
         if($request->expectsJson() && Auth::user()->user_type_id == 1)
         {
-            $select = State::all();
+            $select = State::where('status',1)->get();
             return response()->json(["status"=> true, "data"=>$select]);
         }
         elseif( !$request->expectsJson() && Auth::user()->user_type_id == 7)

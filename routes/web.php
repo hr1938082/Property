@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Artisan;
 |
 */
 Route::get('/foo', function () {
-Artisan::call('storage:link');
+    Artisan::call('storage:link');
 });
 
 Route::group(["middleware" => "guest"],function(){
@@ -85,7 +85,9 @@ Route::group(["middleware"=>"auth", "prefix" => "properties"],function()
     Route::post('/delete/image',[PropertyController::class,'deleteimage'])->name('deleteImage');
     Route::post('update/images',[PropertyController::class,'updateimage'])->name('updateimage');
     Route::get('edit/info/{id}',[PropertyController::class,'editinfo'])->name('editinfo');
+    Route::post('update/info',[PropertyController::class,'updateinfo'])->name('updateinfo');
     Route::get('edit/address/{id}',[PropertyController::class,'editaddress'])->name('editaddress');
+    Route::post('update/address',[PropertyController::class,'updateaddress'])->name('updateaddress');
 });
 Route::group(["middelware"=>"auth","prefix"=>"territory"],function(){
     Route::get('/state/add',[StatesController::class, 'index'])->name('stateIndex');
@@ -97,6 +99,7 @@ Route::group(["middelware"=>"auth","prefix"=>"territory"],function(){
     Route::get('city/manage',[CityController::class,'select'])->name('cityManage');
     Route::get('city/delete/{id}',[CityController::class,'delete'])->name('cityDelete');
     Route::get('city/edit/{id}',[CityController::class,'edit'])->name('cityEdit');
+    Route::get('city/select/{state_name}',[CityController::class,'selectWeb']);
 });
 Route::group(["middleware"=>"auth", "prefix" => "subscription"],function()
 {

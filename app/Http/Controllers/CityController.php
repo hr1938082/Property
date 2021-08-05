@@ -45,6 +45,12 @@ class CityController extends Controller
             return response()->json(["status" => true, "data" => $select]);
         }
     }
+    public function selectWeb(Request $request)
+    {
+        $select = city::select('city')->join('states','states.id','cities.state_id')
+            ->where([['states.state',$request->state_name],['states.status',1]])->get();
+            return response()->json(["status" => true, "data" => $select]);
+    }
     public function delete(Request $request)
     {
         $city = city::find($request->id);
