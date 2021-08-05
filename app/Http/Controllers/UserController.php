@@ -25,7 +25,7 @@ class UserController extends Controller
     // User Login Method
     public function login(Request $request)
     {
-        $Login = $this->user::where('email', $request->email)->first();
+        $Login = $this->user::where([['email', $request->email],['status',1]])->first();
         if ($Login && Hash::check($request->password, $Login->password)) {
             $data = [
                 "id" => $Login->id,
@@ -104,7 +104,6 @@ class UserController extends Controller
         }
         return response()->json(["data" => [["error" => "Email or Password Does not match"]]]);
     }
-
     // User Add Method
     public function register(Request $request)
     {
@@ -118,10 +117,31 @@ class UserController extends Controller
             $this->user->code_id = 0;
             $this->user->mobile = $request->input("mobile");
             $this->user->address = $request->input("address");
+            $this->user->status = 1;
             $this->user->save();
             return response()->json(["data" => ["register" => "sucessfull"]]);
         }
         return response()->json(["data" => [["error" => "email already exists"]]]);
+    }
+    // User Stat Update
+    public function userStatUpdate(Request $request)
+    {
+        $column = $request->column;
+        $search = $request->search;
+        $page = $request->page;
+        $id = $request->id;
+        $user = User::find($id);
+        if($user->status == 1)
+        {
+            $user->status = 0;
+            $user->save();
+        }
+        else
+        {
+            $user->status = 1;
+            $user->save();
+        }
+        return redirect("/user/manage?column=$column&search=$search&page=$page");
     }
     // User varificationcode send Method
     public function sendVerificationCode(Request $request)
@@ -422,13 +442,15 @@ class UserController extends Controller
     // User select admin method
     public function selectAdmin(Request $req)
     {
+        // dd($req);
         $select = DB::table('users')
             ->join('user_type', 'users.user_type_id', "=", 'user_type.id')
-            ->select('users.id', 'users.name', 'user_type.name as user_type_name', 'users.email');
-        if ($req->input('search') != "") {
+            ->select('users.id', 'users.name', 'user_type.name as user_type_name', 'users.email','users.status');
+        if ($req->input('search') != "" && $req->column != "none") {
             $select = $select->where('users.' . $req->input('column'), 'LIKE', '%'.$req->input('search').'%')
                 ->orderByDesc('users.id')
-                ->get();
+                ->paginate(6);
+            $select = $select->appends(["column"=>$req->column, "search"=>$req->search]);
         } else {
             $select = $select->orderByDesc('users.id')
                 ->paginate(6);

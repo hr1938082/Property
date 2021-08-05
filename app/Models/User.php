@@ -28,7 +28,8 @@ class User extends Authenticatable
         'code_id',
         'mobile',
         'address',
-        'image'
+        'image',
+        'status',
     ];
 
     /**
