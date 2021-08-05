@@ -48,6 +48,7 @@ Manage Subscription
                         {{"Disable"}}
                     @endif</td>
                     <td>
+                        <a href="{{ route('subsEdit', ['id'=>$item->id]) }}" class="btn btn-sm btn-outline-primary"><i class="far fa-edit"></i></a>
                         <form action="{{ route('subs-stat-change') }}" method="post" class="d-inline">
                             @csrf
                             <input type="hidden" name="id" value="{{$item->id}}"/>

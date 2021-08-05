@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\subscription;
 use App\Models\usersubscription;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
 
 class SubscriptionController extends Controller
@@ -24,7 +25,7 @@ class SubscriptionController extends Controller
             {
                 $upload = $request->all();
                 $upload += ["status"=>"1"];
-                
+
                 $subs = subscription::create($upload);
                 if($subs)
                 {
@@ -72,11 +73,41 @@ class SubscriptionController extends Controller
                     {
                         return back()->with('status','Enabled');
                     }
-                    
+
                 }
                 return back()->with('status','error');
             }
             return back()->with('status','not found');
         }
+    }
+    public function edit(Request $request)
+    {
+        $id = $request->id;
+        $subscription = subscription::find($id);
+        return view('subscription.edit',compact('id','subscription'));
+    }
+    public function update(Request $request)
+    {
+        $id = $request->id;
+        $request->validate([
+            'name' => "required|alpha",
+            'type' => 'required|alpha',
+            'period' => 'required|numeric',
+            'amount' => 'nullable|numeric',
+            'feature' => 'nullable'
+        ]);
+        $upload = [
+            'name' => $request->name,
+            'type' => $request->type,
+            'period' => $request->period,
+            'amount' => $request->amount,
+            'feature' => $request->feature,
+        ];
+        $subscription = subscription::find($id);
+        if($subscription->update($upload))
+        {
+            return redirect()->route('subs-select-view');
+        }
+        return back()->with('status','Error');
     }
 }

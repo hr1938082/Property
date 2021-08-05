@@ -108,6 +108,8 @@ Route::group(["middleware"=>"auth", "prefix" => "subscription"],function()
     Route::get('/manage', [SubscriptionController::class, 'select'])->name('subs-select-view');
     Route::post('/status/change',[SubscriptionController::class, 'softdelete'])->name('subs-stat-change');
     Route::post('/add',[SubscriptionController::class, 'add'])->name('subs-add');
+    Route::get('edit/{id}',[SubscriptionController::class,'edit'])->name('subsEdit');
+    Route::post('update',[SubscriptionController::class,'update'])->name('subsUpdate');
 });
 Route::group(["middleware"=>"auth", "prefix" => "user/subscription"], function()
 {
