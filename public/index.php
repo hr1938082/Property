@@ -2,9 +2,21 @@
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\PseudoTypes\False_;
 
 define('LARAVEL_START', microtime(true));
-
+if (strpos($_SERVER['REQUEST_URI'],'index.php') !== FALSE )
+{
+    $new_uri = preg_replace('#index\.php\/?#', '', $_SERVER['REQUEST_URI']);
+    header('Location: '.$new_uri, TRUE, 301);
+    die();
+}
+else if(strpos($_SERVER['REQUEST_URI'],'public') !==False)
+{
+    $new_uri = preg_replace('#public\/?#', '', $_SERVER['REQUEST_URI']);
+    header('Location: '.$new_uri, TRUE, 301);
+    die();
+}
 /*
 |--------------------------------------------------------------------------
 | Check If Application Is Under Maintenance
