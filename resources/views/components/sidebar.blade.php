@@ -81,5 +81,14 @@
             <li><a href="{{ route('cityIndex') }}"><i class="fas fa-plus"></i>Add</a></li>
             <li><a href="{{ route('cityManage') }}"><i class="fas fa-cog"></i>Manage</a></li>
         </ul>
+        <li class="title">Currency</li>
+        <li class="dropdown-btn" data-toggle="collapse" data-target="#currency" role="button" aria-expanded="false" aria-controls="properties">
+            <a href="#"><i class="fas fa-dollar-sign"></i>Curreny</a>
+            <i class="fas fa-chevron-left"></i>
+        </li>
+        <ul class="dropdown collapse" id="currency">
+            <li><a href="{{ route('currencyIndex') }}"><i class="fas fa-plus"></i>Add</a></li>
+            <li><a href="{{ route('currencyManage') }}"><i class="fas fa-cog"></i>Manage</a></li>
+        </ul>
     </ul>
 </div>

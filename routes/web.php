@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\PaymentMethodsController;
 use App\Http\Controllers\UserController;
@@ -130,6 +131,14 @@ Route::group(["middleware"=>"auth", "prefix" => "payment/methods"], function()
     Route::post('/detail', [PaymentMethodsController::class, 'authCheck'])->name('pay-met-auth');
     Route::post('/update', [PaymentMethodsController::class, 'update'])->name('pay-met-update');
     Route::post('/soft/del', [PaymentMethodsController::class, 'softdel'])->name('pay-met-soft-del');
+});
+Route::group(["middleware"=>"auth", "prefix" => "currency"],function(){
+    Route::get('/add',[CurrencyController::class,'index'])->name('currencyIndex');
+    Route::post('insert',[CurrencyController::class,'insert'])->name('currencyInsert');
+    Route::get('/manage',[CurrencyController::class,'manage'])->name('currencyManage');
+    Route::get('edit/{id}',[CurrencyController::class,'edit'])->name('currencyEdit');
+    Route::post('update',[CurrencyController::class,'update'])->name('currencyUpdate');
+    Route::get('/stat/update/{id}',[CurrencyController::class,'statUpdate'])->name('currencystatUpdate');
 });
 Route::get('/tenants',[TendentController::class,'ten_to_pro'])
 ->middleware('auth')

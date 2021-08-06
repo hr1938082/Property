@@ -15,6 +15,7 @@ class currency extends Model
 
     protected $fillable = [
         'currency',
+        'status'
     ];
 
     public $timestamps = false;

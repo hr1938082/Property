@@ -24,7 +24,7 @@ Manage User
         <table class="table table-bordered ">
             <thead>
                 <tr class="text-center">
-                    <th scope="col">Id</th>
+                    <th scope="col">S.NO</th>
                     <th scope="col">Name</th>
                     <th scope="col">Type</th>
                     <th scope="col">Email</th>
@@ -33,9 +33,9 @@ Manage User
                 </tr>
             </thead>
             <tbody>
-                @foreach ($select as $item)
+                @foreach ($select as $key => $item)
                 <tr class="text-center">
-                    <td>{{$item->id}}</td>
+                    <td>{{$key + 1}}</td>
                     <td>{{$item->name}}</td>
                     <td>{{$item->user_type_name}}</td>
                     <td>{{$item->email}}</td>
