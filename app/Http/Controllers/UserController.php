@@ -157,11 +157,10 @@ class UserController extends Controller
             if (MailController::mail($data)) {
                 $upload = [
                     "user_id" => Auth::user()->id,
-                    "code" => $data,
+                    "code" => $code,
                     'date_time' => Carbon::now(),
                     'status' => 1
                 ];
-                dd($data,$upload);
                 $user_code = code::create($upload);
                 if ($user_code) {
                     $check = User::find(Auth::user()->id);

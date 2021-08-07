@@ -46,6 +46,7 @@ class CurrencyController extends Controller
         $currency = currency::find($id);
         if($currency->status == 1)
         {
+
             $currency->status = 0;
             $currency->save();
             return redirect()->route('currencyManage');
