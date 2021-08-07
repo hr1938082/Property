@@ -547,12 +547,6 @@ class PropertyController extends Controller
             $property = Propety::find($request->id);
             if ($property) {
                 if ($property->status == 0) {
-                    $rent = Rent::where('property_id', $property->id)->get();
-                    if ($rent->count() > 0) {
-                        foreach ($rent as  $value) {
-                            $value->delete();
-                        }
-                    }
                     $property->status = 1;
                     $property->save();
 
@@ -564,6 +558,12 @@ class PropertyController extends Controller
                         return back()->with('status', "Enabled");
                     }
                 } else {
+                    $rent = Rent::where('property_id', $property->id)->get();
+                    if ($rent->count() > 0) {
+                        foreach ($rent as  $value) {
+                            $value->delete();
+                        }
+                    }
                     $property->status = 0;
                     $property->save();
                     if ($request->expectsJson()) {

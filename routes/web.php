@@ -82,7 +82,7 @@ Route::group(["middleware"=>"auth", "prefix" => "properties"],function()
     Route::post('/add',[PropertyController::class,'insert'])->name('insert-properties');
     Route::get('/manage',[PropertyController::class,'select'])->name('manage-properties');
     Route::get('/{id}', [PropertyController::class,'selectspecific'])->name('select-properties');
-    Route::post('/delete',[PropertyController::class,'delete'])->name('delete-properties');
+    Route::get('/delete/{id}',[PropertyController::class,'delete'])->name('delete-properties');
     Route::get('/edit/images/{id}',[PropertyController::class,'editImages'])->name('editImages');
     Route::post('/delete/image',[PropertyController::class,'deleteimage'])->name('deleteImage');
     Route::post('update/images',[PropertyController::class,'updateimage'])->name('updateimage');

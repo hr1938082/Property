@@ -26,7 +26,7 @@ class UsersubscriptionController extends Controller
             ->where('status', 1)
             ->get();
         $current_year = (int)date('Y');
-        return view('user-subscriptions.add', compact('id', 'select', 'select_pay', 'current_year'));
+        return view('user-subscription.add', compact('id', 'select', 'select_pay', 'current_year'));
     }
     public function fetchdetail(Request $request)
     {
@@ -201,7 +201,7 @@ class UsersubscriptionController extends Controller
         }
         if (Auth::user()->user_type_id == 7) {
             $check = User::find($request->id);
-            if (Auth::user()->user_type_id == 1) {
+            if ($check->user_type_id == 1) {
                 if ($check->verified == 1) {
                     $request->validate([
                         'subscription' => 'required'

@@ -49,6 +49,12 @@ Payment Methods
                         {{"Disable"}}
                     @endif</td>
                     <td class="text-center">
+                        @if ($item->name == "Stripe" || $item->name == "stripe" || $item->name == "STRIPE")
+                        <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal"
+                            data-target="#exampleModal">
+                            <i class="far fa-eye"></i>
+                        </button>
+                        @endif
                         <form class="d-inline" action="{{ route('pay-met-soft-del') }}" method="post">
                             @csrf
                             <input type="hidden" name="id" value="{{$item->id}}">
@@ -61,7 +67,7 @@ Payment Methods
                             @endif
                             ">
                             <button type="submit" class="btn btn-sm
-                            @if ($item->name != "Stripe")
+                            @if (!($item->name == "Stripe" || $item->name == "stripe" || $item->name == "STRIPE"))
                                 btn-block
                             @endif
                             @if ($item->status == 1)
@@ -79,12 +85,6 @@ Payment Methods
                             @endif
                             </button>
                         </form>
-                        @if ($item->name == "Stripe")
-                        <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal"
-                            data-target="#exampleModal">
-                            <i class="far fa-eye"></i>
-                        </button>
-                        @endif
                     </td>
                 </tr>
                 @endforeach

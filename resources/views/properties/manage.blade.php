@@ -93,7 +93,7 @@ Manage Properties
                     </td>
                     <td>
                         <a href="{{ route('select-properties', ['id'=>$item->id]) }}" class="btn btn-outline-primary btn-sm"><i class="far fa-eye"></i></a>
-                        <form action="{{ route('delete-properties') }}" method="post" class="d-inline">
+                        <form action="{{ route('delete-properties',['id'=>$item->id]) }}" method="get" class="d-inline">
                             @csrf
                             <input type="hidden" name="property_id" value="{{$item->id}}" />
                             @if ($item->status ==1)

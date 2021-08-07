@@ -72,8 +72,19 @@ Manage User Subscription
                     <td>
                         @foreach ($expiryDate as $val)
                         @if ($item->id == $val["id"])
+                        <form action="{{ route('user-subs-fetch-detail-view') }}" class="d-inline" method="post">
+                            @csrf
+                            <input type="hidden" name="id" value="{{$item->user_id}}" />
+                            <button type="submit" class="btn btn-sm
+                                @if (!($val["expiry_date"] >0))
+                                    btn-block
+                                @endif
+                            btn-outline-primary">
+                                <i class="far fa-eye"></i>
+                            </button>
+                        </form>
                         @if ($val["expiry_date"] >0)
-                        <form action="{{ route('user-subs-stat-view') }}" method="post">
+                        <form action="{{ route('user-subs-stat-view') }}" class="d-inline" method="post">
                             @csrf
                             <input type="hidden" name="id" value="{{$item->id}}" />
                             <input type="hidden" name="val" value="
@@ -113,13 +124,7 @@ Manage User Subscription
                         @endif
                         @endif
                         @endforeach
-                        <form action="{{ route('user-subs-fetch-detail-view') }}" method="post">
-                            @csrf
-                            <input type="hidden" name="id" value="{{$item->user_id}}" />
-                            <button type="submit" class="btn btn-block btn-sm btn-primary">
-                                <i class="far fa-eye"></i>
-                            </button>
-                        </form>
+
                     </td>
                 </tr>
                 @endforeach

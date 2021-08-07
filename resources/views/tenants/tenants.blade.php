@@ -21,7 +21,19 @@ Manage User
 
         </div>
         <div class="col-12 d-flex justify-content-between">
-            <h3 class="text-primary d-none d-lg-block" style="color: ">Subscription</h3>
+            <h3 class="text-primary d-none d-lg-block" style="color: ">Tenants</h3>
+            <form action="" class="mb-3" method="get" id="usersearch">
+                <select name="ptn" class="border-right-0">
+                    <option value="name">Name</option>
+                    <option value="property_name">Property</option>
+                </select>
+                <select name="is_live" class="rounded-0 border-left-0">
+                    <option value="">All</option>
+                    <option value="1">IN</option>
+                    <option value="0">OUT</option>
+                </select>
+                <input type="search" class="border-left-0" name="pts" placeholder="Search">
+            </form>
         </div>
         <table class="table table-bordered ">
             <thead>

@@ -241,6 +241,9 @@ class TendentController extends Controller
     }
     public function ten_to_pro(Request $request)
     {
+        $ptn = $request->ptn;
+        $pts = $request->pts;
+        $is_live = $request->is_live;
         $select = Tendent::select(
             'tendent_to_property.id as id',
             'users.name as tenants',
@@ -250,11 +253,20 @@ class TendentController extends Controller
         )
             ->join('users', 'users.id', 'tendent_to_property.tendent_id')
             ->join('properties', 'properties.id', 'tendent_to_property.property_id');
+        if ($request->ptn != "")
+        {
+            $select = $select->where($request->ptn,'LIKE','%'.$request->pts.'%');
+        }
         if ($request->is_live != "") {
-            $select = $select->where('is_live', $request->is_live);
+            $select = $select->where('is_live',$request->is_live);
         }
         $select = $select->orderbyDesc('id')
             ->paginate(5);
+
+            if($ptn)
+            {
+                $select = $select->appends(["ptn"=>$ptn,"is_live"=>$is_live,"pts"=>$pts]);
+            }
         return view('tenants.tenants', compact('select'));
     }
 }
