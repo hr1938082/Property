@@ -38,7 +38,7 @@ Manage User
         <table class="table table-bordered ">
             <thead>
                 <tr class="text-center">
-                    <th scope="col">Id</th>
+                    <th scope="col">S.NO</th>
                     <th scope="col">Name</th>
                     <th scope="col">Property</th>
                     <th scope="col">Rent</th>
@@ -46,9 +46,25 @@ Manage User
                 </tr>
             </thead>
             <tbody>
+                @php
+                    if (isset($_GET['page'])) {
+                        if ($_GET['page'] != 1) {
+                            $sno= ($_GET['page']*6)-6;
+                        }
+                        else {
+                            $sno = 0;
+                        }
+                    }
+                    else {
+                        $sno = 0;
+                    }
+                @endphp
                 @foreach ($select as $item)
+                @php
+                    $sno++;
+                @endphp
                 <tr class="text-center">
-                    <td>{{$item->id}}</td>
+                    <td>{{$sno}}</td>
                     <td>{{$item->tenants}}</td>
                     <td class="text-capitalize">{{$item->property}}</td>
                     <td>{{$item->rent}}</td>

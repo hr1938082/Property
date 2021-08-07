@@ -261,7 +261,7 @@ class TendentController extends Controller
             $select = $select->where('is_live',$request->is_live);
         }
         $select = $select->orderbyDesc('id')
-            ->paginate(5);
+            ->paginate(6);
 
             if($ptn)
             {

@@ -35,7 +35,7 @@ class CityController extends Controller
     {
         if(!$request->expectsJson() && Auth::user()->user_type_id == 7)
         {
-            $select = city::select('cities.id as id', 'cities.city','states.state')->join('states','states.id','cities.state_id')->paginate(5);
+            $select = city::select('cities.id as id', 'cities.city','states.state')->join('states','states.id','cities.state_id')->paginate(6);
             return view('city.manageCity',compact('select'));
         }
         elseif($request->expectsJson() && Auth::user()->user_type_id==1)

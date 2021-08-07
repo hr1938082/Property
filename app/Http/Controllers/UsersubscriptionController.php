@@ -499,7 +499,7 @@ class UsersubscriptionController extends Controller
             if ($request->column != "" && $request->search != "") {
                 $select = $select->where($request->column, 'LIKE', '%' . $request->search . '%');
             }
-            $select = $select->paginate(5);
+            $select = $select->paginate(6);
             $current_date = date_create(date('d-m-Y'));
             $expiryDate = [];
             foreach ($select as $value) {
@@ -517,7 +517,7 @@ class UsersubscriptionController extends Controller
                     'users.email'
                 )
                     ->where($request->column, 'LIKE', '%' . $request->search . '%')
-                    ->paginate(5);
+                    ->paginate(6);
             }
             return view('user-subscription.manage', compact('select', 'expiryDate'));
         }

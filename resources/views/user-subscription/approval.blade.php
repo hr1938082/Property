@@ -12,7 +12,7 @@ Manage Approval
 <div class="row justify-content-center align-items-center m-0" id="register">
     <div class="col-md-8 form pt-3 active shadow-lg">
         <div class="row justify-content-center">
-            
+
         </div>
         <div class="col-12 d-flex justify-content-between">
             <h3 class="text-primary d-none d-lg-block" style="color: ">Approvals</h3>
@@ -28,7 +28,7 @@ Manage Approval
         <table class="table table-bordered ">
             <thead>
                 <tr class="text-center">
-                    <th scope="col">Id</th>
+                    <th scope="col">S.NO</th>
                     <th scope="col">Name</th>
                     <th scope="col">Subscription</th>
                     <th scope="col">Status</th>
@@ -36,8 +36,25 @@ Manage Approval
                 </tr>
             </thead>
             <tbody>
+                @php
+                    if (isset($_GET['page'])) {
+                        if ($_GET['page'] != 1) {
+                            $sno= ($_GET['page']*6)-6;
+                        }
+                        else {
+                            $sno = 0;
+                        }
+                    }
+                    else {
+                        $sno = 0;
+                    }
+                @endphp
                 @foreach ($select as $item)
+                @php
+                    $sno++;
+                @endphp
                 <tr class="text-center">
+                    <td>{{$sno}}</td>
                     <td>{{$item->id}}</td>
                     <td>{{$item->user_name}}</td>
                     <td>{{$item->subs_name}}</td>

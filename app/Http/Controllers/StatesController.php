@@ -22,7 +22,7 @@ class StatesController extends Controller
         }
         elseif( !$request->expectsJson() && Auth::user()->user_type_id == 7)
         {
-            $select = state::paginate(5);
+            $select = state::paginate(6);
             return view('State.manageState',compact('select'));
         }
     }

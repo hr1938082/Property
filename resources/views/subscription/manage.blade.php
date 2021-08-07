@@ -25,7 +25,7 @@ Manage Subscription
         <table class="table table-bordered ">
             <thead>
                 <tr class="text-center">
-                    <th scope="col">Id</th>
+                    <th scope="col">S.NO</th>
                     <th scope="col">Name</th>
                     <th scope="col">Type</th>
                     <th scope="col">Period</th>
@@ -35,9 +35,25 @@ Manage Subscription
                 </tr>
             </thead>
             <tbody>
+                @php
+                    if (isset($_GET['page'])) {
+                        if ($_GET['page'] != 1) {
+                            $sno= ($_GET['page']*6)-6;
+                        }
+                        else {
+                            $sno = 0;
+                        }
+                    }
+                    else {
+                        $sno = 0;
+                    }
+                @endphp
                 @foreach ($select as $item)
+                @php
+                    $sno++;
+                @endphp
                 <tr class="text-center">
-                    <td>{{$item->id}}</td>
+                    <td>{{$sno}}</td>
                     <td>{{$item->name}}</td>
                     <td class="text-capitalize">{{$item->type}}</td>
                     <td>{{$item->period}}</td>

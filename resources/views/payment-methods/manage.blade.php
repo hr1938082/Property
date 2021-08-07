@@ -32,16 +32,32 @@ Payment Methods
         <table class="table table-bordered ">
             <thead>
                 <tr class="text-center">
-                    <th scope="col">Id</th>
+                    <th scope="col">S.NO</th>
                     <th scope="col">Name</th>
                     <th scope="col">Status</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
+                @php
+                    if (isset($_GET['page'])) {
+                        if ($_GET['page'] != 1) {
+                            $sno= ($_GET['page']*6)-6;
+                        }
+                        else {
+                            $sno = 0;
+                        }
+                    }
+                    else {
+                        $sno = 0;
+                    }
+                @endphp
                 @foreach ($select as $item)
-                <tr>
-                    <td>{{$item->id}}</td>
+                @php
+                    $sno++;
+                @endphp
+                <tr class="text-center">
+                    <td>{{$sno}}</td>
                     <td>{{$item->name}}</td>
                     <td>@if ($item->status == 1)
                         {{"Enable"}}

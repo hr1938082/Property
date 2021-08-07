@@ -529,7 +529,7 @@ class PropertyController extends Controller
                 if ($request->status != "") {
                     $select = $select->where('properties.status', $request->status);
                 }
-                $select = $select->orderByDesc('id')->paginate('5');
+                $select = $select->orderByDesc('id')->paginate(6);
                 return view('properties.manage', compact('select', 'currency'));
             }
             $status = "No Data Found";
