@@ -13,13 +13,14 @@ class Propety extends Model
     protected $table = 'properties';
 
     // primary key
-    protected $primaryKey ='id';
+    protected $primaryKey = 'id';
 
     //fillabe data
     protected $fillable = [
         'property_name',
         'bed_rooms',
         'bath_rooms',
+        'toilets',
         'description',
         "currency_id",
         'user_id',

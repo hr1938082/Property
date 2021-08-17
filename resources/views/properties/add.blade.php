@@ -26,14 +26,20 @@ Add Properties
                     </div>
                     <div class="form-group">
                         <div class="form-inline justify-content-center">
-                            <select class="fadeIn px-1" name="bed_rooms" id="bed_rooms" style="width: 130px">
+                            <select class="fadeIn px-1" name="bed_rooms" id="bed_rooms" style="width: 115px">
                                 <option selected disabled>Bed Rooms</option>
                                 <option class="text-capitalize" value="1">1</option>
                                 <option class="text-capitalize" value="2">2</option>
                                 <option class="text-capitalize" value="3">3</option>
                             </select>
-                            <select class="fadeIn px-1" name="bath_rooms" id="bath_rooms" style="width: 135px">
+                            <select class="fadeIn px-1" name="bath_rooms" id="bath_rooms" style="width: 115px">
                                 <option selected disabled>Bath Rooms</option>
+                                <option class="text-capitalize" value="1">1</option>
+                                <option class="text-capitalize" value="2">2</option>
+                                <option class="text-capitalize" value="3">3</option>
+                            </select>
+                            <select class="fadeIn px-1" name="toilets" id="toilets" style="width: 115px">
+                                <option selected disabled>Toilets</option>
                                 <option class="text-capitalize" value="1">1</option>
                                 <option class="text-capitalize" value="2">2</option>
                                 <option class="text-capitalize" value="3">3</option>
@@ -259,6 +265,17 @@ Add Properties
                 $('#bed_rooms').css('border', 'none');
                 $('#bath_rooms').css('border', '1px solid red');
                 $('#room-span').text("How many Bath Rooms does it have!!")
+            } else if($('#toilets').val() == null) {
+                $('#description').css('border', 'none')
+                $('#description-span').text("")
+                $('#Rent').css('border', 'none');
+                $('#Rent-span').text("");
+                $('#name-span').text("")
+                $('#name').css('border', 'none');
+                $('#bed_rooms').css('border', 'none');
+                $('#bath_rooms').css('border', 'none');
+                $('#toilets').css('border','1px solid red')
+                $('#room-span').text("How many Toilets does it have!!")
             } else if ($('#description').val() == "") {
                 $('#Rent').css('border', 'none');
                 $('#Rent-span').text("");

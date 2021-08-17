@@ -67,6 +67,7 @@ class PropertyController extends Controller
                 "property_name" => $request->property_name,
                 "bed_rooms" => $request->bed_rooms,
                 "bath_rooms" => $request->bath_rooms,
+                "toilets" => $request->toilets,
                 "description" => $request->description,
                 "currency_id" => $request->currency_id,
                 "rent" => $request->rent,
@@ -109,6 +110,7 @@ class PropertyController extends Controller
                 "property_name" => $request->input('property_name'),
                 "bed_rooms" => $request->input('bed_rooms'),
                 "bath_rooms" => $request->input('bath_rooms'),
+                "toilets" => $request->toilets,
                 "description" => $request->input('description'),
                 "currencySymbol" => $request->input('currencySymbol'),
                 "currency_id" => $request->input('currency_id'),
@@ -140,10 +142,10 @@ class PropertyController extends Controller
     // edit property info
     public function editinfo(Request $request)
     {
-        $id =$request->id;
+        $id = $request->id;
         $property = Propety::find($id);
         $currency = currency::all();
-        return view('properties.editinfo', compact('id','property', 'currency'));
+        return view('properties.editinfo', compact('id', 'property', 'currency'));
     }
     // edit property address
     public function editaddress(Request $request)
@@ -153,10 +155,10 @@ class PropertyController extends Controller
             ->join('address', 'properties.address_id', 'address.id')
             ->where('properties.id', $id)
             ->first();
-        $state = State::select('id','state')->where('status',1)->get();
-        $city = city::select('city as city')->join('states','cities.state_id','states.id')->where('states.state',$property_address->state)->get();
+        $state = State::select('id', 'state')->where('status', 1)->get();
+        $city = city::select('city as city')->join('states', 'cities.state_id', 'states.id')->where('states.state', $property_address->state)->get();
         // dd($city);
-        return view('properties.editaddress', compact('id','property_address', 'city', 'state'));
+        return view('properties.editaddress', compact('id', 'property_address', 'city', 'state'));
     }
     // update property image
     public function updateimage(Request $request)
@@ -269,7 +271,7 @@ class PropertyController extends Controller
             'bath_rooms' => 'required|numeric',
             'description' => 'required',
             'currency_id' => 'required|numeric',
-            'rent'=> 'required|numeric',
+            'rent' => 'required|numeric',
             'build_year' => 'required|numeric|min:4',
             'build_month' => 'required|numeric|min:2',
             'build_date' => 'required|numeric|min:2',
@@ -281,12 +283,11 @@ class PropertyController extends Controller
             "description" => $request->description,
             "currency_id" => $request->currency_id,
             "rent" => $request->rent,
-            "year_build" => $request->build_year."-".$request->build_month."-".$request->build_date
+            "year_build" => $request->build_year . "-" . $request->build_month . "-" . $request->build_date
         ];
         $property = Propety::find($request->id);
-        if($property->update($upload))
-        {
-            return redirect()->route("select-properties",["id"=>$request->id]);
+        if ($property->update($upload)) {
+            return redirect()->route("select-properties", ["id" => $request->id]);
         }
     }
     // update property address
@@ -301,14 +302,13 @@ class PropertyController extends Controller
         $upload = [
             "state" => $request->state,
             "city" => $request->city,
-            "street" =>$request->street,
+            "street" => $request->street,
             "zip_code" => $request->zip_code,
         ];
         $property = Propety::find($request->id);
         $property_address = Address::find($property->address_id);
-        if($property_address->update($upload))
-        {
-            return redirect()->route("select-properties",["id"=>$request->id]);
+        if ($property_address->update($upload)) {
+            return redirect()->route("select-properties", ["id" => $request->id]);
         }
     }
     // delete property image
@@ -348,6 +348,7 @@ class PropertyController extends Controller
                 'properties.property_name AS name',
                 'properties.bed_rooms',
                 'properties.bath_rooms',
+                'properties.toilets',
                 'properties.description',
                 'properties.currency_id',
                 'properties.rent AS rent',
@@ -393,34 +394,55 @@ class PropertyController extends Controller
                     }
                 }
                 $rentval = $currencyVal ? "$value->rent $currencyVal" : $value->rent;
-                array_push($data, [
-                    "id" => $value->id,
-                    "name" => $value->name,
-                    "bed_rooms" => $value->bed_rooms,
-                    "bath_rooms" => $value->bath_rooms,
-                    "description" => $value->description,
-                    "rent" => $rentval,
-                    "currency" => $currencyVal,
-                    "price" => $value->rent,
-                    "year_build" => $value->yearbuild,
-                    "user_name" => $value->username,
-                    "user_email" => $value->user_email,
-                    "user_mobile" => $value->user_mobile,
-                    "user_image" => $value->user_image,
-                    "city" => $value->city,
-                    "state" => $value->state,
-                    "street" => $value->street,
-                    "zip_code" => $value->zipcode,
-                    "features" => $featuresTemp,
-                    "images" => $imgTemp
-                ]);
-            }
-
-            if ($request->expectsJson()) {
-                // dd($select);
-                return response()->json(["property_data" => $data]);
-            } else {
-                return view('properties.edit', compact('data'));
+                if ($request->expectsJson()) {
+                    array_push($data, [
+                        "id" => $value->id,
+                        "name" => $value->name,
+                        "bed_rooms" => $value->bed_rooms,
+                        "bath_rooms" => $value->bath_rooms,
+                        "toilets" => $value->toilets,
+                        "description" => $value->description,
+                        "rent" => $rentval,
+                        "currency" => $currencyVal,
+                        "price" => $value->rent,
+                        "year_build" => $value->yearbuild,
+                        "user_name" => $value->username,
+                        "user_email" => $value->user_email,
+                        "user_mobile" => $value->user_mobile,
+                        "user_image" => $value->user_image,
+                        "city" => $value->city,
+                        "state" => $value->state,
+                        "street" => $value->street,
+                        "zip_code" => $value->zipcode,
+                        "features" => $featuresTemp,
+                        "images" => $imgTemp
+                    ]);
+                    return response()->json(["property_data" => $data]);
+                } else {
+                    array_push($data, [
+                        "id" => $value->id,
+                        "name" => $value->name,
+                        "bed_rooms" => $value->bed_rooms,
+                        "bath_rooms" => $value->bath_rooms,
+                        "toilets" => $value->toilets,
+                        "description" => $value->description,
+                        "rent" => $value->rent,
+                        "currency" => $currencyVal,
+                        "price" => $value->rent,
+                        "year_build" => $value->yearbuild,
+                        "user_name" => $value->username,
+                        "user_email" => $value->user_email,
+                        "user_mobile" => $value->user_mobile,
+                        "user_image" => $value->user_image,
+                        "city" => $value->city,
+                        "state" => $value->state,
+                        "street" => $value->street,
+                        "zip_code" => $value->zipcode,
+                        "features" => $featuresTemp,
+                        "images" => $imgTemp
+                    ]);
+                    return view('properties.edit', compact('data'));
+                }
             }
         }
     }

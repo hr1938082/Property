@@ -49,6 +49,7 @@ class TendentController extends Controller
                 'preperty_request.id AS id',
                 'properties.id as property_id',
                 'properties.property_name AS name',
+                'properties.currency_id',
                 'properties.rent AS rent',
                 'address.city AS city',
                 'address.state AS state',
@@ -63,6 +64,7 @@ class TendentController extends Controller
         }
         $select = $select->orderByDesc('id')->get();
         $image = $image::all();
+        $currency = DB::table('currency')->get();
         foreach ($select as $value) {
             $temp = [];
             $count = 0;
@@ -72,11 +74,18 @@ class TendentController extends Controller
                     $count++;
                 }
             }
+            $currencyVal = "";
+            foreach ($currency as $row) {
+                if ($row->id == $value->currency_id) {
+                    $currencyVal = $row->currency;
+                }
+            }
+            $rentval = $currencyVal ? "$value->rent $currencyVal" : $value->rent;
             array_push($data, [
                 "id" => $value->id,
                 "property_id" => $value->property_id,
                 "name" => $value->name,
-                "rent" => $value->rent,
+                "rent" => $rentval,
                 "city" => $value->city,
                 "state" => $value->state,
                 "image" => $temp,
@@ -169,22 +178,16 @@ class TendentController extends Controller
             $update = ["is_live" => 0];
             $check->update($update);
             $find = Tendent::where([['property_id', $check->property_id], ['is_live', 0]])->get();
-            if($find && $find->count() > 0)
-            {
+            if ($find && $find->count() > 0) {
                 $tendent_on_property_count = $find->count();
-            }
-            else
-            {
+            } else {
                 $tendent_on_property_count = 1;
             }
             $property_rent = Propety::select('rent')
                 ->where('id', $check->property_id)->first();
-            if($property_rent)
-            {
+            if ($property_rent) {
                 $rent = (int)ceil($property_rent->rent / $tendent_on_property_count);
-            }
-            else
-            {
+            } else {
                 return response()->json(["data" => [["tendent_to_property" => "property not found"]]]);
             }
             Rent::where('user_id', $check->tendent_id)->delete();
@@ -253,20 +256,18 @@ class TendentController extends Controller
         )
             ->join('users', 'users.id', 'tendent_to_property.tendent_id')
             ->join('properties', 'properties.id', 'tendent_to_property.property_id');
-        if ($request->ptn != "")
-        {
-            $select = $select->where($request->ptn,'LIKE','%'.$request->pts.'%');
+        if ($request->ptn != "") {
+            $select = $select->where($request->ptn, 'LIKE', '%' . $request->pts . '%');
         }
         if ($request->is_live != "") {
-            $select = $select->where('is_live',$request->is_live);
+            $select = $select->where('is_live', $request->is_live);
         }
         $select = $select->orderbyDesc('id')
             ->paginate(6);
 
-            if($ptn)
-            {
-                $select = $select->appends(["ptn"=>$ptn,"is_live"=>$is_live,"pts"=>$pts]);
-            }
+        if ($ptn) {
+            $select = $select->appends(["ptn" => $ptn, "is_live" => $is_live, "pts" => $pts]);
+        }
         return view('tenants.tenants', compact('select'));
     }
 }

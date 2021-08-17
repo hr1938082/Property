@@ -57,6 +57,12 @@ Edit Property Details
                     </td>
                 </tr>
                 <tr class="text-center">
+                    <th class="w-25">Toilets</th>
+                    <td>
+                        {{$data[0]["toilets"]}}
+                    </td>
+                </tr>
+                <tr class="text-center">
                     <th class="w-25">Rent</th>
                     <td>
                         {{$data[0]["rent"]}}

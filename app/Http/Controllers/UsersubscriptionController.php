@@ -78,9 +78,9 @@ class UsersubscriptionController extends Controller
                         )
                             ->first();
                         if (!$check) {
-                            $check_trail = subscription::where('name', 'trail')
-                                ->orWhere('name', 'Trail')
-                                ->orWhere('name', 'TRAIL')
+                            $check_trail = subscription::where('name', 'trial')
+                                ->orWhere('name', 'Trial')
+                                ->orWhere('name', 'TRIAL')
                                 ->first();
                             if ($check_trail && $request->subs_id == $check_trail->id) {
                                 $check_trail_user = usersubscription::where([
@@ -93,7 +93,7 @@ class UsersubscriptionController extends Controller
                                     $upload = [
                                         "user_id" => Auth::user()->id,
                                         "subscription_id" => $request->subs_id,
-                                        "name" => "trail",
+                                        "name" => "trial",
                                         "status" => 1
                                     ];
                                     if ($this->uploadmethod($upload)) {
@@ -101,7 +101,7 @@ class UsersubscriptionController extends Controller
                                     }
                                     return response()->json(["status" => false]);
                                 }
-                                return response()->json(["data" => [["error" => "can not apply for trail again"]]]);
+                                return response()->json(["data" => [["error" => "can not apply for trial"]]]);
                             } else {
                                 if ($request->pay_method == "stripe" || $request->pay_method == "Stripe" || $request->pay_method == "STRIPE") {
 
@@ -114,7 +114,7 @@ class UsersubscriptionController extends Controller
                                             ['status', 1]
                                         ])
                                         ->orWhere([
-                                            ['name', 'Stripe'],
+                                            ['name', 'STRIPE'],
                                             ['status', 1]
                                         ])
                                         ->first();
@@ -189,6 +189,104 @@ class UsersubscriptionController extends Controller
                                     }
                                     return response()->json(["status" => false, "message" => "Bank is not enable now"]);
                                 }
+                            }
+                        } else {
+                            $check_trail = subscription::where('name', 'trial')
+                                ->orWhere('name', 'Trial')
+                                ->orWhere('name', 'TRIAL')
+                                ->first();
+                            if ($check->subscription_id == $check_trail->id) {
+                                if ($request->subs_id != $check_trail->id) {
+                                    if ($request->pay_method == "stripe" || $request->pay_method == "Stripe" || $request->pay_method == "STRIPE") {
+
+                                        $check_stripe = PaymentMethod::where([
+                                            ['name', 'stripe'],
+                                            ['status', 1]
+                                        ])
+                                            ->orWhere([
+                                                ['name', 'Stripe'],
+                                                ['status', 1]
+                                            ])
+                                            ->orWhere([
+                                                ['name', 'STRIPE'],
+                                                ['status', 1]
+                                            ])
+                                            ->first();
+                                        if ($check_stripe) {
+                                            $pay = PaymentController::stripePayment($request->all());
+                                            if ($pay->original["status"]) {
+                                                $upload = [
+                                                    "user_id" => Auth::user()->id,
+                                                    "name" => "stripe",
+                                                    "subscription_id" => $request->subs_id,
+                                                    "type" => "card",
+                                                    "amount" => $pay->original["payment"]["amount"],
+                                                    "key_id" => $pay->original["payment"]["key_id"],
+                                                    "key_secret" => $pay->original["payment"]["key_secret"],
+                                                    "status" => 1
+                                                ];
+                                                if ($this->uploadmethod($upload)) {
+                                                    $check->status = 0;
+                                                    $check->save();
+                                                    return response()->json(["status" => true]);
+                                                }
+                                                return response()->json(["status" => false]);
+                                            } else {
+                                                return response()->json([
+                                                    "status" => $pay->original["status"],
+                                                    "error" => $pay->original["cart_details"]
+                                                ]);
+                                            }
+                                        }
+                                        return response()->json(["status" => false, "message" => "stripe is not enable now"]);
+                                    }
+                                    if ($request->pay_method == "bank" || $request->pay_method == "Bank" || $request->pay_method == "BANK") {
+
+                                        $check_bank = PaymentMethod::where([
+                                            ['name', 'bank'],
+                                            ['status', 1]
+                                        ])
+                                            ->orWhere([
+                                                ['name', 'Bank'],
+                                                ['status', 1]
+                                            ])
+                                            ->orWhere([
+                                                ['name', 'BANK'],
+                                                ['status', 1]
+                                            ])
+                                            ->first();
+                                        if ($check_bank) {
+                                            $check_bank = BankApproval::where([
+                                                ['user_id', Auth::user()->id],
+                                                ['status', 0]
+                                            ])->first();
+                                            if (!$check_bank) {
+                                                $image_name = explode('.', $request->image[0]["name"]);
+                                                $extension = end($image_name);
+                                                $image_data = base64_decode($request->image[0]["image"]);
+                                                $image_Name = (sha1(date('dmYhis') . microtime('true')));
+                                                $filename = "$image_Name.$extension";
+                                                file_put_contents(public_path("storage/images/$filename"), $image_data);
+                                                $image = "storage/images/$filename";
+                                                $upload = [
+                                                    "user_id" => Auth::user()->id,
+                                                    "subscription_id" => $request->subs_id,
+                                                    "amount" => $request->amount,
+                                                    'image' => $image,
+                                                    'bank_info' => $request->bank_info,
+                                                    'status' => 0
+                                                ];
+                                                if (BankApproval::create($upload)) {
+                                                    return response()->json(["status" => true, "approval" => '0']);
+                                                }
+                                                return response()->json(["status" => false]);
+                                            }
+                                            return response()->json(["status" => true, 'message' => 'Can not send request again']);
+                                        }
+                                        return response()->json(["status" => false, "message" => "Bank is not enable now"]);
+                                    }
+                                }
+                                return response()->json(["data" => [["error" => "can not apply for trial"]]]);
                             }
                         }
                         return response()->json(["data" => [["error" => "already subscribed"]]]);
@@ -606,10 +704,10 @@ class UsersubscriptionController extends Controller
                     $value->status = 0;
                     $value->save();
                     $appr = BankApproval::where([
-                        ['user_id',$value->user_id],
-                        ['status',1]
+                        ['user_id', $value->user_id],
+                        ['status', 1]
                     ])
-                    ->update(['status',0]);
+                        ->update(['status', 0]);
                     MailController::mail($data);
                 }
             }
