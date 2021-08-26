@@ -25,7 +25,7 @@ class UserController extends Controller
     // User Login Method
     public function login(Request $request)
     {
-        $Login = $this->user::where([['email', $request->email],['status',1]])->first();
+        $Login = $this->user::where([['email', $request->email], ['status', 1]])->first();
         if ($Login && Hash::check($request->password, $Login->password)) {
             $data = [
                 "id" => $Login->id,
@@ -38,64 +38,49 @@ class UserController extends Controller
                 "image" => $Login->image,
             ];
             $token = $Login->createToken('my-app-token')->plainTextToken;
-            if($Login->user_type_id == 1)
-            {
+            if ($Login->user_type_id == 1) {
                 $select = usersubscription::where([
-                    ['user_id',$Login->id],
-                    ['status',1]
+                    ['user_id', $Login->id],
+                    ['status', 1]
                 ])
-                ->first();
-                if(!$select)
-                {
+                    ->first();
+                if (!$select) {
                     $data += ['subscription' => 0];
-                }
-                else
-                {
+                } else {
                     $data += ['subscription' => 1];
                 }
                 $select_approve = BankApproval::where([
-                    ["user_id",$Login->id],
+                    ["user_id", $Login->id],
                 ])
-                ->orderbyDesc('id')
-                ->get();
-                if($select_approve && $select_approve->count() > 0)
-                {
-                    if($select_approve[0]->status == 1)
-                    {
+                    ->orderbyDesc('id')
+                    ->get();
+                if ($select_approve && $select_approve->count() > 0) {
+                    if ($select_approve[0]->status == 1) {
                         $data += ['approval' => 'approved'];
-                    }
-                    elseif($select_approve[0]->status == 0)
-                    {
+                    } elseif ($select_approve[0]->status == 0) {
                         $data += ['approval' => 'pending'];
                     }
-                }
-                else
-                {
+                } else {
                     $data += ['approval' => 'not applied'];
                 }
             }
-            if($Login->user_type_id == 2)
-            {
+            if ($Login->user_type_id == 2) {
                 $select = Tendent::select('properties.user_id')
-                ->join('properties','tendent_to_property.property_id','properties.id')
-                ->where([
-                    ['tendent_id',$Login->id],
-                    ['is_live',1]
-                ])
-                ->first();
-                if($select)
-                {
-                    $check_subs = usersubscription::where([
-                        ['user_id',$select->user_id],
-                        ['status',1]
+                    ->join('properties', 'tendent_to_property.property_id', 'properties.id')
+                    ->where([
+                        ['tendent_id', $Login->id],
+                        ['is_live', 1]
                     ])
                     ->first();
-                    if(!$check_subs)
-                    {
+                if ($select) {
+                    $check_subs = usersubscription::where([
+                        ['user_id', $select->user_id],
+                        ['status', 1]
+                    ])
+                        ->first();
+                    if (!$check_subs) {
                         $data += ['subscription' => 0];
-                    }
-                    else
-                    {
+                    } else {
                         $data += ['subscription' => 1];
                     }
                 }
@@ -131,13 +116,10 @@ class UserController extends Controller
         $page = $request->page;
         $id = $request->id;
         $user = User::find($id);
-        if($user->status == 1)
-        {
+        if ($user->status == 1) {
             $user->status = 0;
             $user->save();
-        }
-        else
-        {
+        } else {
             $user->status = 1;
             $user->save();
         }
@@ -379,7 +361,7 @@ class UserController extends Controller
             $check = User::whereEmail($email)->first();
             if ($check) {
                 $password = Hash::make($request->password);
-                $check->update(['password',$password]);
+                $check->update(['password', $password]);
                 $request->session()->forget('email');
                 return response()->json([
                     'status' => true
@@ -444,12 +426,12 @@ class UserController extends Controller
         // dd($req);
         $select = DB::table('users')
             ->join('user_type', 'users.user_type_id', "=", 'user_type.id')
-            ->select('users.id', 'users.name', 'user_type.name as user_type_name', 'users.email','users.status');
+            ->select('users.id', 'users.name', 'user_type.name as user_type_name', 'users.email', 'users.status');
         if ($req->input('search') != "" && $req->column != "none") {
-            $select = $select->where('users.' . $req->input('column'), 'LIKE', '%'.$req->input('search').'%')
+            $select = $select->where('users.' . $req->input('column'), 'LIKE', '%' . $req->input('search') . '%')
                 ->orderByDesc('users.id')
                 ->paginate(6);
-            $select = $select->appends(["column"=>$req->column, "search"=>$req->search]);
+            $select = $select->appends(["column" => $req->column, "search" => $req->search]);
         } else {
             $select = $select->orderByDesc('users.id')
                 ->paginate(6);

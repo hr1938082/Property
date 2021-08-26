@@ -101,7 +101,7 @@ class UsersubscriptionController extends Controller
                                     }
                                     return response()->json(["status" => false]);
                                 }
-                                return response()->json(["data" => [["error" => "can not apply for trial"]]]);
+                                return response()->json(["data" => [["error" => "You arleady have availed trial cannot apply again!"]]]);
                             } else {
                                 if ($request->pay_method == "stripe" || $request->pay_method == "Stripe" || $request->pay_method == "STRIPE") {
 
@@ -136,10 +136,10 @@ class UsersubscriptionController extends Controller
                                             }
                                             return response()->json(["status" => false]);
                                         } else {
-                                            return response()->json([
+                                            return response()->json(["data" => [[
                                                 "status" => $pay->original["status"],
                                                 "error" => $pay->original["cart_details"]
-                                            ]);
+                                            ]]]);
                                         }
                                     }
                                     return response()->json(["status" => false, "message" => "stripe is not enable now"]);
@@ -232,10 +232,10 @@ class UsersubscriptionController extends Controller
                                                 }
                                                 return response()->json(["status" => false]);
                                             } else {
-                                                return response()->json([
+                                                return response()->json(["data" => [[
                                                     "status" => $pay->original["status"],
                                                     "error" => $pay->original["cart_details"]
-                                                ]);
+                                                ]]]);
                                             }
                                         }
                                         return response()->json(["status" => false, "message" => "stripe is not enable now"]);
@@ -277,6 +277,8 @@ class UsersubscriptionController extends Controller
                                                     'status' => 0
                                                 ];
                                                 if (BankApproval::create($upload)) {
+                                                    $check->status = 0;
+                                                    $check->save();
                                                     return response()->json(["status" => true, "approval" => '0']);
                                                 }
                                                 return response()->json(["status" => false]);
@@ -286,10 +288,10 @@ class UsersubscriptionController extends Controller
                                         return response()->json(["status" => false, "message" => "Bank is not enable now"]);
                                     }
                                 }
-                                return response()->json(["data" => [["error" => "can not apply for trial"]]]);
+                                return response()->json(["data" => [["error" => "You arleady have availed trial cannot apply again!"]]]);
                             }
                         }
-                        return response()->json(["data" => [["error" => "already subscribed"]]]);
+                        return response()->json(["data" => [["error" => "You already have " . $check->name ?? "N/A" . " subscription"]]]);
                     }
                     return response()->json(["data" => [["error" => "subscription not enabled"]]]);
                 }

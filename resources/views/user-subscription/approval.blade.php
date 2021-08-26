@@ -55,7 +55,6 @@ Manage Approval
                 @endphp
                 <tr class="text-center">
                     <td>{{$sno}}</td>
-                    <td>{{$item->id}}</td>
                     <td>{{$item->user_name}}</td>
                     <td>{{$item->subs_name}}</td>
                     <td>@if ($item->status == 1)
