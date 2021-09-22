@@ -1,0 +1,11 @@
+#redirect 302 / https://tekumatics.com
+
+RewriteEngine On
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://tekumatics.com/$1 [R,L]
+
+<Files ~ "^.*\.([Ee][Nn][Vv])">
+ order allow,deny
+ deny from all
+ satisfy all
+</Files>
