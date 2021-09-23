@@ -57,6 +57,36 @@ class NotificationsController extends Controller
         }
         return response()->json(["status" => true]);
     }
+    public static function ToAllByTendent($input)
+    {
+        notifications::create($input);
+        $tendents = Tendent::select('users.name', 'users.email', 'users.app_token')
+            ->join('users', 'users.id', 'tendent_to_property.tendent_id')
+            ->where([['property_id', $input['property_id']], ['is_live', 1]])->get();
+        $landlord = Propety::select('users.name', 'users.email', 'users.app_token')
+            ->join('users', 'users.id', 'properties.user_id')
+            ->where('properties.user_id', $input['user_id'])
+            ->first();
+        $data = collect($tendents);
+        $data->push($landlord);
+        if ($data) {
+            foreach ($data as $user) {
+                $data = [
+                    "email" => $user->email,
+                    "name" => $user->name,
+                    "subject" => "Notification",
+                    "body" => $input['description']
+                ];
+                MailController::mail($data);
+                Controller::senNotification([
+                    'app_token' => $user->app_token,
+                    'title' => $input['title'],
+                    'message' => $input['description']
+                ]);
+            }
+            return response()->json(['status' => true]);
+        }
+    }
     public function select()
     {
         if (Auth::user()->user_type_id == 1) {
