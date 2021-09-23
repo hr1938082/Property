@@ -25,24 +25,22 @@ class AdminController extends Controller
     {
         $email_error = $email;
         $user_type = User_type::all();
-        return view('manage-user.add', compact('user_type','email_error'));
+        return view('manage-user.add', compact('user_type', 'email_error'));
     }
     // add user add method
     public function register(Request $request)
     {
         $valitate = $request->validate([
-            'name'=>'required|min:4|max:50',
-            'email'=>'required|email',
-            'password'=>'required|confirmed|min:8',
-            'mobile'=>'required',
-            'address'=>'required',
-            'user_type_id'=>'required',
+            'name' => 'required|min:4|max:50',
+            'email' => 'required|email',
+            'password' => 'required|confirmed|min:8',
+            'mobile' => 'required',
+            'address' => 'required',
+            'user_type_id' => 'required',
         ]);
-        if($valitate)
-        {
-            $check = User::where('email',$request->input('email'))->first();
-            if(!$check)
-            {
+        if ($valitate) {
+            $check = User::where('email', $request->input('email'))->first();
+            if (!$check) {
                 $upload = [
                     "name" => $request->name,
                     "email" => $request->email,
@@ -61,51 +59,53 @@ class AdminController extends Controller
     public function dashboard()
     {
         $rent = RentPay::select(DB::raw('SUM(amount_paid)as rent'))
-        ->first();
+            ->first();
         $utility = UtilityPaid::select(DB::raw('AVG(paid_by_user) as utility'))
-        ->first();
-        $select =RentPay::select('rent_pay.amount_paid','rent_pay.date')
+            ->first();
+        $select = RentPay::select('rent_pay.amount_paid', 'rent_pay.date')
             ->get();
-            $month_data = [];
-            $data= [];
-            $current_month = (int)date('m');
-            $current_year = (int)date('Y');
-            if($select)
-            {
+        $month_data = [];
+        $data = [];
+        $current_month = (int)date('m');
+        $current_year = (int)date('Y');
+        if ($select) {
+            foreach ($select as $value) {
+                $year = (int)substr($value->date, 6);
+                $month = (int)substr($value->date, 3, 2);
+                if ($year == $current_year) {
+                    array_push($month_data, $month);
+                }
+            }
+            $month_data = array_unique($month_data);
+            foreach ($month_data as $key => $value_month) {
+                $temp = [];
                 foreach ($select as $value) {
-                    $year = (int)substr($value->date,6);
-                    $month = (int)substr($value->date,3,2);
-                    if($year == $current_year)
-                    {
-                        array_push($month_data,$month);
+                    $year = (int)substr($value->date, 6);
+                    $month = (int)substr($value->date, 3, 2);
+                    if ($year == $current_year && $month == $value_month) {
+                        array_push($temp, [
+                            "amoutn" => $value->amount_paid
+                        ]);
                     }
                 }
-                $month_data=array_unique($month_data);
-                foreach ($month_data as $key => $value_month) {
-                    $temp = [];
-                    foreach ($select as $value) {
-                        $year = (int)substr($value->date,6);
-                        $month = (int)substr($value->date,3,2);
-                        if($year == $current_year && $month == $value_month)
-                        {
-                            array_push($temp,[
-                                "amoutn" => $value->amount_paid
-                            ]);
-                        }
-                    }
-                    $data += ["$value_month"=>$temp];
-                }
-                ksort($data);
+                $data += ["$value_month" => $temp];
             }
-            $datas = [];
-            foreach ($data as $key => $value) {
-                $month = $key;
-                $temps = 0;
-                foreach ($value as $values) {
-                    $temps += (int)$values["amoutn"];
-                }
-                array_push($datas,["month"=>$month,"rent"=>$temps]);
+            ksort($data);
+        }
+        $datas = [];
+        foreach ($data as $key => $value) {
+            $month = $key;
+            $temps = 0;
+            foreach ($value as $values) {
+                $temps += (int)$values["amoutn"];
             }
-        return view('dashboard',compact('rent','utility','datas'));
+            array_push($datas, ["month" => $month, "rent" => $temps]);
+        }
+        return view('dashboard', compact('rent', 'utility', 'datas'));
+    }
+    public function testNotification()
+    {
+        $this->senNotification([]);
+        # code...
     }
 }

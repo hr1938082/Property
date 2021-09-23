@@ -24,6 +24,7 @@ use App\Http\Controllers\SocialLinksController;
 use App\Http\Controllers\StatesController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\CityController;
+use App\Models\notifications;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,12 +36,15 @@ use App\Http\Controllers\CityController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::get('/noti', [NotificationsController::class, 'notification']);
 // user Routes
 Route::group(['middleware' => ['auth:sanctum', 'check.subs'], 'prefix' => 'user'], function () {
     Route::post('/register', [UserController::class, 'register']);
     Route::post('/update/', [UserController::class, 'update']);
     Route::post('/update/image', [UserController::class, 'updateimage']);
     Route::post('/update/password', [UserController::class, 'updatepassword']);
+    Route::post('/apptoken', [UserController::class, 'storeAppToken']);
 });
 Route::group(['middleware' => 'auth:sanctum', 'prefix' => 'user'], function () {
     Route::get('/select', [UserController::class, 'select']);
@@ -177,6 +181,7 @@ Route::group(["middleware" => 'auth:sanctum', "prefix" => "rent/pay"], function 
     Route::post('/upcoming', [RentPayController::class, 'upcomingrent']);
     Route::post('/sum', [RentPayController::class, 'rentAll']);
     Route::post('/graph', [RentPayController::class, 'YearlyDataMothWise']);
+    Route::get('/notify', [RentPayController::class, 'rentNotification']);
 });
 
 // state Routes
@@ -207,6 +212,7 @@ Route::group(["middleware" => 'auth:sanctum', "prefix" => "bank"], function () {
 // messages Route
 Route::group(["middleware" => 'auth:sanctum', "prefix" => "messages"], function () {
     Route::get('/select/{property_id}', [MessageController::class, 'getMessages']);
+    Route::get('select/{property_id}', [MessageController::class, 'PropertyUsers']);
 });
 // signup Route
 Route::post('/signup', [UserController::class, 'register']);

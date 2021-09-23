@@ -32,9 +32,10 @@ class TaskAssignController extends Controller
                             ];
                             if (TaskAssign::create($add)) {
                                 $input = [
+                                    'title' => "Task",
                                     "user_id" => Auth::user()->id,
                                     "property_id" => $check[0]->id,
-                                    "description" => "Task '" . $check[0]->task . "' Assigned for property ".$check[0]->property_name,
+                                    "description" => "Task '" . $check[0]->task . "' Assigned for property " . $check[0]->property_name,
                                     "stt" => 1,
                                     "stl" => 0
                                 ];
@@ -119,10 +120,10 @@ class TaskAssignController extends Controller
                 $check_property = Tendent::where([['property_id', $check_tendent->property_id], ['tendent_id', Auth::user()->id], ['is_live', 1]])->first();
                 if ($check_property) {
                     $upload = $request->all();
-                    if($check->update($upload))
-                    {
+                    if ($check->update($upload)) {
                         $property = Propety::find($check_tendent->property_id);
                         $input = [
+                            'title' => "Task",
                             "user_id" => $property->user_id,
                             "property_id" => $property->id,
                             "description" => "Task '" . $check_tendent->task . "' completed for property $property->property_name",

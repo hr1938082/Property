@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\File;
 
 class AddsController extends Controller
 {
+
     protected $property;
     protected $address;
     protected $image;

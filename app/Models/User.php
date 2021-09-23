@@ -24,6 +24,7 @@ class User extends Authenticatable
         'user_type_id',
         'email',
         'password',
+        'app_token',
         'verified',
         'code_id',
         'mobile',
@@ -42,5 +43,5 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-public $timestamps = false;
+    public $timestamps = false;
 }

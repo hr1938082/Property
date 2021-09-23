@@ -23,6 +23,7 @@ class PropertyRequestController extends Controller
                 if (PropertyRequest::create($upload)) {
                     $property = Propety::find($request->property_id);
                     $input = [
+                        'title' => "Request for $property->property_name",
                         "user_id" => $request->tendent_id,
                         "property_id" => $request->property_id,
                         "description" => Auth::user()->name . " requested you for property " . $property->property_name,
@@ -70,6 +71,7 @@ class PropertyRequestController extends Controller
                         ]);
                         $user = User::select('name')->where('id', $tendent->tendent_id)->first();
                         $input = [
+                            'title' => "Request approved",
                             "user_id" => Auth::user()->id,
                             "property_id" => $check->property_id,
                             "description" => Auth::user()->name . " approved $user->name request for property " . $property_rent->property_name,

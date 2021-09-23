@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\RentPay;
 use App\Models\Tendent;
 use App\Models\Utility;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -35,6 +36,7 @@ class RentPayController extends Controller
                 if (RentPay::create($upload)) {
                     $Propety = Propety::find($rent->property_id);
                     $input = [
+                        'title' => 'Rent',
                         'user_id' => $Propety->user_id,
                         'property_id' => $Propety->id,
                         'description' => "Rent paid by user " . Auth::user()->name . " for Property " . $Propety->property_name,
@@ -536,5 +538,41 @@ class RentPayController extends Controller
             return response()->json(["status" => true, "data" => $data]);
         }
         return response()->json(["status" => false, "data" => [["unauthenticated"]]]);
+    }
+    public function rentNotification()
+    {
+        $select = Tendent::select('rent.id', 'tendent_to_property.property_id')
+            ->join('rent', 'user_id', 'tendent_to_property.tendent_id')
+            ->where('is_live', 1)
+            ->get();
+        $temp = 0;
+        $data = [];
+        $select = collect($select);
+        foreach ($select as $value) {
+            if ($temp !== $value->property_id) {
+                array_push($data, $value->id);
+            }
+            $temp = $value->property_id;
+        }
+        dd($data);
+        foreach ($select as $value) {
+            $row = RentPay::select('date')->where('rent_id', $value->id)->first();
+            $row2 = RentPay::select('date')->where('rent_id', $value->id)->orderbyDesc("id")->get();
+            $last_paid_date = Carbon::parse($row2[0]->date);
+            $payable_date = Carbon::parse($row2[0]->date)->addMonth(1);
+            $today_date = Carbon::now();
+            if ($payable_date->gt($today_date)) {
+                // if ($payable_date->diffInDays($today_date) > 0) {
+                //     $input = [
+                //         'title' => 'Rent',
+                //         'user_id' => $Propety->user_id,
+                //         'property_id' => $Propety->id,
+                //         'description' => "Rent paid by user " . Auth::user()->name . " for Property " . $Propety->property_name,
+                //         'stt' => 1
+                //     ];
+                //     NotificationsController::insert($input);
+                // }
+            }
+        }
     }
 }

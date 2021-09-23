@@ -14,6 +14,7 @@ use App\Models\usersubscription;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Tendent;
+use Exception;
 
 class UserController extends Controller
 {
@@ -624,5 +625,19 @@ class UserController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
         return response()->json(["data" => [["Logout" => "Sucessfully"]]]);
+    }
+    public function storeAppToken(Request $req)
+    {
+        try {
+            $row = User::find(Auth::user()->id);
+            if ($row) {
+                $row->app_token = $req->app_token;
+                $row->save();
+                return response()->json(['status' => true]);
+            }
+            throw new Exception('Not Found');
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'messages' => $e->getMessage()]);
+        }
     }
 }
