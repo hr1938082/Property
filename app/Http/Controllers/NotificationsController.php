@@ -40,7 +40,7 @@ class NotificationsController extends Controller
         if (Auth::user()->user_type_id == 2) {
             $select = Propety::select('users.name', 'users.email', 'users.app_token')
                 ->join('users', 'users.id', 'properties.user_id')
-                ->where('properties.user_id', $input['user_id'])
+                ->where('properties.id', $input['property_id'])
                 ->first();
             $data = [
                 'email' => $select->email,
