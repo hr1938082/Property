@@ -35,27 +35,24 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'mobile' => ['required'],
             'address' => ['required'],
         ])->validateWithBag('updateProfileInformation');
-        if($request->has('profile'))
-        {
-            if(File::exists($user->image))
-            {
+        if ($request->has('profile')) {
+            if (File::exists($user->image)) {
                 unlink($user->image);
             }
             $upload = $request->file('profile');
             $upload = $upload->store('public/images');
-            $path = "storage/".substr($upload,7);
-        }
-        else
-        {
+            $path = "storage/" . substr($upload, 7);
+        } else {
             $path = null;
         }
-        if ($request->email !== $user->email &&
-            $user instanceof MustVerifyEmail) {
+        if (
+            $request->email !== $user->email &&
+            $user instanceof MustVerifyEmail
+        ) {
             $this->updateVerifiedUser($user, $request->all());
         } else {
 
-            if($path != null)
-            {
+            if ($path != null) {
                 $user->forceFill([
                     'name' => $request->name,
                     'email' => $request->email,
@@ -63,9 +60,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                     'address' => $request->address,
                     'image' => $path
                 ])->save();
-            }
-            else
-            {
+            } else {
                 $user->forceFill([
                     'name' => $request->name,
                     'email' => $request->email,

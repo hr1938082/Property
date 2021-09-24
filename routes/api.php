@@ -212,7 +212,7 @@ Route::group(["middleware" => 'auth:sanctum', "prefix" => "bank"], function () {
 // messages Route
 Route::group(["middleware" => 'auth:sanctum', "prefix" => "messages"], function () {
     Route::get('/select/{property_id}', [MessageController::class, 'getMessages']);
-    Route::get('select/{property_id}', [MessageController::class, 'PropertyUsers']);
+    Route::get('users/select/{property_id}', [MessageController::class, 'PropertyUsers']);
 });
 // signup Route
 Route::post('/signup', [UserController::class, 'register']);

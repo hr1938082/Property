@@ -41,15 +41,16 @@ class AdminController extends Controller
         if ($valitate) {
             $check = User::where('email', $request->input('email'))->first();
             if (!$check) {
-                $upload = [
-                    "name" => $request->name,
-                    "email" => $request->email,
-                    "password" => Hash::make($request->password),
-                    "user_type_id" => $request->user_type_id,
-                    "mobile" => $request->mobile,
-                    "address" => $request->address,
-                ];
-                User::create($upload);
+                $this->user->name = $request->input("name");
+                $this->user->user_type_id = $request->input("user_type_id");
+                $this->user->email = $request->input("email");
+                $this->user->password = Hash::make($request->input("password"));
+                $this->user->verified = 0;
+                $this->user->code_id = 0;
+                $this->user->mobile = $request->input("mobile");
+                $this->user->address = $request->input("address");
+                $this->user->status = 1;
+                $this->user->save();
                 return redirect()->route('manageuser');
             }
             return $this->adduserform("Email Already Exist");
@@ -102,10 +103,5 @@ class AdminController extends Controller
             array_push($datas, ["month" => $month, "rent" => $temps]);
         }
         return view('dashboard', compact('rent', 'utility', 'datas'));
-    }
-    public function testNotification()
-    {
-        $this->senNotification([]);
-        # code...
     }
 }
