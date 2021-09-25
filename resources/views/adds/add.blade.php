@@ -104,6 +104,7 @@ Add Properties
                                     <select class="fadeIn third px-1  rounded-0 my-0" style="width: 122px" name="type" id="type_id"
                                         style="width: 90px">
                                         <option selected disabled>Type</option>
+                                        <option value="room">Rooms</option>
                                         <option value="house">House</option>
                                         <option value="offices">Offices</option>
                                         <option value="apartment">Apartment</option>

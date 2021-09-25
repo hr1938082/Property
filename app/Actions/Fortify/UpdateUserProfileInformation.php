@@ -45,47 +45,21 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         } else {
             $path = null;
         }
-        if (
-            $request->email !== $user->email &&
-            $user instanceof MustVerifyEmail
-        ) {
-            $this->updateVerifiedUser($user, $request->all());
+        if ($path != null) {
+            $user->forceFill([
+                'name' => $request->name,
+                'email' => $request->email,
+                'mobile' => $request->mobile,
+                'address' => $request->address,
+                'image' => $path
+            ])->save();
         } else {
-
-            if ($path != null) {
-                $user->forceFill([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'mobile' => $request->mobile,
-                    'address' => $request->address,
-                    'image' => $path
-                ])->save();
-            } else {
-                $user->forceFill([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'mobile' => $request->mobile,
-                    'address' => $request->address,
-                ])->save();
-            }
+            $user->forceFill([
+                'name' => $request->name,
+                'email' => $request->email,
+                'mobile' => $request->mobile,
+                'address' => $request->address,
+            ])->save();
         }
-    }
-
-    /**
-     * Update the given verified user's profile information.
-     *
-     * @param  mixed  $user
-     * @param  array  $input
-     * @return void
-     */
-    protected function updateVerifiedUser($user, array $input)
-    {
-        $user->forceFill([
-            'name' => $input['name'],
-            'email' => $input['email'],
-            'email_verified_at' => null,
-        ])->save();
-
-        $user->sendEmailVerificationNotification();
     }
 }

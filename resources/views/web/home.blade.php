@@ -71,11 +71,12 @@ $page = 'home'
             <!-- Nav tabs -->
             <ul class="nav nav-tabs pgl-pro-tabs text-center animation" role="tablist">
                 <li class="active"><a href="#all" role="tab" data-toggle="tab">All</a></li>
+                <li><a href="#room" role="tab" data-toggle="tab">Rooms</a></li>
                 <li><a href="#house" role="tab" data-toggle="tab">House</a></li>
                 <li><a href="#offices" role="tab" data-toggle="tab">Offices</a></li>
                 <li><a href="#apartment" role="tab" data-toggle="tab">Apartment</a></li>
                 <li><a href="#residential" role="tab" data-toggle="tab">Residential</a></li>
-                <li><a href="{{ route('adds.request') }}" class="btn btn-lg btn-default">Apply for Ad</a></li>
+                <li><a href="{{ route('adds.request') }}" class="btn btn-lg btn-default" style="margin: 10px 0">Apply for Ad</a></li>
             </ul>
 
             <!-- Tab panes -->
@@ -112,6 +113,43 @@ $page = 'home'
                                 </div>
                             </div>
                         </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="tab-pane" id="room">
+                    <div style="display: flex; flex-wrap: wrap;">
+                        @foreach ($select as $item)
+                        @if ($item->type == "room")
+                        <div class="col-xs-4 animation">
+                            <div class="pgl-property">
+                                <div class="property-thumb-info">
+                                    <div class="property-thumb-info-image">
+                                        @php
+                                        $count = 0;
+                                        @endphp
+                                        @foreach ($select_images as $images)
+                                        @if ($item->id === $images->id && $count === 0)
+                                        <img style="height: 200px; overflow: hidden;" alt="" class="img-responsive"
+                                            src="{{ asset($images->name_dir) }}">
+                                        $count ++;
+                                        @endif
+                                        @endforeach
+                                        <span class="property-thumb-info-label">
+                                            <span class="label price">{{"$item->rent $item->currency_name"}}</span>
+                                            <span class="label forrent text-capitalize">{{$item->for_type}}</span>
+                                        </span>
+                                    </div>
+                                    <div class="property-thumb-info-content">
+                                        <h3>
+                                            {{Str::substr($item->description, 0,50)}}
+                                        </h3>
+                                        <a href="{{ route('web.add', ['id'=>$item->id]) }}"
+                                            class="btn btn-lg btn-default">View more</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
                         @endforeach
                     </div>
                 </div>

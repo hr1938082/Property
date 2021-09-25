@@ -193,6 +193,11 @@ Edit Property Info
                                 <select class="fadeIn third px-1  rounded-0 my-0" style="width: 122px" name="type" id="type_id"
                                     style="width: 90px">
                                     <option selected disabled>Type</option>
+                                    @if ($property->type === "room")
+                                        <option selected value="room">Rooms</option>
+                                    @else
+                                        <option value="house">House</option>
+                                    @endif
                                     @if ($property->type === "house")
                                         <option selected value="house">House</option>
                                     @else
