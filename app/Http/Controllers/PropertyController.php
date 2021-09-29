@@ -57,9 +57,11 @@ class PropertyController extends Controller
                         $upload = ["property_id" => $this->property->id, "name_dir" => $dir];
                         $this->image = $this->image->create($upload);
                     }
-                    return response()->json(["data" => [["property" => "inserted"]]]);
+//			DB::insert('insert into chat (user_id1, user_id2,type) values (?,NULL, ?)', [$this->property->id, 1]);
+                    return response()->json(["data" => [["property" => "Property saved successfully"]]]);
                 } else {
-                    return response()->json(["data" => [["property" => "inserted with out image"]]]);
+			DB::insert('insert into chat (user_id1, user_id2,type) values (?,NULL, ?)', [$this->property->id, 1]);
+                    return response()->json(["data" => [["property" => "Property added. Please go to edit property to add images"]]]);
                 }
             }
             return response()->json(["data" => [["message" => "unauthenticated"], 401]]);
