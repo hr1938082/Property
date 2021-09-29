@@ -103,6 +103,8 @@ class PropertyRequestController extends Controller
             'users.name',
             'users.email',
             'users.image',
+            'users.mobile',
+            'users.address',
             'properties.id as property_id',
             'properties.property_name'
         )
