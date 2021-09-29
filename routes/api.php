@@ -200,8 +200,8 @@ Route::group(["middleware" => 'auth:sanctum', "prefix" => "subscription"], funct
 Route::group(["middleware" => 'auth:sanctum', "prefix" => "user/subscription"], function () {
     Route::post('/add', [UsersubscriptionController::class, 'add']);
     Route::get('/select', [UsersubscriptionController::class, 'select']);
-    Route::get('/update', [UsersubscriptionController::class, 'update']);
 });
+Route::get('user/subscription/update', [UsersubscriptionController::class, 'update']);
 Route::group(["middleware" => 'auth:sanctum', "prefix" => "pay/method"], function () {
     Route::get('/select', [PaymentMethodsController::class, 'manage']);
 });

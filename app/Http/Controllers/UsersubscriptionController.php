@@ -667,6 +667,7 @@ class UsersubscriptionController extends Controller
     }
     public function update(Request $request)
     {
+        ini_set('max_execution_time', 82800);
         $check = usersubscription::where("status", 1)
             ->get();
         if ($check) {
@@ -709,7 +710,7 @@ class UsersubscriptionController extends Controller
                         ['user_id', $value->user_id],
                         ['status', 1]
                     ])
-                        ->update(['status', 0]);
+                        ->update(['status' => 0]);
                     MailController::mail($data);
                 }
             }
