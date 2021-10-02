@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Propety;
 use App\Models\Image;
 use App\Models\Address;
+use App\Models\chat;
 use App\Models\city;
 use App\Models\Country;
 use App\Models\currency;
@@ -57,10 +58,9 @@ class PropertyController extends Controller
                         $upload = ["property_id" => $this->property->id, "name_dir" => $dir];
                         $this->image = $this->image->create($upload);
                     }
-//			DB::insert('insert into chat (user_id1, user_id2,type) values (?,NULL, ?)', [$this->property->id, 1]);
                     return response()->json(["data" => [["property" => "Property saved successfully"]]]);
                 } else {
-			DB::insert('insert into chat (user_id1, user_id2,type) values (?,NULL, ?)', [$this->property->id, 1]);
+                    DB::insert('insert into chat (user_id1, user_id2,type) values (?,NULL, ?)', [$this->property->id, 1]);
                     return response()->json(["data" => [["property" => "Property added. Please go to edit property to add images"]]]);
                 }
             }
@@ -596,6 +596,13 @@ class PropertyController extends Controller
                 if ($property->status == 0) {
                     $property->status = 1;
                     $property->save();
+                    $chat = chat::find($request->id);
+                    if ($chat) {
+                        if ($chat->type == 1) {
+                            $chat->is_live = 1;
+                            $chat->save();
+                        }
+                    }
 
                     if ($request->expectsJson()) {
                         return response()->json([
@@ -609,6 +616,13 @@ class PropertyController extends Controller
                     if ($rent->count() > 0) {
                         foreach ($rent as  $value) {
                             $value->delete();
+                        }
+                    }
+                    $chat = chat::find($request->id);
+                    if ($chat) {
+                        if ($chat->type == 1) {
+                            $chat->is_live = 0;
+                            $chat->save();
                         }
                     }
                     $property->status = 0;
