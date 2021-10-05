@@ -541,6 +541,7 @@ class RentPayController extends Controller
     }
     public function rentNotification()
     {
+        ini_set('max_execution_time', 82800);
         $select = Tendent::select('rent.id', 'properties.property_name', 'tendent_to_property.tendent_id', 'tendent_to_property.property_id')
             ->join('properties', 'properties.id', 'tendent_to_property.property_id')
             ->join('rent', 'rent.user_id', 'tendent_to_property.tendent_id')
@@ -565,41 +566,54 @@ class RentPayController extends Controller
                 $last_paid_date = Carbon::parse($row2[0]->date);
                 $payable_date = $last_paid_date->subDays((int)$row2[0]->late);
                 $today_date = Carbon::now();
-                if ($payable_date->lte($today_date)) {
+                if ($payable_date->gte($today_date)) {
                     if ($payable_date->diffInDays($today_date) == 5) {
-                        $input = [
-                            'title' => 'Rent',
-                            'user_id' => $data['user_id'],
-                            'property_id' => $data['property_id'],
-                            'description' => "Payable date for rent is" . $payable_date->toDateString() . " for Property " . $data['property_name'],
-                            'stt' => 1,
-                            'stl' => 1
-                        ];
-                        NotificationsController::ToAllByTendent($input);
+                        foreach ($data as $row) {
+                            if ($row['rent_id'] === $value->id) {
+
+                                $input = [
+                                    'title' => 'Rent',
+                                    'user_id' => $row['user_id'],
+                                    'property_id' => $row['property_id'],
+                                    'description' => "Payable date for rent is" . $payable_date->toDateString() . " for Property " . $row['property_name'],
+                                    'stt' => 1,
+                                    'stl' => 1
+                                ];
+                                NotificationsController::ToAllByTendent($input);
+                            }
+                        }
                     }
                     if ($payable_date->diffInDays($today_date) == 0) {
-                        $input = [
-                            'title' => 'Rent',
-                            'user_id' => $data['user_id'],
-                            'property_id' => $data['property_id'],
-                            'description' => "Last date of paying rent for Property " . $data['property_name'],
-                            'stt' => 1,
-                            'stl' => 1
-                        ];
-                        NotificationsController::ToAllByTendent($input);
+                        foreach ($data as $row) {
+                            if ($row['rent_id'] === $value->id) {
+                                $input = [
+                                    'title' => 'Rent',
+                                    'user_id' => $row['user_id'],
+                                    'property_id' => $row['property_id'],
+                                    'description' => "Last date of paying rent for Property " . $row['property_name'],
+                                    'stt' => 1,
+                                    'stl' => 1
+                                ];
+                                NotificationsController::ToAllByTendent($input);
+                            }
+                        }
                     }
                 }
-                if ($payable_date->gt($today_date)) {
-                    if ($payable_date->diffInDays($today_date) == 1) {
-                        $input = [
-                            'title' => 'Rent',
-                            'user_id' => $data['user_id'],
-                            'property_id' => $data['property_id'],
-                            'description' => "Payable date for rent was" . $payable_date->toDateString() . " for Property " . $data['property_name'],
-                            'stt' => 1,
-                            'stl' => 1
-                        ];
-                        NotificationsController::ToAllByTendent($input);
+                if ($payable_date->lt($today_date)) {
+                    if ($payable_date->diffInDays($today_date) >= 1) {
+                        foreach ($data as $row) {
+                            if ($row['rent_id'] === $value->id) {
+                                $input = [
+                                    'title' => 'Rent',
+                                    'user_id' => $row['user_id'],
+                                    'property_id' => $row['property_id'],
+                                    'description' => "Payable date for rent was" . $payable_date->toDateString() . " for Property " . $row['property_name'],
+                                    'stt' => 1,
+                                    'stl' => 1
+                                ];
+                                NotificationsController::ToAllByTendent($input);
+                            }
+                        }
                     }
                 }
             }

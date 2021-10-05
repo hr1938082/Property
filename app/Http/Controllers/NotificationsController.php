@@ -65,9 +65,10 @@ class NotificationsController extends Controller
             ->where([['property_id', $input['property_id']], ['is_live', 1]])->get();
         $landlord = Propety::select('users.name', 'users.email', 'users.app_token')
             ->join('users', 'users.id', 'properties.user_id')
-            ->where('properties.user_id', $input['user_id'])
+            ->where('properties.id', $input['property_id'])
             ->first();
         $data = collect($tendents);
+        // dd($landlord);
         $data->push($landlord);
         if ($data) {
             foreach ($data as $user) {
