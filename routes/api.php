@@ -146,6 +146,7 @@ Route::group(["middleware" => ['auth:sanctum', 'check.subs'], "prefix" => "task/
 });
 Route::group(["middleware" => 'auth:sanctum', "prefix" => "task/assign"], function () {
     Route::post('/select', [TaskAssignController::class, 'select']);
+    Route::post('/repetition', [TaskAssignController::class, 'repetition']);
 });
 // utility Routes
 Route::group(["middleware" => ['auth:sanctum', 'check.subs'], "prefix" => "utility"], function () {

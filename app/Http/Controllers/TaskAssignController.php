@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\TaskAssign;
 use App\Models\Tendent;
+use App\Models\Utility;
+use Carbon\Carbon;
 
 class TaskAssignController extends Controller
 {
@@ -28,7 +30,8 @@ class TaskAssignController extends Controller
                                 "user_id" => $request->user_id,
                                 "task_id" => $request->task_id,
                                 "status" => "pending",
-                                "date" => $request->date,
+                                "date" => date('d-m-Y'),
+                                "repetition" => $request->repetition
                             ];
                             if (TaskAssign::create($add)) {
                                 $input = [
@@ -66,7 +69,8 @@ class TaskAssignController extends Controller
                 'users.email as user_email',
                 'task.task',
                 'task_assign.status',
-                'task_assign.date'
+                'task_assign.date',
+                'task_assign.repetition'
             )
                 ->join('task', 'task_assign.task_id', '=', 'task.id')
                 ->join('properties', 'properties.id', '=', 'task.property_id')
@@ -149,5 +153,21 @@ class TaskAssignController extends Controller
             return response()->json(["data" => [["task_assign" => "deleted"]]]);
         }
         return response()->json(["data" => [["task_assign" => "not found"]]]);
+    }
+
+    // repetition method
+    public function repetition()
+    {
+        $task_assigned = TaskAssign::all();
+        foreach ($task_assigned as $value) {
+            $date = Carbon::parse($value->date);
+            $current_date = Carbon::now();
+            if ($current_date->gte($date)) {
+                $row = TaskAssign::find($value->id);
+                $row->status = "pending";
+                $row->date = date('d-m-Y');
+                $row->save();
+            }
+        }
     }
 }

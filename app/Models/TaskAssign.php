@@ -18,6 +18,7 @@ class TaskAssign extends Model
         'task_id',
         'status',
         'date',
+        'repetition'
     ];
     public $timestamps = false;
 }
