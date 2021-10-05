@@ -146,8 +146,8 @@ Route::group(["middleware" => ['auth:sanctum', 'check.subs'], "prefix" => "task/
 });
 Route::group(["middleware" => 'auth:sanctum', "prefix" => "task/assign"], function () {
     Route::post('/select', [TaskAssignController::class, 'select']);
-    Route::post('/repetition', [TaskAssignController::class, 'repetition']);
 });
+Route::get('task/assign/repetition', [TaskAssignController::class, 'repetition']);
 // utility Routes
 Route::group(["middleware" => ['auth:sanctum', 'check.subs'], "prefix" => "utility"], function () {
     Route::post('/add', [UtilityController::class, 'add']);
@@ -182,8 +182,8 @@ Route::group(["middleware" => 'auth:sanctum', "prefix" => "rent/pay"], function 
     Route::post('/upcoming', [RentPayController::class, 'upcomingrent']);
     Route::post('/sum', [RentPayController::class, 'rentAll']);
     Route::post('/graph', [RentPayController::class, 'YearlyDataMothWise']);
-    Route::get('/notify', [RentPayController::class, 'rentNotification']);
 });
+Route::get('rent/pay/notify', [RentPayController::class, 'rentNotification']);
 
 // state Routes
 Route::group(["middleware" => 'auth:sanctum', "prefix" => "states"], function () {
