@@ -28,7 +28,7 @@ class NotificationsController extends Controller
                         "body" => $input['description']
                     ];
                     MailController::mail($data);
-                    Controller::senNotification([
+                    return Controller::senNotification([
                         'app_token' => $tendents->app_token,
                         'title' => $input['title'],
                         'message' => $input['description']

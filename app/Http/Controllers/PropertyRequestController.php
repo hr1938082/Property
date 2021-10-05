@@ -30,9 +30,9 @@ class PropertyRequestController extends Controller
                         'stt' => 0,
                         'stl' => 1
                     ];
-                    NotificationsController::insert($input);
+                    $not = NotificationsController::insert($input);
                 }
-                return response()->json(["data" => ["Property Request" => "inserted"]]);
+                return response()->json(["data" => ["Property Request" => "inserted", "notification" => $not]]);
             }
             return response()->json(["data" => ["error" => "can not request for same"]]);
         }
@@ -78,13 +78,13 @@ class PropertyRequestController extends Controller
                             'stt' => 1,
                             "stl" => 0
                         ];
-                        NotificationsController::insert($input);
+                        $not = NotificationsController::insert($input);
                         $check->delete();
                         if ($tendent_on_property_count > 1) {
                             Rent::where('property_id', $check->property_id)
                                 ->update(['amount' => $rent, 'split' => 1]);
                         }
-                        return response()->json(["data" => ["Property Request" => "Approved"]]);
+                        return response()->json(["data" => ["Property Request" => "Approved", "notification" => $not]]);
                     }
                     return response()->json(["data" => ["error" => "Tendent is already approved in any other property"]]);
                 }

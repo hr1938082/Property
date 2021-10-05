@@ -27,12 +27,14 @@ class Controller extends BaseController
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         //Send the request
         $response = curl_exec($ch);
+        return $response;
         //Close request
         if ($response === FALSE) {
-            die('FCM Send Error: ' . curl_error($ch));
+            return curl_error($ch);
         }
         curl_close($ch);
     }

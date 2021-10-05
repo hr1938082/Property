@@ -39,9 +39,9 @@ class TaskAssignController extends Controller
                                     "stt" => 1,
                                     "stl" => 0
                                 ];
-                                NotificationsController::insert($input);
+                                $not = NotificationsController::insert($input);
                             }
-                            return response()->json(["data" => [["task_assign" => "Added"]]]);
+                            return response()->json(["data" => [["task_assign" => "Added", 'notification' => $not]]]);
                         }
                         return response()->json(["data" => [["error" => "Already Added"]]]);
                     }
@@ -130,9 +130,9 @@ class TaskAssignController extends Controller
                             "stt" => 1,
                             "stl" => 1
                         ];
-                        NotificationsController::insert($input);
+                        $not = NotificationsController::insert($input);
                     }
-                    return response()->json(["data" => [["task_assign" => "updated"]]]);
+                    return response()->json(["data" => [["task_assign" => "updated", "notification" => $not]]]);
                 }
                 return response()->json(["data" => [["task_assign" => "not belongs to you"]]]);
             }
