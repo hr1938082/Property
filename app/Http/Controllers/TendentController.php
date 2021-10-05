@@ -9,6 +9,7 @@ use App\Models\Image;
 use App\Models\Tendent;
 use App\Models\Propety;
 use App\Models\Rent;
+use Exception;
 
 class TendentController extends Controller
 {
@@ -297,5 +298,24 @@ class TendentController extends Controller
             $select = $select->appends(["ptn" => $ptn, "is_live" => $is_live, "pts" => $pts]);
         }
         return view('tenants.tenants', compact('select'));
+    }
+
+    public function tendentSelectOne(Request $request)
+    {
+        try {
+            if ($request->id) {
+                $row = Tendent::select(
+                    'properties.id as property_id',
+                    'properties.property_name'
+                )
+                    ->join('properties', 'properties.id', 'tendent_to_property.property_id')
+                    ->where([['tendent_to_property.tendent_id', $request->id], ['is_live', 1]])
+                    ->get();
+                return response()->json(['status' => true, 'data' => $row]);
+            }
+            throw new Exception('id is required');
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'messages' => $e->getMessage()]);
+        }
     }
 }

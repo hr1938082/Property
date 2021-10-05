@@ -98,6 +98,7 @@ Route::group(['middleware' => 'auth:sanctum', "prefix" => "property/tendent"], f
     Route::post('/tendentonproperty', [TendentController::class, 'tendent_on_property']);
     Route::post('/detail', [TendentController::class, 'selectone']);
     Route::post('/old', [TendentController::class, 'tendent_lived_in_property']);
+    Route::get('/{id}', [TendentController::class, 'tendentSelectOne']);
 });
 
 
