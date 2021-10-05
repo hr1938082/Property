@@ -306,18 +306,38 @@ class RentPayController extends Controller
         $data = [];
         if ($request->expectsJson()) {
             if (Auth::user()->user_type_id == 1) {
-                $select = Rent::select(
-                    'rent.id',
-                    'rent.user_id as tendent_id',
-                    'rent.property_id',
-                    'properties.property_name',
-                    'currency.currency',
-                    'rent.amount'
-                )
-                    ->join('properties', 'properties.id', '=', 'rent.property_id')
-                    ->join('currency', 'currency.id', 'property.currecny_id')
-                    ->where('properties.user_id', Auth::user()->id)
-                    ->get();
+                // dd(true);
+                // $select = Rent::select(
+                // 'rent.id',
+                // 'rent.user_id as tendent_id',
+                // 'rent.property_id',
+                // 'properties.property_name',
+                // 'properties.currency_id',
+                // 'currency.currency',
+                // 'rent.amount'
+                // )
+                //     ->join('properties', 'properties.id', '=', 'rent.property_id')
+                //     //  ->join('currency', 'currency.id', '=', 'properties.currecny_id')
+                //     ->where('properties.user_id', Auth::user()->id)
+                //     ->get();
+                // dd($select);
+                $select = DB::table('rent')
+                    ->join('properties', function ($join) {
+                        $join->on('properties.id', '=', 'rent.property_id');
+                    })->join('currency', function ($join) {
+                        $join->on('currency.id', '=', 'properties.currency_id');
+                    })->where('properties.user_id', Auth::user()->id)
+                    ->select(
+                        'rent.id',
+                        'rent.user_id as tendent_id',
+                        'rent.property_id',
+                        'properties.property_name',
+                        'properties.currency_id',
+                        'currency.currency',
+                        'rent.amount',
+                        // 'properties.currecny_id'
+                    )->get();
+                // dd($select);
                 if ($select->count() > 0) {
                     $data = [];
                     foreach ($select as $value) {

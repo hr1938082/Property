@@ -260,7 +260,7 @@ class TendentController extends Controller
             return response()->json(
                 [
                     "status" => true,
-                    "data" => $data,
+                    "data" => [$data],
                 ]
             );
         }
