@@ -160,13 +160,14 @@ class TendentController extends Controller
             'properties.property_name',
             'users.name as tendent_name',
             'currency.currency',
-            'properties.rent',
+            'rent.amount as rent',
             'properties.year_build',
             'tendent_to_property.date'
         )
             ->join('properties', 'properties.id', '=', 'tendent_to_property.property_id')
             ->join('users', 'users.id', '=', 'tendent_to_property.tendent_id')
             ->join('currency', 'properties.currency_id', 'currency.id')
+            ->join('rent', 'rent.property_id', 'properties.id')
             ->where('tendent_to_property.tendent_id', Auth::user()->id)
             ->where('is_live', 1)
             ->first();
