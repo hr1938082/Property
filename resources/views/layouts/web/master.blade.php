@@ -5,9 +5,9 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="HTML5 Template" />
-    <meta name="description" content="Flatize - Shop HTML5 Responsive Template">
-    <meta name="author" content="pixelgeeklab.com">
+    <meta name="keywords" content="Tekumatics" />
+    <meta name="description" content="Your home and property manager">
+    <meta name="author" content="Tekumatics">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tekumatics  | @yield('title')</title>
 
@@ -84,12 +84,19 @@
                             <li class="@if ($page == 'contact')
 								{{'active'}}
 							@endif"><a href="{{ route('contact') }}">Contact</a></li>
-                            <li class="@if ($page == 'about')
-								{{'active'}}
-							@endif"><a href="{{ route('about') }}">About</a></li>
                             <li class="@if ($page == 'privacy')
 								{{'active'}}
 							@endif"><a href="{{ route('policy') }}">Privacy Policy</a></li>
+                            <li class="@if ($page == 'about')
+								{{'active'}}
+							@endif"><a href="{{ route('about') }}">About</a></li>
+                            <li class="@if ($page == 'benefits')
+								{{'active'}}
+							@endif"><a href="{{ route('benefits') }}">Benefits</a></li>
+                            <li class="@if ($page == 'functionality')
+								{{'active'}}
+							@endif"><a href="{{ route('functionality') }}">Functionality</a></li>
+
                         </ul>
                     </div>
                     <!--/.nav-collapse -->
@@ -140,6 +147,16 @@
                             </ul>
                         </div> --}}
                         <div class="col-sm-4">
+
+                            <h2 style="margin-bottom:10px">Extra Links</h2>
+                            <ul style="list-style: none;">
+                                <li class="@if ($page == 'contact')
+                                {{'active'}}
+                            @endif"><a href="{{ route('contact') }}">Contact</a></li>
+                            <li class="@if ($page == 'privacy')
+                                {{'active'}}
+                            @endif"><a href="{{ route('policy') }}">Privacy Policy</a></li>
+                                </ul>
                             <h2>Don’t miss out</h2>
                             <p>In venenatis neque a eros laoreet eu placerat erat suscipit. Fusce cursus, erat ut
                                 scelerisque condimentum, quam odio ultrices leo.</p>

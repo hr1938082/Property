@@ -317,6 +317,7 @@ class RentPayController extends Controller
                         'rent.user_id as tendent_id',
                         'rent.property_id',
                         'properties.property_name',
+                        'properties.rent_days',
                         'properties.currency_id',
                         'currency.currency',
                         'rent.amount',
@@ -345,11 +346,11 @@ class RentPayController extends Controller
                                     ->where('rent_id', $value->id)
                                     ->first();
                                 if ($first_paid_date) {
-                                    $first_date = substr($first_paid_date->date, 0, 2);
-                                    $last_month = (int)substr($last_paid_date[0]->date, 3, 2);
-                                    $last_year = substr($last_paid_date[0]->date, 6, 4);
-                                    $duedate = $first_date . "-" . ($last_month + 1) . "-" . $last_year;
-                                    $late = $this->differ_days($first_paid_date->date, $last_paid_date[0]->date);
+                                    $first_date = Carbon::parse($first_paid_date->date);
+                                    $last_date = Carbon::parse($last_paid_date[0]->date);
+                                    $payable_date = Carbon::parse($first_date->day / $last_date->month / $last_date->year)->addDays($value->rent_days);
+                                    $duedate = $payable_date->format('d-m-Y');
+                                    $late = Carbon::now()->gt($payable_date) ? $payable_date->diffInDays(Carbon::now()) : 0;
                                     array_push($data, [
                                         "tendent_id" => $value->tendent_id,
                                         "property_name" => $value->property_name,
@@ -377,6 +378,7 @@ class RentPayController extends Controller
             if (Auth::user()->user_type_id == 2) {
                 $select = Rent::select(
                     'properties.property_name',
+                    'properties.rent_days',
                     'currency.currency',
                     'rent.amount',
                     'rent_pay.date as last_paid_date'
@@ -393,16 +395,15 @@ class RentPayController extends Controller
                     ->first();
                 if ($select->count() > 0) {
                     if ($first_paid_date->count() > 0) {
-                        $late = $this->differ_days($first_paid_date->date, $select[0]->last_paid_date);
-                        $date = substr($first_paid_date->date, 0, 2);
-                        $month = (int)substr($select[0]->last_paid_date, 3, 2);
-                        $year = substr($select[0]->last_paid_date, 6, 4);
-                        $last_paid_date = "$date-" . ($month + 1) . "-$year";
+                        $first_date = $first_paid_date->date;
+                        $last_date = $select[0]->last_paid_date;
+                        $payable_date = Carbon::parse($last_date)->addDays($select[0]->rent_days);
+                        $late = $payable_date->gt(Carbon::now()) ? $payable_date->diffInDays(Carbon::now()) : 0;
                         $data = [
                             "property_name" => $select[0]->property_name,
                             "amount" => $select[0]->amount . " " . $select[0]->currency ?? "AUD",
                             "last_paid_date" => $select[0]->last_paid_date,
-                            "Payable_date" => $last_paid_date,
+                            "Payable_date" => $payable_date,
                             "late" => $late
                         ];
                     }

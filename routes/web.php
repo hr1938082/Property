@@ -58,6 +58,12 @@ Route::get('/contact', function () {
 Route::get('/about', function () {
     return view('web.about');
 })->name('about');
+Route::get('/benefits', function () {
+    return view('web.benefits');
+})->name('benefits');
+Route::get('/functionality', function () {
+    return view('web.functionality');
+})->name('functionality');
 Route::post('contact/mail/send', [ContactController::class, 'contact'])->name('contact-mail-send');
 Route::get('/add', function () {
     return view('web.adds');
