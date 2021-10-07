@@ -136,8 +136,8 @@ class RentPayController extends Controller
                 }
                 $check_select = $check_select->orderbyDesc('id')->get();
                 if (isset($check_select[0]->date)) {
-                    $date_select = Carbon::parse($check_select[0]->date);
-                    $current_date = Carbon::now();
+                    $date_select = date_create($check_select[0]->date);
+                    $current_date = date_create(date('Y-m-d'));
                     $diff_date = date_diff($date_select, $current_date);
                     $diff_month = $diff_date->m;
                 }
@@ -164,7 +164,7 @@ class RentPayController extends Controller
                 $temp = [];
                 foreach ($check_select as $value) {
                     if ($month != "" && $year != "") {
-                        if ($month == Carbon::parse($value->date)->day && $year == Carbon::parse($value->date)->year) {
+                        if ($month == substr($value->date, 3, 2) && $year == substr($value->date, 6)) {
                             array_push($temp, [
                                 "user_id" => $value->tendent_id,
                                 "month" => substr($value->date, 3, 2),
@@ -174,7 +174,7 @@ class RentPayController extends Controller
                             ]);
                         }
                     } else if ($month != "") {
-                        if ($month == Carbon::parse($value->date)->month) {
+                        if ($month == substr($value->date, 3, 2)) {
                             array_push($temp, [
                                 "user_id" => $value->tendent_id,
                                 "month" => substr($value->date, 3, 2),
@@ -184,7 +184,7 @@ class RentPayController extends Controller
                             ]);
                         }
                     } else if ($year != "") {
-                        if ($year == Carbon::parse($value->date)->year) {
+                        if ($year == substr($value->date, 6)) {
                             array_push($temp, [
                                 "user_id" => $value->tendent_id,
                                 "month" => substr($value->date, 3, 2),
@@ -217,12 +217,13 @@ class RentPayController extends Controller
                                     'date' => $check["date"]
                                 ]);
                             } else {
+
                                 $sel = Rent::select('rent_pay.date')
                                     ->join('rent_pay', 'rent.id', 'rent_pay.rent_id')
                                     ->where('rent.user_id', $value->user_id)->first();
                                 if (!empty($sel->date)) {
-                                    $day = Carbon::parse($sel->date)->day;
-                                    $month = (string)((int)Carbon::parse($sel->date)->month) + 1;
+                                    $day = substr($sel->date, 0, 2);
+                                    $month = (string)((int)substr($sel->date, 3, 2)) + 1;
                                     $year = substr($sel->date, 6);
                                     if (strlen($month) == 1) {
                                         $month = "0" . $month;
