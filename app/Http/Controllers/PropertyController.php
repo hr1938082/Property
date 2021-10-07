@@ -122,6 +122,7 @@ class PropertyController extends Controller
                 "currency_id" => $request->input('currency_id'),
                 "user_id" => $request->input('user_id'),
                 "rent" => $request->input('rent'),
+                'rent_days' => $request->rent_days,
                 "year_build" => $request->input('year_build'),
                 "property_limit" => $request->limit,
             ];
@@ -296,6 +297,7 @@ class PropertyController extends Controller
             'description' => 'required',
             'currency_id' => 'required|numeric',
             'rent' => 'required|numeric',
+            'rent_days' => 'required|integer',
             'build_year' => 'required|numeric|min:4',
             'build_month' => 'required|numeric',
             'build_date' => 'required|numeric',
@@ -308,6 +310,7 @@ class PropertyController extends Controller
             "description" => $request->description,
             "currency_id" => $request->currency_id,
             "rent" => $request->rent,
+            'rent_days' => $request->rent_days,
             "year_build" => $request->build_year . "-" . $request->build_month . "-" . $request->build_date,
             'property_limit' => $request->limit
         ];
@@ -380,6 +383,7 @@ class PropertyController extends Controller
                 'properties.currency_id',
                 'properties.rent AS rent',
                 'properties.year_build AS yearbuild',
+                'properties.property_limit',
                 'users.name AS username',
                 'users.email as user_email',
                 'users.mobile as user_mobile',
@@ -434,6 +438,7 @@ class PropertyController extends Controller
                         "currency" => $currencyVal,
                         "price" => $value->rent,
                         "year_build" => $value->yearbuild,
+                        'limit' => $value->property_limit,
                         "user_name" => $value->username,
                         "user_email" => $value->user_email,
                         "user_mobile" => $value->user_mobile,

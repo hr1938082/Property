@@ -26,6 +26,7 @@ class Propety extends Model
         'user_id',
         'address_id',
         'rent',
+        'rent_days',
         'year_build',
         'property_limit',
         'limit_status',
