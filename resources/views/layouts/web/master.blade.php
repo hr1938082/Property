@@ -81,12 +81,6 @@
                             <li class="@if ($page == 'home')
 								{{'active'}}
 							@endif"><a href="{{ route('index') }}">Home</a></li>
-                            <li class="@if ($page == 'contact')
-								{{'active'}}
-							@endif"><a href="{{ route('contact') }}">Contact</a></li>
-                            <li class="@if ($page == 'privacy')
-								{{'active'}}
-							@endif"><a href="{{ route('policy') }}">Privacy Policy</a></li>
                             <li class="@if ($page == 'about')
 								{{'active'}}
 							@endif"><a href="{{ route('about') }}">About</a></li>
