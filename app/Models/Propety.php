@@ -27,6 +27,8 @@ class Propety extends Model
         'address_id',
         'rent',
         'year_build',
+        'property_limit',
+        'limit_status',
         'status'
     ];
 

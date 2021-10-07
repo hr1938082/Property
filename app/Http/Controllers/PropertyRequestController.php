@@ -47,46 +47,51 @@ class PropertyRequestController extends Controller
                 $check2 = Propety::where([['id', $check->property_id], ['user_id', Auth::user()->id]])->first();
 
                 if (isset($check2)) {
-                    $tendent_on_property = Tendent::where([
-                        ['tendent_id', $check->tendent_id],
-                        ['is_live', 1]
-                    ])->first();
-                    if (!$tendent_on_property) {
-                        $tendent = new Tendent();
-                        $tendent->tendent_id = $check->tendent_id;
-                        $tendent->property_id = $check->property_id;
-                        $tendent->date = date('d-m-Y');
-                        $tendent->is_live = 1;
-                        $tendent->save();
-                        $find = Tendent::where([['property_id', $check->property_id], ['is_live', 1]])->get();
-                        $tendent_on_property_count = $find->count();
-                        $property_rent = Propety::select('property_name', 'rent')
-                            ->where('id', $check->property_id)->first();
-                        $rent = (int)ceil($property_rent->rent / $tendent_on_property_count);
-                        $rent_ins = Rent::create([
-                            "property_id" => $check->property_id,
-                            "user_id" => $check->tendent_id,
-                            "amount" => $rent,
-                            "split" => 0
-                        ]);
-                        $user = User::select('name')->where('id', $tendent->tendent_id)->first();
-                        $input = [
-                            'title' => "Request approved",
-                            "user_id" => Auth::user()->id,
-                            "property_id" => $check->property_id,
-                            "description" => Auth::user()->name . " approved $user->name request for property " . $property_rent->property_name,
-                            'stt' => 1,
-                            "stl" => 0
-                        ];
-                        $not = NotificationsController::insert($input);
-                        $check->delete();
-                        if ($tendent_on_property_count > 1) {
-                            Rent::where('property_id', $check->property_id)
-                                ->update(['amount' => $rent, 'split' => 1]);
+                    if ($check2->limit_status != 0) {
+                        $tendent_on_property = Tendent::where([
+                            ['tendent_id', $check->tendent_id],
+                            ['is_live', 1]
+                        ])->first();
+                        if (!$tendent_on_property) {
+                            $tendent = new Tendent();
+                            $tendent->tendent_id = $check->tendent_id;
+                            $tendent->property_id = $check->property_id;
+                            $tendent->date = date('d-m-Y');
+                            $tendent->is_live = 1;
+                            $tendent->save();
+                            $check2->property_limit = $check2->property_limit + 1;
+                            $check2->save();
+                            $find = Tendent::where([['property_id', $check->property_id], ['is_live', 1]])->get();
+                            $tendent_on_property_count = $find->count();
+                            $property_rent = Propety::select('property_name', 'rent')
+                                ->where('id', $check->property_id)->first();
+                            $rent = (int)ceil($property_rent->rent / $tendent_on_property_count);
+                            $rent_ins = Rent::create([
+                                "property_id" => $check->property_id,
+                                "user_id" => $check->tendent_id,
+                                "amount" => $rent,
+                                "split" => 0
+                            ]);
+                            $user = User::select('name')->where('id', $tendent->tendent_id)->first();
+                            $input = [
+                                'title' => "Request approved",
+                                "user_id" => Auth::user()->id,
+                                "property_id" => $check->property_id,
+                                "description" => Auth::user()->name . " approved $user->name request for property " . $property_rent->property_name,
+                                'stt' => 1,
+                                "stl" => 0
+                            ];
+                            $not = NotificationsController::insert($input);
+                            $check->delete();
+                            if ($tendent_on_property_count > 1) {
+                                Rent::where('property_id', $check->property_id)
+                                    ->update(['amount' => $rent, 'split' => 1]);
+                            }
+                            return response()->json(["data" => ["Property Request" => "Approved", "notification" => $not]]);
                         }
-                        return response()->json(["data" => ["Property Request" => "Approved", "notification" => $not]]);
+                        return response()->json(["data" => ["error" => "Tendent is already approved in any other property"]]);
                     }
-                    return response()->json(["data" => ["error" => "Tendent is already approved in any other property"]]);
+                    return response()->json(["data" => ["error" => "reached its limit"]]);
                 }
                 return response()->json(["data" => ["error" => "not belongs to you"]]);
             }

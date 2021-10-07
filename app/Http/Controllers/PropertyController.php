@@ -42,6 +42,7 @@ class PropertyController extends Controller
         if ($request->expectsJson()) {
             if (Auth::user()->user_type_id == 1) {
                 $input = $request->all();
+                $input += ['property_limit' => $request->limit];
                 $input += ["status" => 1];
                 $this->address = $this->address->create($input);
                 $input += ["address_id" => $this->address->id];
@@ -75,6 +76,7 @@ class PropertyController extends Controller
                 "currency_id" => $request->currency_id,
                 "rent" => $request->rent,
                 "year_build" => "$request->build_year-$request->build_month-$request->build_date",
+                'property_limit' => $request->limit,
                 "country" => $request->country,
                 "city" => $request->city,
                 "state" => $request->state,
@@ -85,7 +87,7 @@ class PropertyController extends Controller
             $this->address = $this->address->create($upload);
             $upload += [
                 "address_id" => $this->address->id,
-                "user_id" => Auth::user()->id,
+                "user_id" => $request->user_id,
             ];
             $this->property = $this->property->create($upload);
             if ($request->hasFile('images')) {
@@ -120,7 +122,8 @@ class PropertyController extends Controller
                 "currency_id" => $request->input('currency_id'),
                 "user_id" => $request->input('user_id'),
                 "rent" => $request->input('rent'),
-                "year_build" => $request->input('year_build')
+                "year_build" => $request->input('year_build'),
+                "property_limit" => $request->limit,
             ];
             if ($this->property::find($this->property->id)->update($update)) {
                 $update = [
@@ -296,6 +299,7 @@ class PropertyController extends Controller
             'build_year' => 'required|numeric|min:4',
             'build_month' => 'required|numeric',
             'build_date' => 'required|numeric',
+            'limit' => 'required|integer',
         ]);
         $upload = [
             "property_name" => $request->property_name,
@@ -304,7 +308,8 @@ class PropertyController extends Controller
             "description" => $request->description,
             "currency_id" => $request->currency_id,
             "rent" => $request->rent,
-            "year_build" => $request->build_year . "-" . $request->build_month . "-" . $request->build_date
+            "year_build" => $request->build_year . "-" . $request->build_month . "-" . $request->build_date,
+            'property_limit' => $request->limit
         ];
         $property = Propety::find($request->id);
         if ($property->update($upload)) {
@@ -493,7 +498,8 @@ class PropertyController extends Controller
                 'address.state AS state',
                 'properties.status as status'
             )
-            ->join('address', 'address.id', 'properties.address_id');
+            ->join('address', 'address.id', 'properties.address_id')
+            ->where('limit_status', 1);
         $currency = DB::table('currency')->get();
         if ($request->expectsJson()) {
             if ($name != "") {
