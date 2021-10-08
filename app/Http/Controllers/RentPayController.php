@@ -348,7 +348,7 @@ class RentPayController extends Controller
                                 if ($first_paid_date) {
                                     $first_date = Carbon::parse($first_paid_date->date);
                                     $last_date = Carbon::parse($last_paid_date[0]->date);
-                                    $payable_date = Carbon::parse($first_date->day / $last_date->month / $last_date->year)->addDays($value->rent_days);
+                                    $payable_date = Carbon::parse("$first_date->day-$last_date->month-$last_date->year")->addDays($value->rent_days);
                                     $duedate = $payable_date->format('d-m-Y');
                                     $late = Carbon::now()->gt($payable_date) ? $payable_date->diffInDays(Carbon::now()) : 0;
                                     array_push($data, [
@@ -395,9 +395,9 @@ class RentPayController extends Controller
                     ->first();
                 if ($select->count() > 0) {
                     if ($first_paid_date->count() > 0) {
-                        $first_date = $first_paid_date->date;
-                        $last_date = $select[0]->last_paid_date;
-                        $payable_date = Carbon::parse($last_date)->addDays($select[0]->rent_days);
+                        $first_date = Carbon::parse($first_paid_date->date);
+                        $last_date = Carbon::parse($select[0]->last_paid_date);
+                        $payable_date = Carbon::parse("$first_date->day-$last_date->month-$last_date->year")->addDays($select[0]->rent_days);
                         $late = $payable_date->lt(Carbon::now()) ? $payable_date->diffInDays(Carbon::now()) : 0;
                         $data = [
                             "property_name" => $select[0]->property_name,
@@ -470,7 +470,7 @@ class RentPayController extends Controller
                             ->get();
                         $first_date = Carbon::parse($find_first_date->date);
                         $last_date = Carbon::parse($find_last_date[0]->date);
-                        $payable_date = Carbon::parse($first_date->day / $last_date->month / $last_date->year)->addDays($value->rent_days);
+                        $payable_date = Carbon::parse("$first_date->day-$last_date->month-$last_date->year")->addDays($value->rent_days);
                         $upcoming_paid_date = $payable_date->format('d-m-Y');
                         $days_left = $payable_date->diffInDays(Carbon::now());
                         array_push($data, [
@@ -578,7 +578,7 @@ class RentPayController extends Controller
                 $first_paid_date = RentPay::select('date')->where('rent_id', $value->id)->first();
                 $last_paid_date = Carbon::parse($row2[0]->date);
                 $payable_date = Carbon::parse($first_paid_date->date);
-                $payable_date = Carbon::parse($payable_date->day / $last_paid_date->month / $last_paid_date->year)->addDays($value->rent_days);
+                $payable_date = Carbon::parse("$payable_date->day-$last_paid_date->month-$last_paid_date->year")->addDays($value->rent_days);
                 $today_date = Carbon::now();
                 if ($payable_date->gte($today_date)) {
                     if ($payable_date->diffInDays($today_date) == 1) {
