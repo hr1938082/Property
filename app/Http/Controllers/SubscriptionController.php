@@ -12,8 +12,7 @@ class SubscriptionController extends Controller
 {
     public function add(Request $request)
     {
-        if(Auth::user()->user_type_id == 7)
-        {
+        if (Auth::user()->user_type_id == 7) {
             $validator = $request->validate([
                 'name' => 'required',
                 'type' => 'required',
@@ -21,70 +20,61 @@ class SubscriptionController extends Controller
                 'amount' => 'nullable|numeric',
                 'feature' => 'nullable'
             ]);
-            if($validator)
-            {
+            if ($validator) {
                 $upload = $request->all();
-                $upload += ["status"=>"1"];
+                $upload += ["status" => "1"];
 
                 $subs = subscription::create($upload);
-                if($subs)
-                {
+                if ($subs) {
                     return redirect()->route('subs-select-view');
                 }
-                return back()->with('status','Not inserted');
+                return back()->with('status', 'Not inserted');
             }
         }
     }
     public function select(Request $request)
     {
-        if(Auth::user()->user_type_id == 7)
-        {
+        if (Auth::user()->user_type_id == 7) {
             $select = subscription::paginate(5);
-            return view('subscription.manage',compact('select'));
+            return view('subscription.manage', compact('select'));
         }
-        if(Auth::user()->user_type_id == 1)
-        {
-            $select = subscription::where('status',1)->get();
+        if (Auth::user()->user_type_id == 1) {
+            $select = subscription::where('status', 1)->get();
+            $select = collect($select);
+            $check = usersubscription::where('user_id', Auth::user()->id)->first();
+            $check ? $select->shift() : $select;
             return response()->json(["status" => true, "data" => $select]);
         }
-        return response()->json(["data"=>[["error"=>"unauthenticated"],401]]);
+        return response()->json(["data" => [["error" => "unauthenticated"], 401]]);
     }
     public function softdelete(Request $request)
     {
-        if(Auth::user()->user_type_id ==7)
-        {
+        if (Auth::user()->user_type_id == 7) {
             $check = subscription::find($request->id);
-            if($check)
-            {
-                if($request->val == 0)
-                {
+            if ($check) {
+                if ($request->val == 0) {
                     $check->status = 0;
                     $update = $check->save();
-                    if($update)
-                    {
-                        return back()->with('status','Disabled');
+                    if ($update) {
+                        return back()->with('status', 'Disabled');
                     }
-                }
-                else
-                {
+                } else {
                     $check->status = 1;
                     $update = $check->save();
-                    if($update)
-                    {
-                        return back()->with('status','Enabled');
+                    if ($update) {
+                        return back()->with('status', 'Enabled');
                     }
-
                 }
-                return back()->with('status','error');
+                return back()->with('status', 'error');
             }
-            return back()->with('status','not found');
+            return back()->with('status', 'not found');
         }
     }
     public function edit(Request $request)
     {
         $id = $request->id;
         $subscription = subscription::find($id);
-        return view('subscription.edit',compact('id','subscription'));
+        return view('subscription.edit', compact('id', 'subscription'));
     }
     public function update(Request $request)
     {
@@ -104,10 +94,9 @@ class SubscriptionController extends Controller
             'feature' => $request->feature,
         ];
         $subscription = subscription::find($id);
-        if($subscription->update($upload))
-        {
+        if ($subscription->update($upload)) {
             return redirect()->route('subs-select-view');
         }
-        return back()->with('status','Error');
+        return back()->with('status', 'Error');
     }
 }
