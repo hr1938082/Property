@@ -26,6 +26,7 @@ class TendentController extends Controller
                     'users.email',
                     'users.mobile',
                     'users.address',
+                    'users.image',
                     'properties.property_name'
                 )
                     ->join('properties', 'properties.id', '=', 'tendent_to_property.property_id')
