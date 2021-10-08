@@ -398,12 +398,12 @@ class RentPayController extends Controller
                         $first_date = $first_paid_date->date;
                         $last_date = $select[0]->last_paid_date;
                         $payable_date = Carbon::parse($last_date)->addDays($select[0]->rent_days);
-                        $late = $payable_date->gt(Carbon::now()) ? $payable_date->diffInDays(Carbon::now()) : 0;
+                        $late = $payable_date->lt(Carbon::now()) ? $payable_date->diffInDays(Carbon::now()) : 0;
                         $data = [
                             "property_name" => $select[0]->property_name,
                             "amount" => $select[0]->amount . " " . $select[0]->currency ?? "AUD",
                             "last_paid_date" => $select[0]->last_paid_date,
-                            "Payable_date" => $payable_date,
+                            "Payable_date" => $payable_date->format('d-m-Y'),
                             "late" => $late
                         ];
                     }
@@ -525,7 +525,7 @@ class RentPayController extends Controller
                     }
                 }
                 $month_data = array_unique($month_data);
-                foreach ($month_data as $key => $value_month) {
+                foreach ($month_data as $value_month) {
                     $temp = [];
                     foreach ($select as $value) {
                         $year = (int)substr($value->date, 6);
@@ -548,7 +548,13 @@ class RentPayController extends Controller
     public function rentNotification()
     {
         ini_set('max_execution_time', 82800);
-        $select = Tendent::select('rent.id', 'properties.property_name', 'tendent_to_property.tendent_id', 'tendent_to_property.property_id')
+        $select = Tendent::select(
+            'rent.id',
+            'properties.property_name',
+            'properties.rent_days',
+            'tendent_to_property.tendent_id',
+            'tendent_to_property.property_id'
+        )
             ->join('properties', 'properties.id', 'tendent_to_property.property_id')
             ->join('rent', 'rent.user_id', 'tendent_to_property.tendent_id')
             ->where('is_live', 1)
@@ -567,13 +573,15 @@ class RentPayController extends Controller
             $temp = $value->property_id;
         }
         foreach ($select as $value) {
-            $row2 = RentPay::select('date', 'late')->where('rent_id', $value->id)->orderbyDesc("id")->get();
+            $row2 = RentPay::select('date')->where('rent_id', $value->id)->orderbyDesc("id")->get();
             if ($row2->count() > 0) {
+                $first_paid_date = RentPay::select('date')->where('rent_id', $value->id)->first();
                 $last_paid_date = Carbon::parse($row2[0]->date);
-                $payable_date = $last_paid_date->subDays((int)$row2[0]->late);
+                $payable_date = Carbon::parse($first_paid_date->date);
+                $payable_date = Carbon::parse($payable_date->day / $last_paid_date->month / $last_paid_date->year)->addDays($value->rent_days);
                 $today_date = Carbon::now();
                 if ($payable_date->gte($today_date)) {
-                    if ($payable_date->diffInDays($today_date) == 5) {
+                    if ($payable_date->diffInDays($today_date) == 1) {
                         foreach ($data as $row) {
                             if ($row['rent_id'] === $value->id) {
 
@@ -581,7 +589,7 @@ class RentPayController extends Controller
                                     'title' => 'Rent',
                                     'user_id' => $row['user_id'],
                                     'property_id' => $row['property_id'],
-                                    'description' => "Payable date for rent is" . $payable_date->toDateString() . " for Property " . $row['property_name'],
+                                    'description' => "Payable date for rent is " . $payable_date->format('d-m-Y') . " for Property " . $row['property_name'],
                                     'stt' => 1,
                                     'stl' => 1
                                 ];
@@ -613,7 +621,7 @@ class RentPayController extends Controller
                                     'title' => 'Rent',
                                     'user_id' => $row['user_id'],
                                     'property_id' => $row['property_id'],
-                                    'description' => "Payable date for rent was" . $payable_date->toDateString() . " for Property " . $row['property_name'],
+                                    'description' => "Payable date for rent was " . $payable_date->format('d-m-Y') . " for Property " . $row['property_name'],
                                     'stt' => 1,
                                     'stl' => 1
                                 ];
