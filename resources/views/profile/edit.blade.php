@@ -61,7 +61,6 @@ Edit Profile
                     value="{{Auth::user()->address}}" placeholder="Address">
             </div>
             <input type="submit" class="fadeIn fourth mb-4" value="{{ __('Update') }}">
-        </form>
     </div>
 </div>
 <!-- Modal -->
@@ -96,7 +95,6 @@ Edit Profile
                         File name here
                     </div>
                 </div>
-                <form action="{{ route('Adminupdateimage') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" value="{{Auth::user()->id}}" name="id">
                     <input type="file" name="profile" id="profile" hidden>
