@@ -5,6 +5,7 @@ namespace App\Actions\Fortify;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
@@ -33,11 +34,31 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'mobile' => ['required'],
             'address' => ['required'],
         ])->validateWithBag('updateProfileInformation');
-        $user->forceFill([
-            'name' => $request->name,
-            'email' => $request->email,
-            'mobile' => $request->mobile,
-            'address' => $request->address,
-        ])->save();
+        if ($request->has('profile')) {
+            if (File::exists($user->image)) {
+                unlink($user->image);
+            }
+            $upload = $request->file('profile');
+            $upload = $upload->store('public/images');
+            $path = "storage/" . substr($upload, 7);
+        } else {
+            $path = null;
+        }
+        if ($path != null) {
+            $user->forceFill([
+                'name' => $request->name,
+                'email' => $request->email,
+                'mobile' => $request->mobile,
+                'address' => $request->address,
+                'image' => $path
+            ])->save();
+        } else {
+            $user->forceFill([
+                'name' => $request->name,
+                'email' => $request->email,
+                'mobile' => $request->mobile,
+                'address' => $request->address,
+            ])->save();
+        }
     }
 }
