@@ -29,8 +29,7 @@ Edit Profile
             </div>
         </div>
         <!-- Login Form -->
-        <form method="POST"  action="{{ route('user-profile-information.update') }}" enctype="multipart/form-data">
-            @method('PUT')
+        <form method="POST"  action="{{ route('updateprofile') }}" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
                 <input id="name" type="text" class="fadeIn second @error('name') is-invalid @enderror"

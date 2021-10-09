@@ -19,8 +19,6 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      */
     public function update($user, Request $request)
     {
-        // dd($request->all(), $user);
-        // dd();
         Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
 

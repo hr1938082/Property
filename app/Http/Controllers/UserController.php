@@ -15,6 +15,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Tendent;
 use Exception;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -590,6 +592,51 @@ class UserController extends Controller
                 return back()->with('password', '1');
             }
         }
+    }
+    public function updateprofile(Request $request)
+    {
+        Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore($request->id),
+            ],
+            'mobile' => ['required'],
+            'address' => ['required'],
+        ])->validateWithBag('updateProfileInformation');
+
+        if ($request->has('profile')) {
+            if (File::exists($request->image)) {
+                unlink($request->image);
+            }
+            $upload = $request->file('profile');
+            $upload = $upload->store('public/images');
+            $path = "storage/" . substr($upload, 7);
+        } else {
+            $path = null;
+        }
+        $user = User::find($request->id);
+
+        if ($path != null) {
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->mobile = $request->mobile;
+            $user->address = $request->address;
+            $user->image = $path;
+            $user->save();
+        } else {
+
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->mobile = $request->mobile;
+            $user->address = $request->address;
+            $user->save();
+        }
+        return back()->with('status', 'profile-information-updated');
     }
     // User Check password admin Method
     public function checkpasswordAdmin(Request $req)

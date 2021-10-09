@@ -70,6 +70,7 @@ Route::get('/add', function () {
 })->name('add');
 Route::get('/ads/request', [AddsController::class, 'indexrequestforad'])->name('adds.request');
 Route::post('/ads/request', [AddsController::class, 'webstore'])->name('adds.request.send');
+Route::post('/profile/update', [UserController::class, 'updateprofile'])->name('updateprofile');
 Route::get('/home', [AdminController::class, 'dashboard'])->middleware('auth')->name('dashboard');
 Route::group(["middleware" => "auth", "prefix" => "user"], function () {
     Route::get('profile', function () {
