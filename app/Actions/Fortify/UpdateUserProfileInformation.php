@@ -22,6 +22,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      */
     public function update($user, Request $request)
     {
+        // dd($request->all());
         Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
 
@@ -35,31 +36,11 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'mobile' => ['required'],
             'address' => ['required'],
         ])->validateWithBag('updateProfileInformation');
-        if ($request->has('profile')) {
-            if (File::exists($user->image)) {
-                unlink($user->image);
-            }
-            $upload = $request->file('profile');
-            $upload = $upload->store('public/images');
-            $path = "storage/" . substr($upload, 7);
-        } else {
-            $path = null;
-        }
-        if ($path != null) {
-            $user->forceFill([
-                'name' => $request->name,
-                'email' => $request->email,
-                'mobile' => $request->mobile,
-                'address' => $request->address,
-                'image' => $path
-            ])->save();
-        } else {
-            $user->forceFill([
-                'name' => $request->name,
-                'email' => $request->email,
-                'mobile' => $request->mobile,
-                'address' => $request->address,
-            ])->save();
-        }
+        $user->forceFill([
+            'name' => $request->name,
+            'email' => $request->email,
+            'mobile' => $request->mobile,
+            'address' => $request->address,
+        ])->save();
     }
 }

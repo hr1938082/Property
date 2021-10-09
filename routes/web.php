@@ -87,7 +87,7 @@ Route::group(["middleware" => "auth", "prefix" => "user"], function () {
     Route::post('update/password', [UserController::class, 'updatepasswordAdmin'])->name('updatepass');
     Route::post('update/mobile', [UserController::class, 'updatemobileAdmin'])->name('updatemob');
     Route::post('update/address', [UserController::class, 'updateaddressAdmin'])->name('updateadd');
-    Route::post('update/profile-image', [UserController::class, 'updateImageAdmin'])->name('updateimage');
+    Route::post('update/profile-image', [UserController::class, 'updateImageAdmin'])->name('Adminupdateimage');
     Route::get('stat/update/{id}/{column}/{search}/{page}', [UserController::class, 'userStatUpdate'])->name('userStatUpdate');
 });
 Route::group(["middleware" => "auth", "prefix" => "user/type"], function () {

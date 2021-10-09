@@ -50,13 +50,17 @@
                                 $social[3]->name => $social[3]->link,
                             ];
                         @endphp
-                        <li><a href="{{$socialLinks['facebook']}}" title="" data-placement="bottom" data-toggle="tooltip"
+                        <li><a href="#" title="Android App" data-placement="bottom" data-toggle="tooltip"
+                            data-original-title="Android App"><i class="fa fa-android" aria-hidden="true"></i></a></li>
+                            <li><a href="#" title="IOS App" data-placement="bottom" data-toggle="tooltip"
+                                data-original-title="IOS App"><i class="fa fa-apple" aria-hidden="true"></i></a></li>
+                        <li><a href="{{$socialLinks['facebook']}}" title="Facebook" data-placement="bottom" data-toggle="tooltip"
                                 data-original-title="Facebook"><i class="fa fa-facebook"></i></a></li>
-                        <li><a href="{{$socialLinks['insta']}}" title="" data-placement="bottom" data-toggle="tooltip"
+                        <li><a href="{{$socialLinks['insta']}}" title="Instagram" data-placement="bottom" data-toggle="tooltip"
                                 data-original-title="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-                        <li><a href="{{$socialLinks['twitter']}}" title="" data-placement="bottom" data-toggle="tooltip"
+                        <li><a href="{{$socialLinks['twitter']}}" title="Twitter" data-placement="bottom" data-toggle="tooltip"
                                 data-original-title="Twitter"><i class="fa fa-twitter"></i></a></li>
-                        <li><a href="{{$socialLinks['linkedin']}}" title="" data-placement="bottom" data-toggle="tooltip"
+                        <li><a href="{{$socialLinks['linkedin']}}" title="Linkedin" data-placement="bottom" data-toggle="tooltip"
                             data-original-title="LinkedIn"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
                     </ul>
                 </div>

@@ -514,7 +514,7 @@ class UserController extends Controller
             $upload = $upload->store('public/images');
             $upload = "storage/" . substr($upload, 7);
             $check->update(["image" => $upload]);
-            return redirect()->route('edituser', ['id' => $request->input('id')]);
+            return redirect()->back();
         }
     }
     // User Update mobile Admin Method
@@ -587,7 +587,7 @@ class UserController extends Controller
             if ($check) {
                 $check->password = Hash::make($req->input('password'));
                 $check = $check->save();
-                return redirect()->route('edituser', ['id' => $req->input('id'), 'password' => '1']);
+                return back()->with('password', '1');
             }
         }
     }

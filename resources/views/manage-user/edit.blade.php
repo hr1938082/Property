@@ -90,7 +90,7 @@ Edit User Details
                                     File name here
                                 </div>
                             </div>
-                            <form action="{{ route('updateimage') }}" method="post" enctype="multipart/form-data">
+                            <form action="{{ route('Adminupdateimage') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" value="{{$id}}" name="id">
                                 <input type="file" name="profile" id="profile" hidden>
