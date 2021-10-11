@@ -17,9 +17,12 @@ class RentPayController extends Controller
     // RentPay Add method
     public function add(Request $request)
     {
-        $rent = Rent::where('user_id', $request->user_id)->select('id', 'amount', 'property_id')->first();
+        $rent = Rent::select('id', 'amount', 'property_id', 'properties.rent_days')
+            ->join('properties', 'properties.id', 'rent.property_id')
+            ->where('user_id', $request->user_id)
+            ->first();
         if ($rent != null) {
-            $find_last_date = RentPay::where('rent_id', $rent->id)
+            $find_last_date = RentPay::select('date', 'late')->where('rent_id', $rent->id)
                 ->orderbyDesc('id')
                 ->get();
 
@@ -47,7 +50,11 @@ class RentPayController extends Controller
                 }
                 return response()->json(["data" => ["status" => false]]);
             } else {
-                $late = $this->differ_days($find_first_date[0]->date, $find_last_date[0]->date);
+                $first_date = Carbon::parse($find_first_date[0]->date);
+                $last_date = Carbon::parse($find_last_date[0]->date);
+                $payable_date = Carbon::parse("$first_date->day/$last_date->month/$last_date->year")
+                    ->addDays($rent->rent_days);
+                $late = $payable_date->lt(Carbon::now()) ? $payable_date->diffInDays(Carbon::now()) : 0;
                 if ($late != null) {
                     $upload = [
                         "rent_id" => $rent->id,
@@ -112,21 +119,22 @@ class RentPayController extends Controller
     {
         if ($request->expectsJson()) {
             if (Auth::user()->user_type_id == 1) {
-                $month = $request->month;
-                $year = $request->year;
-                $select = [];
+                $month = (int)$request->month;
+                $year = (int)$request->year;
                 $check_select = RentPay::select(
-                    'rent_pay.id as id',
-                    'rent_id',
                     'rent.user_id as tendent_id',
-                    'rent.property_id',
+                    'users.name as tendent_name',
                     'properties.property_name',
                     'rent_pay.date',
-                    'amount',
+                    'rent_pay.amount_paid',
+                    'currency.currency',
                     'split'
                 )
                     ->join('rent', 'rent_pay.rent_id', '=', 'rent.id')
+                    ->join('users', 'users.id', 'rent.user_id')
                     ->join('properties', 'properties.id', '=', 'rent.property_id')
+                    ->join('tendent_to_property', 'tendent_to_property.tendent_id', 'users.id')
+                    ->join('currency', 'currency.id', 'properties.currency_id')
                     ->where('properties.user_id', Auth::user()->id);
                 if ($request->property_id != "") {
                     $check_select = $check_select->where('properties.id', $request->property_id);
@@ -134,26 +142,64 @@ class RentPayController extends Controller
                 if ($request->tendent_id != "") {
                     $check_select = $check_select->where('rent.user_id', $request->tendent_id);
                 }
-                $check_select = $check_select->orderbyDesc('id')->get();
-                if (isset($check_select[0]->date)) {
-                    $date_select = date_create($check_select[0]->date);
-                    $current_date = date_create(date('Y-m-d'));
-                    $diff_date = date_diff($date_select, $current_date);
-                    $diff_month = $diff_date->m;
+                $check_select = $check_select->orderbyDesc('rent_pay.id')->get();
+
+                $select = [];
+                foreach ($check_select as $value) {
+                    if ($month && $year) {
+                        if ($month == Carbon::parse($value->date)->month && $year == Carbon::parse($value->date)->year) {
+                            array_push($select, [
+                                "tendent_id" => $value->tendent_id,
+                                "tendent_name" => $value->tendent_name,
+                                "Property_name" => $value->property_name,
+                                'amount' => $value->amount_paid  . " " . $value->currency ?? "AUD",
+                                "split" => $value->split,
+                                "rent" => "Paid",
+                                "date" => $value->date
+                            ]);
+                        }
+                    } else if ($month) {
+                        if ($month == Carbon::parse($value->date)->month) {
+                            array_push($select, [
+                                "tendent_id" => $value->tendent_id,
+                                "tendent_name" => $value->tendent_name,
+                                "Property_name" => $value->property_name,
+                                'amount' => $value->amount_paid  . " " . $value->currency ?? "AUD",
+                                "split" => $value->split,
+                                "rent" => "Paid",
+                                "date" => $value->date
+                            ]);
+                        }
+                    } else if ($year) {
+                        if ($year == Carbon::parse($value->date)->year) {
+                            array_push($select, [
+                                "tendent_id" => $value->tendent_id,
+                                "tendent_name" => $value->tendent_name,
+                                "Property_name" => $value->property_name,
+                                'amount' => $value->amount_paid  . " " . $value->currency ?? "AUD",
+                                "split" => $value->split,
+                                "rent" => "Paid",
+                                "date" => $value->date
+                            ]);
+                        }
+                    } else {
+                        array_push($select, [
+                            "tendent_id" => $value->tendent_id,
+                            "tendent_name" => $value->tendent_name,
+                            "Property_name" => $value->property_name,
+                            'amount' => $value->amount_paid  . " " . $value->currency ?? "AUD",
+                            "split" => $value->split,
+                            "rent" => "Paid",
+                            "date" => $value->date
+                        ]);
+                    }
                 }
                 $check_select2 = Rent::select(
-                    'users.id as user_id',
-                    'users.name as user_name',
-                    'properties.property_name',
-                    'currency.currency',
-                    'rent.amount',
-                    'rent.split'
+                    'rent.id as id'
                 )
-                    ->join('users', 'users.id', 'rent.user_id')
-                    ->join('properties', 'properties.id', 'rent.property_id')
-                    ->join('currency', 'currency.id', 'properties.currency_id');
+                    ->join('properties', 'properties.id', 'rent.property_id');
                 if ($request->property_id != "") {
-                    $check_select2 = $check_select2->where('properties.id', $request->property_id);
+                    $check_select2 = $check_select2->where('rent.property_id', $request->property_id);
                 }
                 if ($request->tendent_id != "") {
                     $check_select2 = $check_select2->where('rent.user_id', $request->tendent_id);
@@ -161,98 +207,60 @@ class RentPayController extends Controller
                 $check_select2 = $check_select2
                     ->where('properties.user_id', Auth::user()->id)
                     ->get();
-                $temp = [];
-                foreach ($check_select as $value) {
-                    if ($month != "" && $year != "") {
-                        if ($month == substr($value->date, 3, 2) && $year == substr($value->date, 6)) {
-                            array_push($temp, [
-                                "user_id" => $value->tendent_id,
-                                "month" => substr($value->date, 3, 2),
-                                "year" => substr($value->date, 6),
-                                "rent" => "paid",
-                                "date" => $value->date
-                            ]);
-                        }
-                    } else if ($month != "") {
-                        if ($month == substr($value->date, 3, 2)) {
-                            array_push($temp, [
-                                "user_id" => $value->tendent_id,
-                                "month" => substr($value->date, 3, 2),
-                                "year" => substr($value->date, 6),
-                                "rent" => "paid",
-                                "date" => $value->date
-                            ]);
-                        }
-                    } else if ($year != "") {
-                        if ($year == substr($value->date, 6)) {
-                            array_push($temp, [
-                                "user_id" => $value->tendent_id,
-                                "month" => substr($value->date, 3, 2),
-                                "year" => substr($value->date, 6),
-                                "rent" => "paid",
-                                "date" => $value->date
-                            ]);
-                        }
-                    } else {
-                        array_push($temp, [
-                            "user_id" => $value->tendent_id,
-                            "month" => substr($value->date, 3, 2),
-                            "year" => substr($value->date, 6),
-                            "rent" => "paid",
-                            "date" => $value->date
-                        ]);
-                    }
-                }
                 foreach ($check_select2 as $value) {
-                    if (count($temp) > 0) {
-                        foreach ($temp as $check) {
-                            if ($check["user_id"] == $value->user_id) {
+                    $check = RentPay::where('rent_id', $value->id)->first();
+                    if ($check) {
+                        $rows = RentPay::select(
+                            'rent.user_id as tendent_id',
+                            'users.name as tendent_name',
+                            'properties.property_name as property_name',
+                            'rent_pay.amount_paid as amount',
+                            'currency.currency',
+                            'rent.split',
+                            'rent_pay.date'
+                        )
+                            ->join('rent', 'rent.id', 'rent_pay.rent_id')
+                            ->join('users', 'users.id', 'rent.user_id')
+                            ->join('properties', 'properties.id', 'rent.property_id')
+                            ->join('currency', 'currency.id', 'properties.currency_id')
+                            ->where('rent_pay.rent_id', $check->rent_id)
+                            ->orderbyDesc('rent.id')
+                            ->get();
+                        if ($rows->count() > 0) {
+                            foreach ($rows as $row) {
                                 array_push($select, [
-                                    'tendent_id' => $value->user_id,
-                                    'tendent_name' => $value->user_name,
-                                    'property_name' => $value->property_name,
-                                    'amount' => $value->amount . " " . $value->currency ?? "AUD",
-                                    'split' => $value->split,
-                                    'rent' => 'paid',
-                                    'date' => $check["date"]
-                                ]);
-                            } else {
-
-                                $sel = Rent::select('rent_pay.date')
-                                    ->join('rent_pay', 'rent.id', 'rent_pay.rent_id')
-                                    ->where('rent.user_id', $value->user_id)->first();
-                                if (!empty($sel->date)) {
-                                    $day = substr($sel->date, 0, 2);
-                                    $month = (string)((int)substr($sel->date, 3, 2)) + 1;
-                                    $year = substr($sel->date, 6);
-                                    if (strlen($month) == 1) {
-                                        $month = "0" . $month;
-                                    }
-                                    $date = "$day-$month-$year";
-                                } else {
-                                    $date = "";
-                                }
-
-                                array_push($select, [
-                                    'tendent_id' => $value->user_id,
-                                    'tendent_name' => $value->user_name,
-                                    'property_name' => $value->property_name,
-                                    'amount' => $value->amount  . " " . $value->currency ?? "AUD",
-                                    'split' => $value->split,
-                                    'rent' => 'unpaid',
-                                    'date' => $date,
+                                    'tendent_id' => $row->tendent_id,
+                                    'tendent_name' => $row->tendent_name,
+                                    'property_name' => $row->property_name,
+                                    'amount' => $row->amount  . " " . $row->currency ?? "AUD",
+                                    'split' => $row->split,
+                                    'rent' => 'Paid',
+                                    'date' => $row->date,
                                 ]);
                             }
                         }
                     } else {
+                        $row = Rent::select(
+                            'rent.user_id as tendent_id',
+                            'users.name as tendent_name',
+                            'properties.property_name as property_name',
+                            'rent.amount',
+                            'currency.currency',
+                            'rent.split',
+                        )
+                            ->join('users', 'users.id', 'rent.user_id')
+                            ->join('properties', 'properties.id', 'rent.property_id')
+                            ->join('currency', 'currency.id', 'properties.currency_id')
+                            ->where('rent.id', $value->id)
+                            ->first();
                         array_push($select, [
-                            'tendent_id' => $value->user_id,
-                            'tendent_name' => $value->user_name,
-                            'property_name' => $value->property_name,
-                            'amount' => $value->amount  . " " . $value->currency ?? "AUD",
-                            'split' => $value->split,
-                            'rent' => 'unpaid',
-                            'date' => ""
+                            'tendent_id' => $row->tendent_id,
+                            'tendent_name' => $row->tendent_name,
+                            'property_name' => $row->property_name,
+                            'amount' => $row->amount  . " " . $row->currency ?? "AUD",
+                            'split' => $row->split,
+                            'rent' => 'Unpaid',
+                            'date' => "",
                         ]);
                     }
                 }
@@ -290,14 +298,12 @@ class RentPayController extends Controller
             }
         }
 
-        if ($select != "") {
-            return response()->json(
-                [
-                    "status" => true,
-                    "data" => [$select]
-                ]
-            );
-        }
+        return response()->json(
+            [
+                "status" => true,
+                "data" => $select
+            ]
+        );
     }
     // RentPay duedate method
     public function duedate(Request $request)
