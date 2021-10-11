@@ -13,6 +13,7 @@ use App\Models\currency;
 use App\Models\Rent;
 use App\Models\State;
 use App\Models\Tendent;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
@@ -34,7 +35,8 @@ class PropertyController extends Controller
         $date = (int)date('Y');
         $currency = currency::all();
         $country = Country::select('country')->where('status', 1)->get();
-        return view('properties.add', compact('date', 'currency', 'country'));
+        $users = User::select('id', 'name')->where('user_type_id', 1)->get();
+        return view('properties.add', compact('date', 'currency', 'country', 'users'));
     }
     // insert property
     public function insert(Request $request)
@@ -75,6 +77,7 @@ class PropertyController extends Controller
                 "description" => $request->description,
                 "currency_id" => $request->currency_id,
                 "rent" => $request->rent,
+                "rent_days" => $request->rent_days,
                 "year_build" => "$request->build_year-$request->build_month-$request->build_date",
                 'property_limit' => $request->limit,
                 "country" => $request->country,
@@ -153,7 +156,8 @@ class PropertyController extends Controller
         $id = $request->id;
         $property = Propety::find($id);
         $currency = currency::all();
-        return view('properties.editinfo', compact('id', 'property', 'currency'));
+        $users = User::select('id', 'name')->where('user_type_id', 1)->get();
+        return view('properties.editinfo', compact('id', 'property', 'currency', 'users'));
     }
     // edit property address
     public function editaddress(Request $request)
@@ -290,25 +294,27 @@ class PropertyController extends Controller
     // update property info
     public function updateinfo(Request $request)
     {
-        $request->validate([
-            'property_name' => 'required',
-            'bed_rooms' => 'required|numeric',
-            'bath_rooms' => 'required|numeric',
-            'description' => 'required',
-            'currency_id' => 'required|numeric',
-            'rent' => 'required|numeric',
-            'rent_days' => 'required|integer',
-            'build_year' => 'required|numeric|min:4',
-            'build_month' => 'required|numeric',
-            'build_date' => 'required|numeric',
-            'limit' => 'required|integer',
-        ]);
+        // $request->validate([
+        //     'property_name' => 'required',
+        //     'bed_rooms' => 'required|numeric',
+        //     'bath_rooms' => 'required|numeric',
+        //     'description' => 'required',
+        //     'currency_id' => 'required|numeric',
+        //     'user_id' => 'required|numeric',
+        //     'rent' => 'required|numeric',
+        //     'rent_days' => 'required|integer',
+        //     'build_year' => 'required|numeric|min:4',
+        //     'build_month' => 'required|numeric',
+        //     'build_date' => 'required|numeric',
+        //     'limit' => 'required|integer',
+        // ]);
         $upload = [
             "property_name" => $request->property_name,
             "bed_rooms" => $request->bed_rooms,
             "bath_rooms" => $request->bath_rooms,
             "description" => $request->description,
             "currency_id" => $request->currency_id,
+            "user_id" => $request->user_id,
             "rent" => $request->rent,
             'rent_days' => $request->rent_days,
             "year_build" => $request->build_year . "-" . $request->build_month . "-" . $request->build_date,
@@ -385,7 +391,8 @@ class PropertyController extends Controller
                 'properties.rent_days',
                 'properties.year_build AS yearbuild',
                 'properties.property_limit',
-                'users.name AS username',
+                'users.id as user_id',
+                'users.name as username',
                 'users.email as user_email',
                 'users.mobile as user_mobile',
                 'users.image as user_image',
@@ -467,6 +474,8 @@ class PropertyController extends Controller
                         "currency" => $currencyVal,
                         "price" => $value->rent,
                         "year_build" => $value->yearbuild,
+                        'limit' => $value->property_limit,
+                        "user_id" => $value->user_id,
                         "user_name" => $value->username,
                         "user_email" => $value->user_email,
                         "user_mobile" => $value->user_mobile,

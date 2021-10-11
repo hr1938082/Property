@@ -77,9 +77,30 @@ Edit Property Details
                     </td>
                 </tr>
                 <tr class="text-center">
+                    <th class="w-25">User</th>
+                    <td>
+                        {{$data[0]["user_name"]}}
+                    </td>
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <th class="w-25">Rent Days</th>
+                    <td>
+                        {{$data[0]["rent_days"]}}
+                    </td>
+                    </td>
+                </tr>
+                <tr class="text-center">
                     <th class="w-25">Year Build</th>
                     <td>
                         {{$data[0]["year_build"]}}
+                    </td>
+                </tr>
+                <tr class="text-center">
+                    <th class="w-25">Limit</th>
+                    <td>
+                        {{$data[0]["limit"]}}
+                    </td>
                     </td>
                 </tr>
                 <tr class="text-center">

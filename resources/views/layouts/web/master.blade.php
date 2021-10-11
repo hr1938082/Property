@@ -107,15 +107,11 @@
                     <div class="row" style="display: flex; justify-content: space-between">
                         <div class="col-sm-4">
                             <h2>Contact detail</h2>
-                            <p>Pellentesque nec erat. Aenean semper, neque non faucis. Malesuada, dui felis tempor
-                                felis,
-                                vel varius ante diam ut mauris.</p>
+                            <p>4 Jasmine Rd, Cairnlea (in Melbourne), Victoria, 3023, Australia</p>
                             <address>
-                                <i class="fa fa-map-marker"></i> Office : 1-800-666-8888<br>
-                                <i class="fa fa-phone"></i> Mobile : 0800-666-6666<br>
-                                <i class="fa fa-fax"></i> Fax : 1-800-666-8888<br>
+                                <i class="fa fa-phone"></i> Mobile : +61 413455576<br>
                                 <i class="fa fa-envelope-o"></i> Mail: <a
-                                    href="mailto:pixelgeklab@gmail.com">Pixelgeklab@gmail.com</a>
+                                    href="mailto:pixelgeklab@gmail.com">tekumatics@gmail.com</a>
                             </address>
                         </div>
                         {{-- <div class="col-sm-2">

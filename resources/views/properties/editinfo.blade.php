@@ -9,9 +9,9 @@ Edit Property Info
 @endsection
 @section('content')
 <div class="row justify-content-center align-items-center m-0">
-    <div class="wrapper fadeInDown">
-        <div id="formContent" class="pt-3 pb-2" style="margin-top: 120px;">
-            <div class="fadeIn first my-2">
+    <div class="wrapper fadeInDown align-items-center" style="height: 100vh">
+        <div id="formContent" class="pt-3 pb-2">
+            <div class="fadeIn first">
                 @if (session('status'))
                 <h4 class="alert alert-success">
                     {{session('status')}}
@@ -29,11 +29,11 @@ Edit Property Info
                         @enderror
                     " placeholder="Name" name="property_name" autocomplete="off" autofocus
                         value="<?php echo $property->property_name?>">
+                    @error('property_name')
                     <div class="text-danger">
-                        @error('property_name')
                         {{"Property name invalid"}}
-                        @enderror
                     </div>
+                    @enderror
                 </div>
                 <div class="form-group">
                     <div class="form-inline justify-content-center">
@@ -69,7 +69,6 @@ Edit Property Info
                         @error('bed_rooms')
                         {{"select a valid bedroom number"}}
                         @enderror
-                        <br>
                         @error('bath_rooms')
                         {{"select a valid bathroom number"}}
                         @enderror
@@ -119,6 +118,43 @@ Edit Property Info
                     </div>
                 </div>
                 <div class="form-group">
+                    <select class="fadeIn third px-1" name="user_id" id="users" style="width: 355px">
+                        <option selected disabled>User</option>
+                        @foreach ($users as $item)
+                        @if ($property->user_id === $item->id)
+                        <option selected value="{{$item->id}}">{{$item->name}}s</option>
+                        @else
+                        <option value="{{$item->id}}">{{$item->name}}s</option>
+                        @endif
+                        @endforeach
+                    </select>
+                    <div class="text-danger" id="user-span">
+                        @error("user_id")
+                            {{"User is required"}}
+                            @enderror
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-inline justify-content-center">
+                        <div style="width: 190px">
+                            <input id="rent_days" type="text" class="fadeIn third" name="rent_days"
+                                placeholder="Rent Days" autocomplete="none" value="{{$property->rent_days}}">
+                        </div>
+                        <div style="width: 190px">
+                            <input id="property_limit" type="text" class="fadeIn third" name="limit" placeholder="Limit"
+                                autocomplete="none" value="{{$property->property_limit}}">
+                        </div>
+                    </div>
+                    <div class="text-danger" id="rent-limit-span">
+                        @error("rent_days")
+                        {{"Rent Days is required"}}
+                        @enderror
+                        @error("limit")
+                        {{"Limit is required"}}
+                        @enderror
+                    </div>
+                </div>
+                <div class="form-group">
                     <label>Year Build</label>
                     <div class="form-inline justify-content-center">
                         <select class="fadeIn fourth px-1 rounded-0 m-0
@@ -128,7 +164,7 @@ Edit Property Info
                         " name="build_date" id="build_date"
                             style="width: 70px; border-top-left-radius: 5px !important;border-bottom-left-radius: 5px !important;">
                             <option selected disabled>Date</option>
-                            @for ($i = 1; $i <= 31; $i++) @if ($i==(int)Str::substr($property->year_build, 7))
+                            @for ($i = 1; $i <= 31; $i++) @if ($i==(int)Str::substr($property->year_build, 8))
                                 <option selected value="{{$i}}">{{$i}}</option>
                                 @else
                                 <option value="{{$i}}">{{$i}}</option>

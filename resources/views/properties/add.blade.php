@@ -12,7 +12,8 @@ Add Properties
 @section('content')
 <div class="width-100">
     <div class="width-300">
-        <form enctype="multipart/form-data" action="{{ route('insert-properties') }}" id="property" class="w-100 d-flex mt-2" method="post">
+        <form enctype="multipart/form-data" action="{{ route('insert-properties') }}" id="property"
+            class="w-100 d-flex mt-2" method="post">
             @csrf
             <div class="wrapper fadeInDown align-items-center" style="height: 100vh">
                 <div id="formContent">
@@ -55,10 +56,10 @@ Add Properties
                     <div class="form-group">
                         <div class="form-inline justify-content-center">
                             <div style="width: 190px">
-                                <select class="fadeIn" name="currency_id" id="currency_id">
+                                <select class="fadeIn third" name="currency_id" id="currency_id">
                                     <option selected disabled>currency</option>
                                     @foreach ($currency as $curr)
-                                        <option value="{{$curr->id}}">{{$curr->currency}}</option>
+                                    <option value="{{$curr->id}}">{{$curr->currency}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -68,6 +69,28 @@ Add Properties
                             </div>
                             <div class="text-danger" id="Rent-span"></div>
                         </div>
+                    </div>
+                    <div class="form-group">
+                            <select class="fadeIn third px-1" name="user_id" id="users" style="width: 355px">
+                                <option selected disabled>User</option>
+                                @foreach ($users as $item)
+                                <option value="{{$item->id}}">{{$item->name}}s</option>
+                                @endforeach
+                            </select>
+                        <div class="text-danger" id="user-span"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-inline justify-content-center">
+                            <div style="width: 190px">
+                                <input id="rent_days" type="text" class="fadeIn third" name="rent_days" placeholder="Rent Days"
+                                    autocomplete="none">
+                            </div>
+                            <div style="width: 190px">
+                                <input id="property_limit" type="text" class="fadeIn third" name="limit" placeholder="Limit"
+                                    autocomplete="none">
+                            </div>
+                        </div>
+                        <div class="text-danger" id="rent-limit-span"></div>
                     </div>
                     <div class="form-group">
                         <label>Year Build</label>
@@ -107,7 +130,7 @@ Add Properties
                             <select class="fadeIn px-1" name="country" id="country-input">
                                 <option selected disabled>Country</option>
                                 @foreach ($country as $stateval)
-                                    <option value="{{$stateval->country}}">{{$stateval->country}}</option>
+                                <option value="{{$stateval->country}}">{{$stateval->country}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -145,8 +168,7 @@ Add Properties
                         <div class="card shadow-sm w-100">
                             <div class="card-header d-flex justify-content-center">
                                 <input type="file" name="images[]" id="inpImg" multiple hidden>
-                                <input type="button" id="image_btn"
-                                    value="{{ __('Choose Images') }}">
+                                <input type="button" id="image_btn" value="{{ __('Choose Images') }}">
                             </div>
                             <div class="card-body d-flex flex-wrap justify-content-center" id="imgContainerMulti">
                             </div>
@@ -168,7 +190,8 @@ Add Properties
             <div class="modal-body bg-light">
                 <p class="text-danger">Are you sure You want to upload property without images</p>
                 <div class="d-flex justify-content-center">
-                    <button type="submit" form="property" id="modalPropertySubmit" class="btn btn-warning btn-sm w-25 ">Yes</button>
+                    <button type="submit" form="property" id="modalPropertySubmit"
+                        class="btn btn-warning btn-sm w-25 ">Yes</button>
                     <button type="button" class="btn btn-secondary btn-sm w-25 mx-2" data-dismiss="modal">No</button>
                 </div>
             </div>
@@ -182,7 +205,6 @@ Add Properties
     const image_btn = document.querySelector('#image_btn');
     const cardBody = document.querySelector('.card-body');
     const cardBodyPara = document.querySelector('#cardBodyPara');
-    // const host = "http://127.0.0.1:8000"
     const country = document.querySelector('#country-input');
     const state = document.querySelector('#state-input');
     const city = document.querySelector('#city-input');
@@ -276,6 +298,13 @@ Add Properties
         // validation start
         $('#first').click(() => {
             if ($('#name').val() == "") {
+                $('#user').css('border', 'none');
+                $('#user-span').text("");
+                $('#Rent').css('border', 'none');
+                $('#Rent-span').text("");
+                $('#rent_days').css('border', 'none');
+                $('#property_limit').css('border', 'none');
+                $('#rent-limit-span').text("");
                 $('#description').css('border', 'none')
                 $('#description-span').text("")
                 $('#Rent').css('border', 'none');
@@ -283,6 +312,13 @@ Add Properties
                 $('#name').css('border', '1px solid red');
                 $('#name-span').text("Name is Required!!")
             } else if ($('#name').val().length <= 3) {
+                $('#user').css('border', 'none');
+                $('#user-span').text("");
+                $('#Rent').css('border', 'none');
+                $('#Rent-span').text("");
+                $('#rent_days').css('border', 'none');
+                $('#property_limit').css('border', 'none');
+                $('#rent-limit-span').text("");
                 $('#bed_rooms').css('border', 'none');
                 $('#bath_rooms').css('border', 'none');
                 $('#room-span').text("")
@@ -294,6 +330,13 @@ Add Properties
                 $('#name').css('border', '1px solid red');
                 $('#name-span').text("Name is too short!!")
             } else if ($('#bed_rooms').val() == null) {
+                $('#user').css('border', 'none');
+                $('#user-span').text("");
+                $('#Rent').css('border', 'none');
+                $('#Rent-span').text("");
+                $('#rent_days').css('border', 'none');
+                $('#property_limit').css('border', 'none');
+                $('#rent-limit-span').text("");
                 $('#bath_rooms').css('border', 'none');
                 $('#description').css('border', 'none')
                 $('#description-span').text("")
@@ -304,6 +347,13 @@ Add Properties
                 $('#bed_rooms').css('border', '1px solid red');
                 $('#room-span').text("How many Bed Rooms does it have!!")
             } else if ($('#bath_rooms').val() == null) {
+                $('#user').css('border', 'none');
+                $('#user-span').text("");
+                $('#Rent').css('border', 'none');
+                $('#Rent-span').text("");
+                $('#rent_days').css('border', 'none');
+                $('#property_limit').css('border', 'none');
+                $('#rent-limit-span').text("");
                 $('#description').css('border', 'none')
                 $('#description-span').text("")
                 $('#Rent').css('border', 'none');
@@ -314,6 +364,13 @@ Add Properties
                 $('#bath_rooms').css('border', '1px solid red');
                 $('#room-span').text("How many Bath Rooms does it have!!")
             } else if($('#toilets').val() == null) {
+                $('#user').css('border', 'none');
+                $('#user-span').text("");
+                $('#Rent').css('border', 'none');
+                $('#Rent-span').text("");
+                $('#rent_days').css('border', 'none');
+                $('#property_limit').css('border', 'none');
+                $('#rent-limit-span').text("");
                 $('#description').css('border', 'none')
                 $('#description-span').text("")
                 $('#Rent').css('border', 'none');
@@ -325,6 +382,13 @@ Add Properties
                 $('#toilets').css('border','1px solid red')
                 $('#room-span').text("How many Toilets does it have!!")
             } else if ($('#description').val() == "") {
+                $('#user').css('border', 'none');
+                $('#user-span').text("");
+                $('#Rent').css('border', 'none');
+                $('#Rent-span').text("");
+                $('#rent_days').css('border', 'none');
+                $('#property_limit').css('border', 'none');
+                $('#rent-limit-span').text("");
                 $('#Rent').css('border', 'none');
                 $('#Rent-span').text("");
                 $('#name-span').text("")
@@ -335,6 +399,13 @@ Add Properties
                 $('#description').css('border', '1px solid red')
                 $('#description-span').text("Provide Some details!!")
             }else if ($('#currency_id').val() == null){
+                $('#user').css('border', 'none');
+                $('#user-span').text("");
+                $('#Rent').css('border', 'none');
+                $('#Rent-span').text("");
+                $('#rent_days').css('border', 'none');
+                $('#property_limit').css('border', 'none');
+                $('#rent-limit-span').text("");
                 $('#name-span').text("")
                 $('#name').css('border', 'none');
                 $('#bed_rooms').css('border', 'none');
@@ -345,6 +416,13 @@ Add Properties
                 $('#currency_id').css('border', '1px solid red');
                 $('#Rent-span').text("Please select currency of this property!!");
             } else if ($('#Rent').val() == "") {
+                $('#user').css('border', 'none');
+                $('#user-span').text("");
+                $('#Rent').css('border', 'none');
+                $('#Rent-span').text("");
+                $('#rent_days').css('border', 'none');
+                $('#property_limit').css('border', 'none');
+                $('#rent-limit-span').text("");
                 $('#name-span').text("")
                 $('#name').css('border', 'none');
                 $('#bed_rooms').css('border', 'none');
@@ -356,6 +434,13 @@ Add Properties
                 $('#currency_id').css('border', 'none');
                 $('#Rent-span').text("Please Provide Rent of this property!!");
             } else if (isNaN(parseInt($('#Rent').val()))) {
+                $('#user').css('border', 'none');
+                $('#user-span').text("");
+                $('#Rent').css('border', 'none');
+                $('#Rent-span').text("");
+                $('#rent_days').css('border', 'none');
+                $('#property_limit').css('border', 'none');
+                $('#rent-limit-span').text("");
                 $('#name-span').text("")
                 $('#name').css('border', 'none');
                 $('#bed_rooms').css('border', 'none');
@@ -366,6 +451,81 @@ Add Properties
                 $('#currency_id').css('border', 'none');
                 $('#Rent').css('border', '1px solid red');
                 $('#Rent-span').text("Only numbers are allowed!!");
+            }else if ($('#users').val() == null) {
+                $('#name-span').text("")
+                $('#name').css('border', 'none');
+                $('#bed_rooms').css('border', 'none');
+                $('#bath_rooms').css('border', 'none');
+                $('#room-span').text("");
+                $('#description').css('border', 'none');
+                $('#description-span').text("");
+                $('#currency_id').css('border', 'none');
+                $('#Rent').css('border', 'none');
+                $('#Rent-span').text("");
+                $('#user').css('border', '1px solid red');
+                $('#user-span').text("Please Select a user");
+            }else if ($('#rent_days').val() == "") {
+                $('#name-span').text("")
+                $('#name').css('border', 'none');
+                $('#bed_rooms').css('border', 'none');
+                $('#bath_rooms').css('border', 'none');
+                $('#room-span').text("");
+                $('#description').css('border', 'none');
+                $('#description-span').text("");
+                $('#currency_id').css('border', 'none');
+                $('#Rent').css('border', 'none');
+                $('#Rent-span').text("");
+                $('#user').css('border', 'none');
+                $('#user-span').text("");
+                $('#rent_days').css('border', 'none');
+                $('#rent-limit-span').text("Please Provide rent days");
+            }else if (isNaN(parseInt($('#rent_days').val()))) {
+                $('#name-span').text("")
+                $('#name').css('border', 'none');
+                $('#bed_rooms').css('border', 'none');
+                $('#bath_rooms').css('border', 'none');
+                $('#room-span').text("");
+                $('#description').css('border', 'none');
+                $('#description-span').text("");
+                $('#currency_id').css('border', 'none');
+                $('#Rent').css('border', 'none');
+                $('#Rent-span').text("");
+                $('#user').css('border', 'none');
+                $('#user-span').text("");
+                $('#rent_days').css('border', 'none');
+                $('#rent-limit-span').text("Rent Days must be numeric");
+            }else if ($('#property_limit').val() == "") {
+                $('#name-span').text("")
+                $('#name').css('border', 'none');
+                $('#bed_rooms').css('border', 'none');
+                $('#bath_rooms').css('border', 'none');
+                $('#room-span').text("");
+                $('#description').css('border', 'none');
+                $('#description-span').text("");
+                $('#currency_id').css('border', 'none');
+                $('#Rent').css('border', 'none');
+                $('#Rent-span').text("");
+                $('#user').css('border', 'none');
+                $('#user-span').text("");
+                $('#rent_days').css('border', 'none');
+                $('#property_limit').css('border', 'none');
+                $('#rent-limit-span').text("Please Provide Limit");
+            }else if (isNaN(parseInt($('#property_limit').val()))) {
+                $('#name-span').text("")
+                $('#name').css('border', 'none');
+                $('#bed_rooms').css('border', 'none');
+                $('#bath_rooms').css('border', 'none');
+                $('#room-span').text("");
+                $('#description').css('border', 'none');
+                $('#description-span').text("");
+                $('#currency_id').css('border', 'none');
+                $('#Rent').css('border', 'none');
+                $('#Rent-span').text("");
+                $('#user').css('border', 'none');
+                $('#user-span').text("");
+                $('#rent_days').css('border', 'none');
+                $('#property_limit').css('border', 'none');
+                $('#rent-limit-span').text("Property Limit must be numeric");
             } else if ($('#build_date').val() == null) {
                 $('#build_month').css('border', 'none');
                 $('#build_year').css('border', 'none');
@@ -377,8 +537,13 @@ Add Properties
                 $('#description').css('border', 'none');
                 $('#description-span').text("");
                 $('#currency_id').css('border', 'none');
+                $('#user').css('border', 'none');
+                $('#user-span').text("");
                 $('#Rent').css('border', 'none');
                 $('#Rent-span').text("");
+                $('#rent_days').css('border', 'none');
+                $('#property_limit').css('border', 'none');
+                $('#rent-limit-span').text("");
                 $('#build_date').css('border', '1px solid red');
                 $('#year_build').text("Date of build!!");
             } else if ($('#build_month').val() == null) {
@@ -391,8 +556,13 @@ Add Properties
                 $('#description').css('border', 'none');
                 $('#description-span').text("");
                 $('#currency_id').css('border', 'none');
+                $('#user').css('border', 'none');
+                $('#user-span').text("");
                 $('#Rent').css('border', 'none');
                 $('#Rent-span').text("");
+                $('#rent_days').css('border', 'none');
+                $('#property_limit').css('border', 'none');
+                $('#rent-limit-span').text("");
                 $('#build_date').css('border', 'none');
                 $('#build_month').css('border', '1px solid red');
                 $('#year_build').text("Month of build!!");
@@ -405,8 +575,13 @@ Add Properties
                 $('#description').css('border', 'none');
                 $('#description-span').text("");
                 $('#currency_id').css('border', 'none');
+                $('#user').css('border', 'none');
+                $('#user-span').text("");
                 $('#Rent').css('border', 'none');
                 $('#Rent-span').text("");
+                $('#rent_days').css('border', 'none');
+                $('#property_limit').css('border', 'none');
+                $('#rent-limit-span').text("");
                 $('#build_date').css('border', 'none');
                 $('#build_month').css('border', 'none');
                 $('#build_year').css('border', '1px solid red');
@@ -498,4 +673,3 @@ Add Properties
     })
 </script>
 @endsection
-
