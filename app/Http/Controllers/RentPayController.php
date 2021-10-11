@@ -182,86 +182,80 @@ class RentPayController extends Controller
                                 "date" => $value->date
                             ]);
                         }
-                    } else {
-                        array_push($select, [
-                            "tendent_id" => $value->tendent_id,
-                            "tendent_name" => $value->tendent_name,
-                            "Property_name" => $value->property_name,
-                            'amount' => $value->amount_paid  . " " . $value->currency ?? "AUD",
-                            "split" => $value->split,
-                            "rent" => "Paid",
-                            "date" => $value->date
-                        ]);
                     }
                 }
-                $check_select2 = Rent::select(
-                    'rent.id as id'
-                )
-                    ->join('properties', 'properties.id', 'rent.property_id');
-                if ($request->property_id != "") {
-                    $check_select2 = $check_select2->where('rent.property_id', $request->property_id);
-                }
-                if ($request->tendent_id != "") {
-                    $check_select2 = $check_select2->where('rent.user_id', $request->tendent_id);
-                }
-                $check_select2 = $check_select2
-                    ->where('properties.user_id', Auth::user()->id)
-                    ->get();
-                foreach ($check_select2 as $value) {
-                    $check = RentPay::where('rent_id', $value->id)->first();
-                    if ($check) {
-                        $rows = RentPay::select(
-                            'rent.user_id as tendent_id',
-                            'users.name as tendent_name',
-                            'properties.property_name as property_name',
-                            'rent_pay.amount_paid as amount',
-                            'currency.currency',
-                            'rent.split',
-                            'rent_pay.date'
-                        )
-                            ->join('rent', 'rent.id', 'rent_pay.rent_id')
-                            ->join('users', 'users.id', 'rent.user_id')
-                            ->join('properties', 'properties.id', 'rent.property_id')
-                            ->join('currency', 'currency.id', 'properties.currency_id')
-                            ->where('rent_pay.rent_id', $check->rent_id)
-                            ->orderbyDesc('rent.id')
-                            ->get();
-                        if ($rows->count() > 0) {
-                            foreach ($rows as $row) {
-                                array_push($select, [
-                                    'tendent_id' => $row->tendent_id,
-                                    'tendent_name' => $row->tendent_name,
-                                    'property_name' => $row->property_name,
-                                    'amount' => $row->amount  . " " . $row->currency ?? "AUD",
-                                    'split' => $row->split,
-                                    'rent' => 'Paid',
-                                    'date' => $row->date,
-                                ]);
+                if ($select) {
+                    return response()->json(['status' => true, 'data' => $select]);
+                } else {
+                    $check_select2 = Rent::select(
+                        'rent.id as id'
+                    )
+                        ->join('properties', 'properties.id', 'rent.property_id');
+                    if ($request->property_id != "") {
+                        $check_select2 = $check_select2->where('rent.property_id', $request->property_id);
+                    }
+                    if ($request->tendent_id != "") {
+                        $check_select2 = $check_select2->where('rent.user_id', $request->tendent_id);
+                    }
+                    $check_select2 = $check_select2
+                        ->where('properties.user_id', Auth::user()->id)
+                        ->get();
+                    foreach ($check_select2 as $value) {
+                        $check = RentPay::where('rent_id', $value->id)->first();
+                        if ($check) {
+                            $rows = RentPay::select(
+                                'rent.user_id as tendent_id',
+                                'users.name as tendent_name',
+                                'properties.property_name as property_name',
+                                'rent_pay.amount_paid as amount',
+                                'currency.currency',
+                                'rent.split',
+                                'rent_pay.date'
+                            )
+                                ->join('rent', 'rent.id', 'rent_pay.rent_id')
+                                ->join('users', 'users.id', 'rent.user_id')
+                                ->join('properties', 'properties.id', 'rent.property_id')
+                                ->join('currency', 'currency.id', 'properties.currency_id')
+                                ->where('rent_pay.rent_id', $check->rent_id)
+                                ->orderbyDesc('rent.id')
+                                ->get();
+                            if ($rows->count() > 0) {
+                                foreach ($rows as $row) {
+                                    array_push($select, [
+                                        'tendent_id' => $row->tendent_id,
+                                        'tendent_name' => $row->tendent_name,
+                                        'property_name' => $row->property_name,
+                                        'amount' => $row->amount  . " " . $row->currency ?? "AUD",
+                                        'split' => $row->split,
+                                        'rent' => 'Paid',
+                                        'date' => $row->date,
+                                    ]);
+                                }
                             }
+                        } else {
+                            $row = Rent::select(
+                                'rent.user_id as tendent_id',
+                                'users.name as tendent_name',
+                                'properties.property_name as property_name',
+                                'rent.amount',
+                                'currency.currency',
+                                'rent.split',
+                            )
+                                ->join('users', 'users.id', 'rent.user_id')
+                                ->join('properties', 'properties.id', 'rent.property_id')
+                                ->join('currency', 'currency.id', 'properties.currency_id')
+                                ->where('rent.id', $value->id)
+                                ->first();
+                            array_push($select, [
+                                'tendent_id' => $row->tendent_id,
+                                'tendent_name' => $row->tendent_name,
+                                'property_name' => $row->property_name,
+                                'amount' => $row->amount  . " " . $row->currency ?? "AUD",
+                                'split' => $row->split,
+                                'rent' => 'Unpaid',
+                                'date' => "",
+                            ]);
                         }
-                    } else {
-                        $row = Rent::select(
-                            'rent.user_id as tendent_id',
-                            'users.name as tendent_name',
-                            'properties.property_name as property_name',
-                            'rent.amount',
-                            'currency.currency',
-                            'rent.split',
-                        )
-                            ->join('users', 'users.id', 'rent.user_id')
-                            ->join('properties', 'properties.id', 'rent.property_id')
-                            ->join('currency', 'currency.id', 'properties.currency_id')
-                            ->where('rent.id', $value->id)
-                            ->first();
-                        array_push($select, [
-                            'tendent_id' => $row->tendent_id,
-                            'tendent_name' => $row->tendent_name,
-                            'property_name' => $row->property_name,
-                            'amount' => $row->amount  . " " . $row->currency ?? "AUD",
-                            'split' => $row->split,
-                            'rent' => 'Unpaid',
-                            'date' => "",
-                        ]);
                     }
                 }
             }
