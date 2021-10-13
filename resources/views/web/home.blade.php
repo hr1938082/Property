@@ -21,9 +21,10 @@ $page = 'home'
                     <div class="container">
                         <div class="property-info">
                             <div class="property-thumb-info-content">
-                                <h2>Lorem ipsum dolor sit amet.</h2>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente sit tempore optio
-                                    dicta asperiores? Corporis ab obcaecati nostrum eum rerum.
+                                <p>
+                                    This system is an easy tool which enable Landlords to upload, list and manage their
+                                    properties and to find perfect renters. Also, the system can be use as a convenient
+                                    means for landlords to get rentals from tenants and to manage utility bills.
                                 </p>
                             </div>
                         </div>
@@ -36,9 +37,10 @@ $page = 'home'
                     <div class="container">
                         <div class="property-info">
                             <div class="property-thumb-info-content">
-                                <h2>Lorem ipsum dolor sit amet.</h2>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente sit tempore optio
-                                    dicta asperiores? Corporis ab obcaecati nostrum eum rerum.
+                                <p>
+                                    This system is an easy tool which enable Landlords to upload, list and manage their
+                                    properties and to find perfect renters. Also, the system can be use as a convenient
+                                    means for landlords to get rentals from tenants and to manage utility bills.
                                 </p>
                             </div>
                         </div>
@@ -51,9 +53,10 @@ $page = 'home'
                     <div class="container">
                         <div class="property-info">
                             <div class="property-thumb-info-content">
-                                <h2>Lorem ipsum dolor sit amet.</h2>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente sit tempore optio
-                                    dicta asperiores? Corporis ab obcaecati nostrum eum rerum.
+                                <p>
+                                    This system is an easy tool which enable Landlords to upload, list and manage their
+                                    properties and to find perfect renters. Also, the system can be use as a convenient
+                                    means for landlords to get rentals from tenants and to manage utility bills.
                                 </p>
                             </div>
                         </div>
@@ -76,7 +79,8 @@ $page = 'home'
                 <li><a href="#offices" role="tab" data-toggle="tab">Offices</a></li>
                 <li><a href="#apartment" role="tab" data-toggle="tab">Apartment</a></li>
                 <li><a href="#residential" role="tab" data-toggle="tab">Residential</a></li>
-                <li><a href="{{ route('adds.request') }}" class="btn btn-lg btn-default" style="margin: 10px 0">Apply for Ad</a></li>
+                <li><a href="{{ route('adds.request') }}" class="btn btn-lg btn-default" style="margin: 10px 0">Apply
+                        for Ad</a></li>
             </ul>
 
             <!-- Tab panes -->
@@ -335,12 +339,12 @@ $page = 'home'
                                         alt="Andrew MCCarthy">
                                 </div>
                                 <h4>Andrew MCCarthy</h4>
-                                <p><strong>Selller</strong></p>
+                                <p><strong>Landlord</strong></p>
                             </div>
                             <div class="divider-quote-sign"><span>“</span></div>
                             <blockquote class="testimonial">
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident voluptates nam
-                                    nulla ab laborum dolore odit dolores consequuntur aliquid doloremque.</p>
+                                <p>As a Landlord, I love this tool, it has been very helpful as a good source for my
+                                    property management</p>
                             </blockquote>
                         </div>
                         <div class="col-md-12">
@@ -350,12 +354,12 @@ $page = 'home'
                                         alt="John Smith">
                                 </div>
                                 <h4>John Smith</h4>
-                                <p><strong>Selller</strong></p>
+                                <p><strong>Tenant</strong></p>
                             </div>
                             <div class="divider-quote-sign"><span>“</span></div>
                             <blockquote class="testimonial">
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas nam cupiditate
-                                    aliquam dolorem quas, commodi consequatur. Totam debitis tenetur ex.</p>
+                                <p>The system enables me to track and manage my rentals and utilities also, it allow me
+                                    communicate with my landlord concerning any issue and with other tenants</p>
                             </blockquote>
                         </div>
                     </div>

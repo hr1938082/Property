@@ -150,8 +150,7 @@
                             @endif"><a href="{{ route('policy') }}">Privacy Policy</a></li>
                                 </ul>
                             <h2>Don’t miss out</h2>
-                            <p>In venenatis neque a eros laoreet eu placerat erat suscipit. Fusce cursus, erat ut
-                                scelerisque condimentum, quam odio ultrices leo.</p>
+                            <p>Get the latest update on our system by providing your email below</p>
                             <form class="form-inline pgl-form-newsletter" role="form">
                                 <div class="form-group">
                                     <label class="sr-only" for="exampleInputEmail2">Email address</label>
