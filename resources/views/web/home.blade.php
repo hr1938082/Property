@@ -38,9 +38,10 @@ $page = 'home'
                         <div class="property-info">
                             <div class="property-thumb-info-content">
                                 <p>
-                                    This system is an easy tool which enable Landlords to upload, list and manage their
-                                    properties and to find perfect renters. Also, the system can be use as a convenient
-                                    means for landlords to get rentals from tenants and to manage utility bills.
+                                    This system can be use by tenants to find properties for rent and for sales. Also,
+                                    the system can be use by tenants as a platform for communication between other
+                                    tenants and landlords.
+
                                 </p>
                             </div>
                         </div>
@@ -54,9 +55,8 @@ $page = 'home'
                         <div class="property-info">
                             <div class="property-thumb-info-content">
                                 <p>
-                                    This system is an easy tool which enable Landlords to upload, list and manage their
-                                    properties and to find perfect renters. Also, the system can be use as a convenient
-                                    means for landlords to get rentals from tenants and to manage utility bills.
+                                    As a landlord or tenant Tekmatics system will make the search of properties seamless
+                                    and rewarding.
                                 </p>
                             </div>
                         </div>
