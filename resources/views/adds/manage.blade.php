@@ -12,11 +12,8 @@ Manage Properties
 <div class="row justify-content-center align-items-center m-0" id="register">
     <div class="col-md-8 form px-5 pt-3 active shadow-lg">
         <div class="row justify-content-center">
-            @if(session('status') == "Enabled")
+            @if(session('status'))
                 <h5 class="alert alert-success text-success w-100 text-center">{{session('status')}}</h5>
-            @endif
-            @if(session('status') == "Disabled")
-                <h5 class="alert alert-danger text-danger w-100 text-center">{{session('status')}}</h5>
             @endif
         </div>
         <div class="col-12 d-flex justify-content-between">
@@ -118,11 +115,7 @@ Manage Properties
                         <form action="{{ route('add.delete',['id'=>$item->id]) }}" method="post" class="d-inline">
                             @csrf
                             <input type="hidden" name="property_id" value="{{$item->id}}" />
-                            @if ($item->status ==1)
-                                <button class="btn btn-outline-danger btn-sm">Disable</button>
-                            @else
-                                <button class="btn btn-outline-success btn-sm">Enable</button>
-                            @endif
+                            <button class="btn btn-outline-danger btn-sm">Delete</button>
                         </form>
                         <form action="{{ route('add.approval',['id'=>$item->id]) }}" method="get" class="d-inline">
                             @csrf

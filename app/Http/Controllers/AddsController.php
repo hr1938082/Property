@@ -10,7 +10,9 @@ use App\Models\city;
 use App\Models\Country;
 use Illuminate\Http\Request;
 use App\Models\currency;
+use App\Models\Image;
 use App\Models\State;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -296,28 +298,19 @@ class AddsController extends Controller
     // delete property
     public  function delete(Request $request)
     {
-        $property = Adds::find($request->id);
-        if ($property) {
-            if ($property->status == 0) {
-                $property->status = 1;
-                $property->save();
+        $adds = Adds::find($request->id);
+        if ($adds) {
+            if ($adds->address_id) {
+                $address = Address::find($adds->address_id);
+                if ($address) {
+                    $images = AdsImages::where('property_id', $adds->id)->get();
+                    foreach ($images as $value) {
+                        $value->delete();
+                    }
+                    $adds->delete();
+                    $address->delete();
 
-                if ($request->expectsJson()) {
-                    return response()->json([
-                        "status" => true,
-                    ]);
-                } else {
-                    return back()->with('status', "Enabled");
-                }
-            } else {
-                $property->status = 0;
-                $property->save();
-                if ($request->expectsJson()) {
-                    return response()->json([
-                        "status" => true,
-                    ]);
-                } else {
-                    return back()->with('status', "Disabled");
+                    return back()->with('status', "Deleted");
                 }
             }
         }
