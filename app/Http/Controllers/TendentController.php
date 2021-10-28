@@ -105,12 +105,15 @@ class TendentController extends Controller
                 'properties.rent AS rent',
                 'address.city AS city',
                 'address.state AS state',
+                'tendent_to_property.date as approved_date'
             )
             ->join('properties', 'properties.id', 'tendent_to_property.property_id')
             ->join('address', 'address.id', 'properties.address_id')
-            ->where([['tendent_to_property.tendent_id', $request->input('tendent_id')], ['is_live', 1]]);
+            ->where('is_live', 1);
         if ($name != "") {
             $tendentselect = $tendentselect->where('properties.property_name', 'LIKE', '%' . $name . '%');
+        } else if ($request->tendent_id) {
+            $tendentselect = $tendentselect->where('tendent_to_property.tendent_id', $request->input('tendent_id'));
         }
         $tendentselect = $tendentselect->orderByDesc('id')->get();
         foreach ($tendentselect as $value) {
@@ -130,6 +133,7 @@ class TendentController extends Controller
                 "city" => $value->city,
                 "state" => $value->state,
                 "image" => $temp,
+                'approved_date' => $value->approved_date,
                 "status" => "approved"
             ]);
         }
