@@ -27,6 +27,7 @@ class TendentController extends Controller
                     'users.mobile',
                     'users.address',
                     'users.image',
+                    'tendent_to_property.date as approved_date',
                     'properties.property_name'
                 )
                     ->join('properties', 'properties.id', '=', 'tendent_to_property.property_id')
