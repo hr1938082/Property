@@ -27,23 +27,45 @@ Add Properties
                     </div>
                     <div class="form-group">
                         <div class="form-inline justify-content-center">
-                            <select class="fadeIn px-1" name="bed_rooms" id="bed_rooms" style="width: 115px">
+
+                            <select class="fadeIn px-1" name="bed_rooms" id="bed_rooms" style="width: 110px">
                                 <option selected disabled>Bed Rooms</option>
                                 <option class="text-capitalize" value="1">1</option>
                                 <option class="text-capitalize" value="2">2</option>
                                 <option class="text-capitalize" value="3">3</option>
+                                <option class="text-capitalize" value="3">4</option>
+                                <option class="text-capitalize" value="3">5</option>
+                                <option class="text-capitalize" value="3">6</option>
+                                <option class="text-capitalize" value="3">7</option>
+                                <option class="text-capitalize" value="3">8</option>
+                                <option class="text-capitalize" value="3">9</option>
+                                <option class="text-capitalize" value="3">10</option>
                             </select>
-                            <select class="fadeIn px-1" name="bath_rooms" id="bath_rooms" style="width: 115px">
+                            <select class="fadeIn px-1" name="bath_rooms" id="bath_rooms" style="width: 110px">
                                 <option selected disabled>Bath Rooms</option>
                                 <option class="text-capitalize" value="1">1</option>
                                 <option class="text-capitalize" value="2">2</option>
                                 <option class="text-capitalize" value="3">3</option>
+                                <option class="text-capitalize" value="3">4</option>
+                                <option class="text-capitalize" value="3">5</option>
+                                <option class="text-capitalize" value="3">6</option>
+                                <option class="text-capitalize" value="3">7</option>
+                                <option class="text-capitalize" value="3">8</option>
+                                <option class="text-capitalize" value="3">9</option>
+                                <option class="text-capitalize" value="3">10</option>
                             </select>
-                            <select class="fadeIn px-1" name="toilets" id="toilets" style="width: 115px">
+                            <select class="fadeIn px-1" name="toilets" id="toilets" style="width: 145px">
                                 <option selected disabled>Toilets</option>
                                 <option class="text-capitalize" value="1">1</option>
                                 <option class="text-capitalize" value="2">2</option>
                                 <option class="text-capitalize" value="3">3</option>
+                                <option class="text-capitalize" value="3">4</option>
+                                <option class="text-capitalize" value="3">5</option>
+                                <option class="text-capitalize" value="3">6</option>
+                                <option class="text-capitalize" value="3">7</option>
+                                <option class="text-capitalize" value="3">8</option>
+                                <option class="text-capitalize" value="3">9</option>
+                                <option class="text-capitalize" value="3">10</option>
                             </select>
                         </div>
                         <div class="text-danger" id="room-span"></div>

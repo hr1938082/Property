@@ -163,7 +163,7 @@
                     </div>
                 </div>
                 <div class="pgl-copyrights">
-                    <p id="copyright">Copyright © {{date('Y')}} Tekumatics. Designed by <a href="https://www.remgs.com/">REMGS</a></p>
+                    <p id="copyright">Copyright © {{date('Y')}} Tekumatics. {{-- Designed by <a href="https://www.remgs.com/">REMGS</a> --}}</p>
                 </div>
             </div>
         </footer>

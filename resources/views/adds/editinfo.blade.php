@@ -46,7 +46,7 @@ Edit Property Info
                             @enderror
                         " name="bed_rooms" id="bed_rooms" style="width: 130px">
                             <option selected disabled>Bed Rooms</option>
-                            @for ($i = 1; $i < 4; $i++) @if ($property->bed_rooms == $i)
+                            @for ($i = 1; $i < 10; $i++) @if ($property->bed_rooms == $i)
 
                                 <option selected class="text-capitalize" value="{{$i}}">{{$i}}</option>
                                 @else
@@ -60,7 +60,7 @@ Edit Property Info
                         @enderror
                         " name="bath_rooms" id="bath_rooms" style="width: 135px">
                             <option selected disabled>Bath Rooms</option>
-                            @for ($i = 1; $i < 4; $i++) @if ($property->bath_rooms == $i)
+                            @for ($i = 1; $i < 10; $i++) @if ($property->bath_rooms == $i)
                                 <option selected class="text-capitalize" value="{{$i}}">{{$i}}</option>
                                 @else
                                 <option class="text-capitalize" value="{{$i}}">{{$i}}</option>
