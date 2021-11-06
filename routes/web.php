@@ -36,6 +36,17 @@ use Illuminate\Support\Facades\Artisan;
 Route::get('/foo', function () {
     Artisan::call('storage:link');
 });
+Route::get('/termsofservices', function () {
+    $social = SocialLinks::all();
+    $socialLinks = [
+        $social[0]->name => $social[0]->link,
+        $social[1]->name => $social[1]->link,
+        $social[2]->name => $social[2]->link,
+        $social[3]->name => $social[3]->link,
+    ];
+    view()->share('socialLinks', $socialLinks);
+    return view('web.termsofservices');
+})->name('terms');
 Route::get('/policy', function () {
     $social = SocialLinks::all();
     $socialLinks = [

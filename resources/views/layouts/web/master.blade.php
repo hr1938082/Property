@@ -7,7 +7,7 @@
     <meta name="description" content="Your home and property manager">
     <meta name="author" content="Tekumatics">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tekumatics  | @yield('title')</title>
+    <title>Tekumatics | @yield('title')</title>
 
     <!-- Google Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Rochester' rel='stylesheet' type='text/css'>
@@ -42,26 +42,31 @@
                 <div class="container">
                     <ul class="nav nav-pills nav-top navbar-right">
                         @php
-                            $social = DB::table('social_links')->get();
-                            $socialLinks = [
-                                $social[0]->name => $social[0]->link,
-                                $social[1]->name => $social[1]->link,
-                                $social[2]->name => $social[2]->link,
-                                $social[3]->name => $social[3]->link,
-                            ];
+                        $social = DB::table('social_links')->get();
+                        $socialLinks = [
+                        $social[0]->name => $social[0]->link,
+                        $social[1]->name => $social[1]->link,
+                        $social[2]->name => $social[2]->link,
+                        $social[3]->name => $social[3]->link,
+                        ];
                         @endphp
                         <li><a href="#" title="Android App" data-placement="bottom" data-toggle="tooltip"
-                            data-original-title="Android App"><i class="fa fa-android" aria-hidden="true"></i></a></li>
-                            <li><a href="#" title="IOS App" data-placement="bottom" data-toggle="tooltip"
+                                data-original-title="Android App"><i class="fa fa-android" aria-hidden="true"></i></a>
+                        </li>
+                        <li><a href="#" title="IOS App" data-placement="bottom" data-toggle="tooltip"
                                 data-original-title="IOS App"><i class="fa fa-apple" aria-hidden="true"></i></a></li>
-                        <li><a href="{{$socialLinks['facebook']}}" title="Facebook" data-placement="bottom" data-toggle="tooltip"
-                                data-original-title="Facebook"><i class="fa fa-facebook"></i></a></li>
-                        <li><a href="{{$socialLinks['insta']}}" title="Instagram" data-placement="bottom" data-toggle="tooltip"
-                                data-original-title="Instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-                        <li><a href="{{$socialLinks['twitter']}}" title="Twitter" data-placement="bottom" data-toggle="tooltip"
-                                data-original-title="Twitter"><i class="fa fa-twitter"></i></a></li>
-                        <li><a href="{{$socialLinks['linkedin']}}" title="Linkedin" data-placement="bottom" data-toggle="tooltip"
-                            data-original-title="LinkedIn"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+                        <li><a href="{{$socialLinks['facebook']}}" title="Facebook" data-placement="bottom"
+                                data-toggle="tooltip" data-original-title="Facebook"><i class="fa fa-facebook"></i></a>
+                        </li>
+                        <li><a href="{{$socialLinks['insta']}}" title="Instagram" data-placement="bottom"
+                                data-toggle="tooltip" data-original-title="Instagram"><i class="fa fa-instagram"
+                                    aria-hidden="true"></i></a></li>
+                        <li><a href="{{$socialLinks['twitter']}}" title="Twitter" data-placement="bottom"
+                                data-toggle="tooltip" data-original-title="Twitter"><i class="fa fa-twitter"></i></a>
+                        </li>
+                        <li><a href="{{$socialLinks['linkedin']}}" title="Linkedin" data-placement="bottom"
+                                data-toggle="tooltip" data-original-title="LinkedIn"><i class="fa fa-linkedin"
+                                    aria-hidden="true"></i></a></li>
                     </ul>
                 </div>
             </div>
@@ -145,10 +150,14 @@
                                 <li class="@if ($page == 'contact')
                                 {{'active'}}
                             @endif"><a href="{{ route('contact') }}">Contact</a></li>
-                            <li class="@if ($page == 'privacy')
+                                <li class="@if ($page == 'privacy')
                                 {{'active'}}
                             @endif"><a href="{{ route('policy') }}">Privacy Policy</a></li>
-                                </ul>
+
+                                <li class="@if ($page == 'termsofservices')
+                                {{'active'}}
+                            @endif"><a href="{{ route('terms') }}">Terms of Services</a></li>
+                            </ul>
                             <h2>Don’t miss out</h2>
                             <p>Get the latest update on our system by providing your email below</p>
                             <form class="form-inline pgl-form-newsletter" role="form">
@@ -163,7 +172,8 @@
                     </div>
                 </div>
                 <div class="pgl-copyrights">
-                    <p id="copyright">Copyright © {{date('Y')}} Tekumatics. {{-- Designed by <a href="https://www.remgs.com/">REMGS</a> --}}</p>
+                    <p id="copyright">Copyright © {{date('Y')}} Tekumatics. {{-- Designed by <a
+                            href="https://www.remgs.com/">REMGS</a> --}}</p>
                 </div>
             </div>
         </footer>
