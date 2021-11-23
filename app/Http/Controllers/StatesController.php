@@ -18,14 +18,14 @@ class StatesController extends Controller
     }
     public function select(Request $request)
     {
-        if ($request->expectsJson() && Auth::user()->user_type_id == 1) {
-            $select = State::where('status', 1)->get();
-            return response()->json(["status" => true, "data" => $select]);
-        } elseif (!$request->expectsJson() && Auth::user()->user_type_id == 7) {
+        if (!$request->expectsJson() && Auth::user()->user_type_id == 7) {
             $select = state::select('states.id', 'country.country', 'states.state')
                 ->join('country', 'states.country_id', 'country.id')
                 ->paginate(6);
             return view('State.manageState', compact('select'));
+        } else if ($request->expectsJson()) {
+            $select = State::where('status', 1)->get();
+            return response()->json(["status" => true, "data" => $select]);
         }
     }
     public function insert(Request $request)
