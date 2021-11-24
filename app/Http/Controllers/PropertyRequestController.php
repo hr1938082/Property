@@ -89,7 +89,7 @@ class PropertyRequestController extends Controller
                             }
                             return response()->json(["data" => ["Property Request" => "Approved", "notification" => $not]]);
                         }
-                        return response()->json(["data" => ["error" => "Tendent is already approved in any other property"]]);
+                        return response()->json(["data" => ["error" => "Tendent is active in another property"]]);
                     }
                     return response()->json(["data" => ["error" => "reached its limit"]]);
                 }

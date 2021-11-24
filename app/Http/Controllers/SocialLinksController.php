@@ -16,12 +16,10 @@ class SocialLinksController extends Controller
     public function select(Request $request)
     {
         $social = SocialLinks::all();
-        $socialLinks = [
-            $social[0]->name => $social[0]->link,
-            $social[1]->name => $social[1]->link,
-            $social[2]->name => $social[2]->link,
-            $social[3]->name => $social[3]->link,
-        ];
+        $socialLinks = [];
+        foreach ($social as $key => $value) {
+            $socialLinks += [$key => $value];
+        }
         if ($request->expectsJson()) {
             return response()->json(["status" => true, "data" => $socialLinks]);
         } else {
