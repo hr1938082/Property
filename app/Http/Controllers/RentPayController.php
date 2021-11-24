@@ -17,13 +17,13 @@ class RentPayController extends Controller
     // RentPay Add method
     public function add(Request $request)
     {
-        $rent = Rent::select('id', 'amount', 'property_id', 'properties.rent_days')
+        $rent = Rent::select('rent.id', 'amount', 'property_id', 'properties.rent_days')
             ->join('properties', 'properties.id', 'rent.property_id')
             ->where('user_id', $request->user_id)
             ->first();
         if ($rent != null) {
             $find_last_date = RentPay::select('date', 'late')->where('rent_id', $rent->id)
-                ->orderbyDesc('id')
+                ->orderbyDesc('rent.id')
                 ->get();
 
             $find_first_date = RentPay::where('rent_id', $rent->id)
