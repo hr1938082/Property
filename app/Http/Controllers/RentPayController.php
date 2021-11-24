@@ -23,7 +23,7 @@ class RentPayController extends Controller
             ->first();
         if ($rent != null) {
             $find_last_date = RentPay::select('date', 'late')->where('rent_id', $rent->id)
-                ->orderbyDesc('rent.id')
+                ->orderbyDesc('id')
                 ->get();
 
             $find_first_date = RentPay::where('rent_id', $rent->id)
