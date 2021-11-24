@@ -52,7 +52,7 @@ class RentPayController extends Controller
             } else {
                 $first_date = Carbon::parse($find_first_date[0]->date);
                 $last_date = Carbon::parse($find_last_date[0]->date);
-                $payable_date = Carbon::parse("$first_date->day/$last_date->month/$last_date->year")
+                $payable_date = Carbon::parse("$first_date->day-$last_date->month-$last_date->year")
                     ->addDays($rent->rent_days);
                 $late = $payable_date->lt(Carbon::now()) ? $payable_date->diffInDays(Carbon::now()) : 0;
                 if ($late != null) {
@@ -66,6 +66,7 @@ class RentPayController extends Controller
                     if (RentPay::create($upload)) {
                         $Propety = Propety::find($rent->property_id);
                         $input = [
+                            'title' => 'Rent',
                             'user_id' => $Propety->user_id,
                             'property_id' => $Propety->id,
                             'description' => "Rent paid by user " . Auth::user()->name . " for Property " . $Propety->property_name,
