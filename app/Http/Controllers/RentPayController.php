@@ -19,7 +19,7 @@ class RentPayController extends Controller
     {
         $rent = Rent::select('rent.id', 'amount', 'property_id', 'properties.rent_days')
             ->join('properties', 'properties.id', 'rent.property_id')
-            ->where('user_id', $request->user_id)
+            ->where('rent.user_id', $request->user_id)
             ->first();
         if ($rent != null) {
             $find_last_date = RentPay::select('date', 'late')->where('rent_id', $rent->id)
