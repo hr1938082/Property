@@ -24,7 +24,7 @@ $page = 'benefits';
             <div class="about">
                 <div class="inner">
                     <h3 class="text-center">Benefit</h3>
-                    <h4>BENEFITS OD USING OUR APP</h4>
+                    <h4>BENEFITS OF USING OUR APP</h4>
                     <p>Tekumatics property management platform is designed to solve day to day hurdles and problems
                         faced by real estate agent or landlords when managing their property on rent. This app
                         automatically takes care of every aspect of your property management and significantly reduces
@@ -86,7 +86,7 @@ $page = 'benefits';
             </div>
             {{-- <div class="col-md-8 col-sm-offset-2 content">
 
-			</div> --}}
+            </div> --}}
         </div>
     </div>
     <!-- End content with sidebar -->

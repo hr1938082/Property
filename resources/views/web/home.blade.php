@@ -79,8 +79,8 @@ $page = 'home'
                 <li><a href="#offices" role="tab" data-toggle="tab">Offices</a></li>
                 <li><a href="#apartment" role="tab" data-toggle="tab">Apartment</a></li>
                 <li><a href="#residential" role="tab" data-toggle="tab">Residential</a></li>
-                <li><a href="{{ route('adds.request') }}" class="btn btn-lg btn-default" style="margin: 10px 0">Apply
-                        for Ad</a></li>
+                <li><a href="{{ route('adds.request') }}" class="btn btn-lg btn-default"
+                        style="margin: 10px 0; font-size: 1.5rem">Apply for Ad</a></li>
             </ul>
 
             <!-- Tab panes -->
@@ -96,10 +96,10 @@ $page = 'home'
                                         $count = 0;
                                         @endphp
                                         @foreach ($select_images as $images)
-                                        @if ($item->id === $images->id && $count === 0)
+                                        @if ($item->id === $images->property_id && $count === 0)
                                         <img style="height: 200px; overflow: hidden;" alt="" class="img-responsive"
                                             src="{{ asset($images->name_dir) }}">
-                                        $count ++;
+                                        {{$count ++}}
                                         @endif
                                         @endforeach
                                         <span class="property-thumb-info-label">
