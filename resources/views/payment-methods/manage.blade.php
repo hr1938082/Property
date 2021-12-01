@@ -14,16 +14,16 @@ Payment Methods
         <div class="col-12 d-flex justify-content-between">
             <h3 class="text-primary d-none d-lg-block" style="color: ">Payment Methods</h3>
             @if (session('status') == "Password not matched" ||
-                session('status') == "Not Updated" ||
-                session('status') == "Not Disabled" ||
-                session('status') == "Not Found")
-                <h5 class="alert alert-danger text-danger">
-                    {{session('status')}}
-                </h5>
+            session('status') == "Not Updated" ||
+            session('status') == "Not Disabled" ||
+            session('status') == "Not Found")
+            <h5 class="alert alert-danger text-danger">
+                {{session('status')}}
+            </h5>
             @endif
             @if (session('status') == "Update" ||
-                session('status') == "Disabled" ||
-                session('status') == "Enabled")
+            session('status') == "Disabled" ||
+            session('status') == "Enabled")
             <h5 class="alert alert-success text-success">
                 {{session('status')}}
             </h5>
@@ -40,21 +40,21 @@ Payment Methods
             </thead>
             <tbody>
                 @php
-                    if (isset($_GET['page'])) {
-                        if ($_GET['page'] != 1) {
-                            $sno= ($_GET['page']*6)-6;
-                        }
-                        else {
-                            $sno = 0;
-                        }
-                    }
-                    else {
-                        $sno = 0;
-                    }
+                if (isset($_GET['page'])) {
+                if ($_GET['page'] != 1) {
+                $sno= ($_GET['page']*6)-6;
+                }
+                else {
+                $sno = 0;
+                }
+                }
+                else {
+                $sno = 0;
+                }
                 @endphp
                 @foreach ($select as $item)
                 @php
-                    $sno++;
+                $sno++;
                 @endphp
                 <tr class="text-center">
                     <td>{{$sno}}</td>
@@ -63,9 +63,10 @@ Payment Methods
                         {{"Enable"}}
                         @else
                         {{"Disable"}}
-                    @endif</td>
+                        @endif</td>
                     <td class="text-center">
-                        @if ($item->name == "Stripe" || $item->name == "stripe" || $item->name == "STRIPE" || $item->name == "Bank" || $item->name == "bank" || $item->name == "BANK")
+                        @if ($item->name == "Stripe" || $item->name == "stripe" || $item->name == "STRIPE" ||
+                        $item->name == "Bank" || $item->name == "bank" || $item->name == "BANK")
                         <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal"
                             data-target="#exampleModal">
                             <i class="far fa-eye"></i>
@@ -83,22 +84,23 @@ Payment Methods
                             @endif
                             ">
                             <button type="submit" class="btn btn-sm
-                            @if (!($item->name == "Stripe" || $item->name == "stripe" || $item->name == "STRIPE"|| $item->name == "Bank" || $item->name == "bank" || $item->name == "BANK"))
+                            @if (!($item->name == " Stripe" || $item->name == "stripe" || $item->name == "STRIPE"||
+                                $item->name == "Bank" || $item->name == "bank" || $item->name == "BANK"))
                                 btn-block
-                            @endif
-                            @if ($item->status == 1)
-                                {{"btn-danger"}}
-                            @endif
-                            @if ($item->status == 0)
-                                {{"btn-success"}}
-                            @endif
-                                ">
+                                @endif
                                 @if ($item->status == 1)
-                                    {{"Disable"}}
+                                {{"btn-danger"}}
                                 @endif
                                 @if ($item->status == 0)
-                                    {{"Enable"}}
-                            @endif
+                                {{"btn-success"}}
+                                @endif
+                                ">
+                                @if ($item->status == 1)
+                                {{"Disable"}}
+                                @endif
+                                @if ($item->status == 0)
+                                {{"Enable"}}
+                                @endif
                             </button>
                         </form>
                     </td>
@@ -115,18 +117,13 @@ Payment Methods
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
             <div class="modal-body">
                 <form action="{{ route('pay-met-auth') }}" method="post">
                     @csrf
                     <div class="form-group">
                         <input type="hidden" id="id" name="id">
-                        <input type="password" class="form-control" name="pass" placeholder="pass">
+                        <label for="password">Verify its you</label>
+                        <input type="password" id="password" class="form-control" name="pass" placeholder="Password">
                     </div>
                     <input type="submit" class="btn btn-block btn-primary" value="Submit">
                 </form>
@@ -136,13 +133,13 @@ Payment Methods
 </div>
 @endsection
 @section('js')
-    <script>
-        $(document).ready(function(){
+<script>
+    $(document).ready(function(){
             $('.table tbody').on('click','.btn',function(){
                 var crow = $(this).closest('tr');
                 var col1 = crow.find('td:eq(0)').text();
                 $('#id').val(col1);
             });
         });
-    </script>
+</script>
 @endsection
