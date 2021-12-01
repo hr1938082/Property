@@ -81,6 +81,69 @@ $page = 'benefits';
                                 etc. For example, if the app asks Peter to take the Rubbish out and, John to clean the
                                 kitchen, etc</p>
                         </li>
+                        <li>
+                            <h5>Families can use Tekumatics to manage their home</h5>
+                            <p>We know life is too tough and busy now adays. As a parent, sometimes you have absolutely
+                                no time to tell your kids what to do for household chores like: vacuuming, cleaning,
+                                sweeping, washing dishes, feeding pets, doing laundry, preparing meals, cleaning
+                                bathrooms, dusting, fixing beds, shopping etc. Hence, it is very beneficial to use
+                                Tekumatics home manager app. Parents can spend about 10 minutes signing up to the
+                                landlord version of the app to administer the home household duties. The children can
+                                use the tenant version.</p>
+                        </li>
+                        <li>
+                            <h5>Home Inspection</h5>
+                            <p>The landlord or the real estate agent can virtually carry out home inspection via the
+                                Tekumatics app. Tekumatics app has a provision to make photos, videos and voice-records
+                                which can be used to make videos and photos by the tenants to send to the property
+                                owner/landlord/real estate agent. Covid has changed the way we do ordinary things and
+                                home inspection is no different. Tekumatics can make it easier, safer and quicker for
+                                you. </p>
+                        </li>
+                        <li>
+                            <h5>Property Maintenance </h5>
+                            <p>For an example, Imagine if a pipe of your property is block and tenants in that shared
+                                house/property tells you the problem. You are busy or live far and too much far you to
+                                drive to inspect and establish the problem. Tekumatics can do that work and make it
+                                easier for you. Any tenants can use Tekumatics to make a quick video or take photos of
+                                the problem and flip it over via the Tekumatics app and you receive in real time. You
+                                understand, know what is going on and you are ahead of the problem. If you need a
+                                plumber, you can contact the service provider around the area. Tekumatics can bring up
+                                the external property maintenance service provider and make it easy for you too.</p>
+                        </li>
+                        <li>
+                            <h5>Household community board </h5>
+                            <p>Tekumatics home Manager app has a feature called community notice board which is very
+                                important and provide good platform for the household to discuss issues etc. Landlord
+                                can also participate. It can be done through the Tekumatics community notice board
+                                features. For example; if someone left food on the kitchen for days or rotten meat in a
+                                freeze or if someone that meant to vacuum the house didn’t, the issue can be raise to
+                                discuss on the notice board anonymously. Sometimes it becomes personal trying to tell
+                                another tenant what to do. The community notice board is a way of enhancing and
+                                improving the friendly household communication that benefits everyone. </p>
+                        </li>
+                        <li>
+                            <h5>Landlord/tenants meetings</h5>
+                            <p>Sometimes there is a need for the property owner or the landlord to hold a meeting with
+                                the tenants to talk about certain issues of the house. Due to the covid 19, or factors
+                                like landlord being busy or live far, it becomes inconvenient. Hence, Tekumatics can
+                                provide the platform where household meetings can be virtually done. All can virtually
+                                participate through video group calls via Tekumatics or they can hold group discussion
+                                via community notice board features of the app from the convenience of where they are.
+                            </p>
+                        </li>
+                        <li>
+                            <h5>Enhances communication between Landlords/ real estate agents and tenants</h5>
+                            <p>Why wasting too much time messaging all the tenants individually? It can be done one-go
+                                via the Tekumatics home manager app and can be automated. Through the landlord verson of
+                                the app, the landlord or real estate agent or parents if family is using this, can
+                                choose the reminder to be sent whether weekly, forth nightly etc. Landlord can automate
+                                and the app will take over and send reminder/alerts when the time approaches with out
+                                the landlord making effort. The household duties, rent collections date reminders etc.
+                                Tekumatics enhances, improves and promotes communication which is very fundamental to
+                                have peaceful and friendly home.
+                            </p>
+                        </li>
                     </ul>
                 </div>
             </div>
