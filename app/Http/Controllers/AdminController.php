@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
+
+    protected $user;
+    function __construct()
+    {
+        $this->user = new User();
+    }
     // admin index method
     public function index()
     {

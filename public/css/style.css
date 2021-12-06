@@ -465,5 +465,22 @@ nav{
     padding: 5rem;
     box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.116);
 }
+.navbar-collapse .lg-none{
+    display: none;
+}
 /* register end */
 
+/* `lg` applies to medium devices (tablets, less than 992px) */
+@media (max-width: 991.98px) {
+    #top .container .nav{
+        height: 39px;
+    }
+    #top .container .nav li{
+        display: none;
+    }
+
+.navbar-collapse .lg-none{
+    display: block;
+    text-align: center;
+}
+}
