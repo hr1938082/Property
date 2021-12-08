@@ -103,10 +103,10 @@ $page = 'benefits';
                         <li>
                             <h5>Property Maintenance </h5>
                             <p>For an example, Imagine if a pipe of your property is block and tenants in that shared
-                                house/property tells you the problem. You are busy or live far and too much far you to
-                                drive to inspect and establish the problem. Tekumatics can do that work and make it
+                                house/property tells you the problem. Tekumatics can do that work and make it
                                 easier for you. Any tenants can use Tekumatics to make a quick video or take photos of
                                 the problem and flip it over via the Tekumatics app and you receive in real time. You
+                                are busy or live far to drive down for an inspection and verify the problem. You
                                 understand, know what is going on and you are ahead of the problem. If you need a
                                 plumber, you can contact the service provider around the area. Tekumatics can bring up
                                 the external property maintenance service provider and make it easy for you too.</p>

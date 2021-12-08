@@ -30,7 +30,8 @@ $page = 'functionality';
                         his/her profile. Then As part of the contract/agreement, the Landlord send the link and tell the
                         tenants to install this app on their phone. The Landlord version is pretty much an admin version
                         which the admin installs on its phone and sends the link to the tenants to download their tenant
-                        version of the app. The Landlord will need to spend about 20 minutes going through the app
+                        version of the app for free. The Landlord will need to spend about 20 minutes going through the
+                        app
                         filling the information and can prefill or leave blank for the tenants which tenants themselves
                         could complete via the tenant version of the app. Dates when the tenant first moved in and when
                         the rent is due are some of the information. Whatever days/week the landlord assigns, the app
