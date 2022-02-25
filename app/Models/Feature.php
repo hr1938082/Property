@@ -14,7 +14,8 @@ class feature extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'feature'
+        'feature',
+        'is_deleted'
     ];
 
     public $timestamps = false;

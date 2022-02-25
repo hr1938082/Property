@@ -18,6 +18,7 @@ use App\Http\Controllers\StatesController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TendentController;
 use App\Http\Controllers\UsersubscriptionController;
+use App\Http\Controllers\FeatureController;
 use App\Models\SocialLinks;
 use App\Models\usersubscription;
 use Illuminate\Support\Facades\Artisan;
@@ -198,3 +199,8 @@ Route::group(["middleware" => "auth", "prefix" => "social"], function () {
 Route::get('/tenants', [TendentController::class, 'ten_to_pro'])
     ->middleware('auth')
     ->name('tenants-view');
+Route::group(['prefix'=>'features'], function(){
+    Route::post('/store', [FeatureController::class, 'webStore'])->name('feature-store');
+    Route::get('/list', [FeatureController::class, 'webSelect'])->name('feature-view');
+    Route::post('delete',[FeatureController::class, 'webDelete'])->name('feature-delete');
+});

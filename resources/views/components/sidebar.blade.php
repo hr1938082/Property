@@ -62,6 +62,9 @@
             <li><a href="{{ route('manage-properties') }}"><i class="fas fa-users-cog"></i>Manage</a></li>
         </ul>
         <li class="dropdown-btn" data-toggle="collapse" data-target="#tendent" role="button" aria-expanded="false" aria-controls="tendent">
+        <a href="{{ route('feature-view') }}"><i class="fas fa-home"></i>Features</a>
+        </li>
+        <li class="dropdown-btn" data-toggle="collapse" data-target="#tendent" role="button" aria-expanded="false" aria-controls="tendent">
             <a href="{{ route('tenants-view') }}"><i class="fas fa-handshake"></i>Tenant</a>
         </li>
         <li class="title">Teritories</li>

@@ -42,4 +42,29 @@ class FeatureController extends Controller
             return response()->json(["status"=>false,"message"=>"unauthenticated"]);
         }
     }
+
+    public function webStore(Request $req)
+    {
+        if ($req->feature) {
+            $upload = $req->all();
+            $upload['is_deleted'] =0;
+            Feature::create($upload);
+            return redirect()->back()->with('status','Created');
+        }
+        return redirect()->back()->with('status','empty');
+    }
+
+    public function webSelect()
+    {
+        $select = Feature::select('id','feature')->where('is_deleted',0)->orderByDesc('id')->paginate(5);
+        return view('feature.manage',compact('select'));
+    }
+
+    public function webDelete(Request $req)
+    {
+        $feature = Feature::find($req->id);
+        $feature->is_deleted = 1;
+        $feature->save();
+        return redirect()->back()->with('status','Deleted');
+    }
 }
